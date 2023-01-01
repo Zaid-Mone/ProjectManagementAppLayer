@@ -1,0 +1,52 @@
+﻿@using ProjectManagementAppLayer.DTOs.Insert
+@model InsertProjectManagerDTO
+<div class="row">
+    <div class="col-12">
+        <form asp-action="Create" class="m-5">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="row">
+                <div class="col-6">
+                    <label class="form-label" for="FullName">Full Name</label>
+                    <input type="text" class="form-control mt-1" placeholder="Full Name" asp-for="FullName" />
+                    <span class="text-danger" asp-validation-for="FullName"></span>
+
+                </div>
+                <div class="col-6">
+                    <label class="form-label" for="PhoneNumber">Phone Number</label>
+                    <input type="text" class="form-control mt-1" placeholder="PhoneNumber" asp-for="PhoneNumber" />
+                    <span class="text-danger" asp-validation-for="PhoneNumber"></span>
+
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-12">
+                    <label class="form-label" for="Email">Email</label>
+                    <input type="email" class="form-control mt-1" placeholder="Email" asp-for="Email" />
+                    <span class="text-danger" asp-validation-for="Email"></span>
+
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6">
+                    <label class="form-label" for="Password">Password</label>
+                    <input type="password" class="form-control mt-1" placeholder="Password" asp-for="Password" />
+                    <span class="text-danger" asp-validation-for="Password"></span>
+
+                </div>
+                <div class="col-6">
+                    <label class="form-label" for="ConfirmPassword">Confirm Password</label>
+                    <input type="password" class="form-control mt-1" placeholder="Confirm Password" asp-for="ConfirmPassword" />
+                    <span class="text-danger" asp-validation-for="ConfirmPassword"></span>
+
+                </div>
+            </div>
+
+
+            <button class="btn btn-success mt-3" type="submit">Create</button>
+            <a href="/Student/Index" class="btn btn-secondary mt-3">Back</a>
+
+
+        </form>
+    </div>
+</div>

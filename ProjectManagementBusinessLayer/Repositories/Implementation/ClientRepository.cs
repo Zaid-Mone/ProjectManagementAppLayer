@@ -1,0 +1,51 @@
+﻿using Microsoft.EntityFrameworkCore;
+using ProjectManagementBusinessLayer.Data;
+using ProjectManagementBusinessLayer.Entities;
+using ProjectManagementBusinessLayer.Repositories.Interfaces;
+using System;
+using System.Collections.Generic;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace ProjectManagementBusinessLayer.Repositories.Implementation
+{
+    public class ClientRepository : IClientRepository
+    {
+        private readonly ApplicationDbContext _context;
+
+        public ClientRepository(ApplicationDbContext context)
+        {
+            this._context = context;
+        }
+
+        public void Delete(Client client)
+        {
+            _context.Clients.Remove(client);
+        }
+
+        public async Task<List<Client>> GetAllClients()
+        {
+            return await _context.Clients.ToListAsync();
+        }
+
+        public async Task<Client> GetClientById(Guid id)
+        {
+            return await _context.Clients.SingleOrDefaultAsync(r=>r.Id==id);
+        }
+
+        public void Insert(Client client)
+        {
+            _context.Clients.Add(client);
+        }
+
+        public void Save()
+        {
+            _context.SaveChanges();
+        }
+
+        public void Update(Client client)
+        {
+            _context.Clients.Update(client);
+        }
+    }
+}

@@ -1,0 +1,130 @@
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using ProjectManagementAppLayer.DTOs.Insert;
+using ProjectManagementAppLayer.Utility;
+using ProjectManagementBusinessLayer.Entities;
+using ProjectManagementBusinessLayer.Repositories.Interfaces;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+
+namespace ProjectManagementAppLayer.Areas.Administrator.Controllers
+{
+    [Area("Administrator")]
+    [Authorize(Roles ="Admin")]
+    public class ProjectManagerController : Controller
+    {
+        private readonly IProjectManagerRepository _projectManagerRepository;
+        private readonly UserManager<Person> _userManager;
+        public ProjectManagerController(IProjectManagerRepository projectManagerRepository, UserManager<Person> userManager )
+        {
+            this._projectManagerRepository = projectManagerRepository;
+            this._userManager = userManager;
+        }
+        // GET: ProjectManagerController
+        public async Task<ActionResult> Index()
+        {
+            var item = await _projectManagerRepository.GetAllProjectManagers();
+            return View(item);
+        }
+
+        // GET: ProjectManagerController/Details/5
+        public ActionResult Details(int id)
+        {
+            return View();
+        }
+
+        // GET: ProjectManagerController/Create
+        public ActionResult Create()
+        {
+            
+            return View();
+        }
+
+        // POST: ProjectManagerController/Create
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Create(InsertProjectManagerDTO insertProjectManagerDTO)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    var projectmanager = new ProjectManager()
+                    {
+                        Email = insertProjectManagerDTO.Email,
+                        UserName = insertProjectManagerDTO.Email,
+                        PhoneNumber= insertProjectManagerDTO.PhoneNumber,
+                        EmailConfirmed=true,
+                        FullName= insertProjectManagerDTO.FullName,
+                    };
+                    // to check if the user email exist or not
+                    if (_projectManagerRepository.CheckExist(projectmanager)) {
+                        ModelState.AddModelError("", "Sorry the Email is already used");
+                        return View();
+                    }
+                    // to add projectmanager account
+                    var res = await _userManager.CreateAsync(projectmanager, insertProjectManagerDTO.Password);
+                    // to add projectmanager role to the projectmanager account
+                    var role = await _userManager.AddToRoleAsync(projectmanager, WebRoles.ProjectManager);
+                    TempData["save"] = "ProjectManager has been Created Successfully ...";
+                    return RedirectToAction(nameof(Index));
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Something Went Wrong");
+                    return View();
+                }
+            }
+            catch
+            {
+                return View();
+            }
+        }
+
+        // GET: ProjectManagerController/Edit/5
+        public ActionResult Edit(int id)
+        {
+            return View();
+        }
+
+        // POST: ProjectManagerController/Edit/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit(int id, IFormCollection collection)
+        {
+            try
+            {
+                return RedirectToAction(nameof(Index));
+            }
+            catch
+            {
+                return View();
+            }
+        }
+
+        // GET: ProjectManagerController/Delete/5
+        public ActionResult Delete(int id)
+        {
+            return View();
+        }
+
+        // POST: ProjectManagerController/Delete/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Delete(int id, IFormCollection collection)
+        {
+            try
+            {
+                return RedirectToAction(nameof(Index));
+            }
+            catch
+            {
+                return View();
+            }
+        }
+    }
+}
