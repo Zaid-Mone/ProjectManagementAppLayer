@@ -13,24 +13,24 @@ using ProjectManagementBusinessLayer.Repositories.Interfaces;
 namespace ProjectManagementAppLayer.Areas.Administrator.Controllers
 {
     [Area("Administrator")]
-    [Authorize(Roles = "Admin")]
-    public class PhaseController : Controller
+    [Authorize(Roles="Admin")]
+    public class ClientController : Controller
     {
         private readonly ApplicationDbContext _context;
-        private readonly IPhaseRepository _phaseRepository;
-        public PhaseController(ApplicationDbContext context, IPhaseRepository phaseRepository)
+        private readonly IClientRepository _clientRepository;
+        public ClientController(ApplicationDbContext context, IClientRepository clientRepository)
         {
             _context = context;
-            _phaseRepository = phaseRepository;
+            this._clientRepository = clientRepository;
         }
 
-        // GET: Administrator/Phase
+        // GET: Administrator/Client
         public async Task<IActionResult> Index()
         {
-            return View(await _phaseRepository.GetAllPhases());
+            return View(await _clientRepository.GetAllClients());
         }
 
-        // GET: Administrator/Phase/Details/5
+        // GET: Administrator/Client/Details/5
         public async Task<IActionResult> Details(Guid id)
         {
             if (id == null)
@@ -38,48 +38,40 @@ namespace ProjectManagementAppLayer.Areas.Administrator.Controllers
                 return NotFound();
             }
 
-            var phase = await _phaseRepository.GetPhaseById(id);
-            if (phase == null)
+            var client = await _clientRepository.GetClientById(id);
+            if (client == null)
             {
                 return NotFound();
             }
 
-            return View(phase);
+            return View(client);
         }
 
-        // GET: Administrator/Phase/Create
+        // GET: Administrator/Client/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Administrator/Phase/Create
+        // POST: Administrator/Client/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(Phase phase)
+        public ActionResult Create(Client client)
         {
-            try
+            if (ModelState.IsValid)
             {
-                if (ModelState.IsValid)
-                {
-                    phase.Id = Guid.NewGuid();
-                    _phaseRepository.Insert(phase);
-                    _phaseRepository.Save();
-                    TempData["save"] = "Phases has been Created Successfully ...";
-                    return RedirectToAction(nameof(Index));
-                }
-                return View(phase);
-
+                client.Id = Guid.NewGuid();
+                _clientRepository.Insert(client);
+                _clientRepository.Save();
+                TempData["save"] = "Client has been Created Successfully ...";
+                return RedirectToAction(nameof(Index));
             }
-            catch
-            {
-                return View();
-            }
+            return View(client);
         }
 
-        // GET: Administrator/Phase/Edit/5
+        // GET: Administrator/Client/Edit/5
         public async Task<IActionResult> Edit(Guid id)
         {
             if (id == null)
@@ -87,33 +79,32 @@ namespace ProjectManagementAppLayer.Areas.Administrator.Controllers
                 return NotFound();
             }
 
-            var phase = await _phaseRepository.GetPhaseById(id);
-            if (phase == null)
+            var client = await _clientRepository.GetClientById(id);
+            if (client == null)
             {
                 return NotFound();
             }
-            return View(phase);
+            return View(client);
         }
 
-        // POST: Administrator/Phase/Edit/5
+        // POST: Administrator/Client/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(Phase phase)
+        public IActionResult Edit(Client client)
         {
-
             if (ModelState.IsValid)
             {
                 try
                 {
-                    _phaseRepository.Update(phase);
-                    _phaseRepository.Save();
-                    TempData["edit"] = "Phases has been Updated Successfully ...";
+                    _clientRepository.Update(client);
+                    _clientRepository.Save();
+                    TempData["edit"] = "Client has been Updated Successfully ...";
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!_phaseRepository.PhaseExists(phase.Id))
+                    if (!_clientRepository.ClientExists(client.Id))
                     {
                         return NotFound();
                     }
@@ -124,10 +115,10 @@ namespace ProjectManagementAppLayer.Areas.Administrator.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(phase);
+            return View(client);
         }
 
-        // GET: Administrator/Phase/Delete/5
+        // GET: Administrator/Client/Delete/5
         public async Task<IActionResult> Delete(Guid id)
         {
             if (id == null)
@@ -135,26 +126,27 @@ namespace ProjectManagementAppLayer.Areas.Administrator.Controllers
                 return NotFound();
             }
 
-            var phase = await _phaseRepository.GetPhaseById(id);
-            if (phase == null)
+            var client = await _clientRepository.GetClientById(id);
+            if (client == null)
             {
                 return NotFound();
             }
 
-            return View(phase);
+            return View(client);
         }
 
-        // POST: Administrator/Phase/Delete/5
+        // POST: Administrator/Client/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            var phase = await _phaseRepository.GetPhaseById(id);
-            _phaseRepository.Delete(phase);
-            _phaseRepository.Save();
-            TempData["delete"] = "Phases has been Deleted Successfully ...";
+            var client = await _clientRepository.GetClientById(id);
+            _clientRepository.Delete(client);
+            _clientRepository.Save();
+            TempData["delete"] = "Client has been Deleted Successfully ...";
             return RedirectToAction(nameof(Index));
         }
 
+        
     }
 }

@@ -12,6 +12,7 @@ namespace ProjectManagementBusinessLayer.Repositories.Interfaces
         public void Insert(Client client);
         public void Update(Client client);
         public void Delete(Client client);
+        public bool ClientExists(Guid id);
         public void Save();
     }
 }

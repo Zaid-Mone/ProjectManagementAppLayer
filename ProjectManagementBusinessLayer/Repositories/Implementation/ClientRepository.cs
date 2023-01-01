@@ -4,6 +4,7 @@ using ProjectManagementBusinessLayer.Entities;
 using ProjectManagementBusinessLayer.Repositories.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -16,6 +17,11 @@ namespace ProjectManagementBusinessLayer.Repositories.Implementation
         public ClientRepository(ApplicationDbContext context)
         {
             this._context = context;
+        }
+
+        public bool ClientExists(Guid id)
+        {
+            return _context.Clients.Any(e => e.Id == id);
         }
 
         public void Delete(Client client)

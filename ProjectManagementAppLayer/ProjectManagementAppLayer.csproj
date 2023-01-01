@@ -14,6 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Include="Areas\Administrator\Controllers\ClientController.cs" />
     <Compile Include="Areas\Administrator\Controllers\PhaseController.cs" />
     <Compile Include="Areas\Administrator\Controllers\ProjectManagerController.cs" />
     <Compile Include="Areas\Administrator\Controllers\ProjectStatusController.cs" />
@@ -90,6 +91,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="Areas\Administrator\Views\Client\Create.cshtml" />
+    <None Include="Areas\Administrator\Views\Client\Delete.cshtml" />
+    <None Include="Areas\Administrator\Views\Client\Details.cshtml" />
+    <None Include="Areas\Administrator\Views\Client\Edit.cshtml" />
+    <None Include="Areas\Administrator\Views\Client\Index.cshtml" />
     <None Include="Areas\Administrator\Views\Phase\Create.cshtml" />
     <None Include="Areas\Administrator\Views\Phase\Delete.cshtml" />
     <None Include="Areas\Administrator\Views\Phase\Details.cshtml" />
