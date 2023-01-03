@@ -16,5 +16,4 @@ namespace ProjectManagementBusinessLayer.Repositories.Interfaces
         public bool ProjectTypeExists(Guid id);
         public void Save();
     }
-
 }

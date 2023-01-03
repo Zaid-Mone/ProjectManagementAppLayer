@@ -1,0 +1,85 @@
+﻿@model ProjectManagementBusinessLayer.Entities.PaymentTerm
+
+@{
+    ViewData["Title"] = "Create";
+    var del = (Deliverable)ViewBag.deliv;
+}
+
+<h4>Create PaymentTerm</h4>
+<hr />
+<div class="row">
+    <div class="col-md-12">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" name="DeliverableId" value="@del.Id"/>
+            <input type="hidden" name="ProjectPhaseId" value="@del.ProjectPhaseId"/>
+            <input type="hidden" name="ProjectId" value="@del.ProjectPhase.ProjectId"/>
+            <input type="hidden" name="PhaseId" value="@del.ProjectPhase.PhaseId"/>
+
+            <div class="row">
+                <div class="col-6">
+                    <div class="form-group">
+                        <label asp-for="@del.ProjectPhase.Project" class="control-label"></label>
+                        <input asp-for="@del.ProjectPhase.Project.ProjectName" class="form-control" disabled/>
+                        <span asp-validation-for="@del.ProjectPhase.Project.ProjectName" class="text-danger"></span>
+                    </div>
+
+                </div>
+                <div class="col-6">
+                    <div class="form-group">
+                        <label asp-for="@del.ProjectPhase.Phase" class="control-label"></label>
+                        <input asp-for="@del.ProjectPhase.Phase.PhaseName" class="form-control"disabled />
+                        <span asp-validation-for="@del.ProjectPhase.Phase.PhaseName" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-6">
+                    <div class="form-group">
+                        <label asp-for="@del.StartDate" class="control-label"></label>
+                        <input asp-for="@del.StartDate" class="form-control" disabled/>
+                        <span asp-validation-for="@del.StartDate" class="text-danger"></span>
+                    </div>
+
+                </div>
+                <div class="col-6">
+                    <div class="form-group">
+                        <label asp-for="@del.EndDate" class="control-label"></label>
+                        <input asp-for="@del.EndDate" class="form-control" disabled/>
+                        <span asp-validation-for="@del.EndDate" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-6">
+                    <div class="form-group">
+                        <label asp-for="PaymentTermTitle" class="control-label"></label>
+                        <input asp-for="PaymentTermTitle" class="form-control" />
+                        <span asp-validation-for="PaymentTermTitle" class="text-danger"></span>
+                    </div>
+
+                </div>
+                <div class="col-6">
+                    <div class="form-group">
+                        <label asp-for="PaymentTermAmount" class="control-label"></label>
+                        <input asp-for="PaymentTermAmount" class="form-control" />
+                        <span asp-validation-for="PaymentTermAmount" class="text-danger"></span>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+                <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

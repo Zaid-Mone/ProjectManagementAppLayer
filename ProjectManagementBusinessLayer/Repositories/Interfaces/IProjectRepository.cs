@@ -11,9 +11,12 @@ namespace ProjectManagementBusinessLayer.Repositories.Interfaces
         // to find all projects based project manager id
         public Task<List<Project>> GetProjectManagerProjects(string userId);  
         public Task<Project> GetProjectById(Guid id);
+        public Task<Project> GetProjectBySpecificId(Guid? id);
+        public Task<Project> GetPhaseByProjectId(Guid? id);
         public void Insert(Project project);
         public void Update(Project project);
         public void Delete(Project project);
+        public bool ProjectExists(Guid id);
         public void Save();
     }
 

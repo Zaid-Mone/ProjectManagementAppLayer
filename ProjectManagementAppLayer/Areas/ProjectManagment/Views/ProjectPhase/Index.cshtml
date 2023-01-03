@@ -1,19 +1,28 @@
-﻿@model IEnumerable<ProjectManagementBusinessLayer.Entities.ProjectStatus>
+﻿@model IEnumerable<ProjectManagementBusinessLayer.Entities.ProjectPhase>
 
 @{
     ViewData["Title"] = "Index";
+    var project = (Project)ViewBag.project;
 }
 
-<h1>Index</h1>
-
+<h3>Index </h3>
 <p>
-    <a asp-action="Create">Create New</a>
+    <a href="/ProjectManagment/ProjectPhase/Create?id=@project.Id">Create New</a>
 </p>
 <table class="table table-bordered table-striped" id="table_id">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Status)
+                @Html.DisplayNameFor(model => model.Project)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Phase)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.StartDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EndDate)
             </th>
             <th></th>
         </tr>
@@ -23,9 +32,23 @@
         {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Status)
+                    @Html.DisplayFor(modelItem => item.Project.ProjectName)
                 </td>
-                <partial name="_Buttons" model="@item.Id" />
+                <td>
+                    @Html.DisplayFor(modelItem => item.Phase.PhaseName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.StartDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.EndDate)
+                </td>
+                <td>
+                    <a asp-action="Create" asp-controller="Deliverable" asp-route-id="@item.Id">Deliverable</a>|
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                </td>
             </tr>
         }
     </tbody>

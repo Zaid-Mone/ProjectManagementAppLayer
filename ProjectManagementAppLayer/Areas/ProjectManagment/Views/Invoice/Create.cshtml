@@ -1,0 +1,76 @@
+﻿@model ProjectManagementBusinessLayer.Entities.Invoice
+
+@{
+    ViewData["Title"] = "Create";
+    var project = (List<Project>)ViewBag.projcet;
+}
+<script src="~/js/ProjectAjaxRequest.js"></script>
+
+<h4>Create Invoice</h4>
+<hr />
+<div class="row">
+    <div class="col-md-12">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="row">
+                <div class="col-6">
+                    <div class="form-group">
+                        <label asp-for="InvoiceTitle" class="control-label"></label>
+                        <input asp-for="InvoiceTitle" class="form-control" />
+                        <span asp-validation-for="InvoiceTitle" class="text-danger"></span>
+                    </div>
+
+                </div>
+                <div class="col-6">
+                    <div class="form-group">
+                        <label asp-for="InvoiceDate" class="control-label"></label>
+                        <input asp-for="InvoiceDate" class="form-control" />
+                        <span asp-validation-for="InvoiceDate" class="text-danger"></span>
+                    </div>
+
+                </div>
+                </div>
+            
+            
+            <div class="row">
+                <div class="col-6">
+                    <div class="form-group">
+                        <label asp-for="Project" class="control-label"></label>
+                        <select asp-for="ProjectId" class="form-control" id="mySelect" onchange="myFunction()">
+                            <option selected disabled>Select Project Type</option>
+                            @foreach (var item1 in project)
+                            {
+                                if(item1.ProjectManagerId == @ViewBag.user)
+                {
+                        <option value="@item1.Id">@item1.ProjectName</option>
+                }
+                                
+                            }
+                        </select>
+                    </div>
+
+                </div>
+                <div class="col-6">
+                    <div class="form-group">
+                        <label asp-for="Project" class="control-label"id="dropdownLabel" style="display:none;"></label>
+                        <select asp-for="ProjectId" class="form-control" id="secondDropdown" style="display:none;">
+                           <option selected disabled>Select PayementTerm</option>
+                        </select>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+                <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

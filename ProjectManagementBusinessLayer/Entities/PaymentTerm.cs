@@ -18,6 +18,10 @@ namespace ProjectManagementBusinessLayer.Entities
         public Deliverable Deliverable { get; set; }
         public List<InvoicePaymentTerm> InvoicePaymentTerms { get; set; }
 
+        // add flag 
+        // to check if it's paid or not and if it is not show it in invoice
+        //public bool IsPaid { get; set; } = false;
+
     }
 
 }

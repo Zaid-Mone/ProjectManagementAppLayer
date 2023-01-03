@@ -1,0 +1,70 @@
+﻿@*@model ProjectManagementBusinessLayer.Entities.ProjectPhase*@
+
+@using ProjectManagementAppLayer.DTOs.Insert
+@model InsertProjectPhaseDTO
+@{
+    ViewData["Title"] = "Create";
+    var project = (Project)ViewBag.project;
+    var phases = (List<Phase>)ViewBag.phase;
+}
+
+<h1></h1>
+
+<h4>Create Phase</h4>
+<hr />
+<div class="row">
+    <div class="col-md-12">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input hidden name="ProjectId" value="@project.Id" />
+
+
+            <div class="row">
+                <div class="col-6">
+                    <div class="form-group">
+                        <label asp-for="@Model.StartDate" class="control-label"></label>
+                        <input asp-for="@Model.StartDate" class="form-control" />
+                        <span asp-validation-for="@Model.StartDate" class="text-danger"></span>
+                    </div>
+
+                </div>
+                <div class="col-6">
+                    <div class="form-group">
+                        <label asp-for="@Model.EndDate" class="control-label"></label>
+                        <input asp-for="@Model.EndDate" class="form-control" />
+                        <span asp-validation-for="@Model.EndDate" class="text-danger"></span>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="row">
+
+                <div class="col-12">
+                    <div class="form-group">
+                        <label asp-for="@Model.PhaseId" class="control-label"></label>
+                        <select asp-for="@Model.PhaseId" class="form-control">
+                            <option selected disabled>Select Phase</option>
+                            @foreach (var item in phases)
+                            {
+                                <option value="@item.Id">@item.PhaseName</option>
+                            }
+                        </select>
+                    </div>
+
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+                <a asp-action="Index" asp-route-Id="@project.Id" class="btn btn-success">Back to List</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

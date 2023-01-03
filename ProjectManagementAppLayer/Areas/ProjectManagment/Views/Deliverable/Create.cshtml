@@ -1,0 +1,111 @@
+﻿@model ProjectManagementBusinessLayer.Entities.Deliverable
+
+@{
+    ViewData["Title"] = "Create";
+    var projectPhase = (ProjectPhase)ViewBag.projectphase;
+    var projects = (Project)ViewBag.project;
+}
+
+<h1>Create</h1>
+
+<h4>Deliverable</h4>
+<hr />
+<div class="row">
+    <div class="col-md-12">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input hidden value="@projectPhase.Id" name="ProjectPhaseId" id="ProjectPhaseId" />
+            <input hidden value="@projectPhase.ProjectId" name="ProjectId" />
+        <input hidden value="@projectPhase.PhaseId" name="PhaseId" />
+
+            <div class="row">
+                <div class="col-6">
+                    <div class="form-group">
+                        <label asp-for="@projectPhase.Project" class="control-label"></label>
+                        <input asp-for="@projectPhase.Project.ProjectName" class="form-control" disabled />
+                        <span asp-validation-for="@projectPhase.Project.ProjectName" class="text-danger"></span>
+                    </div>
+
+                </div>
+                <div class="col-6">
+                    <div class="form-group">
+                        <label asp-for="@projectPhase.Phase" class="control-label"></label>
+                        <input asp-for="@projectPhase.Phase.PhaseName" class="form-control" disabled />
+                        <span asp-validation-for="@projectPhase.Phase.PhaseName" class="text-danger"></span>
+                    </div>
+
+                </div>
+            </div>
+           
+            <div class="row">
+                <div class="col-6">
+                    <div class="form-group">
+                        <label asp-for="@projectPhase.StartDate" class="control-label"></label>
+                        <input value="@projectPhase.StartDate" class="form-control" disabled />
+                        <span asp-validation-for="@projectPhase.StartDate" class="text-danger"></span>
+                    </div>
+
+                </div>
+                <div class="col-6">
+                    <div class="form-group">
+                        <label asp-for="@projectPhase.EndDate" class="control-label"></label>
+                        <input value="@projectPhase.EndDate" class="form-control" disabled />
+                        <span asp-validation-for="@projectPhase.EndDate" class="text-danger"></span>
+                    </div>
+
+                </div>
+            </div>
+
+
+
+
+            <div class="row">
+                <div class="col-6">
+                    <div class="form-group">
+                        <label asp-for="StartDate" class="control-label"></label>
+                        <input asp-for="StartDate" class="form-control" />
+                        <span asp-validation-for="StartDate" class="text-danger"></span>
+                    </div>
+
+                </div>
+                <div class="col-6">
+                    <div class="form-group">
+                        <label asp-for="EndDate" class="control-label"></label>
+                        <input asp-for="EndDate" class="form-control" />
+                        <span asp-validation-for="EndDate" class="text-danger"></span>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-12">
+                    <div class="form-group">
+                        <label asp-for="Description" class="control-label"></label>
+                        <textarea asp-for="Description" class="form-control"></textarea>
+                        <span asp-validation-for="Description" class="text-danger"></span>
+                    </div>
+
+                </div>
+            </div>
+           
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+                <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        tinymce.init({
+            selector: 'textarea',
+            plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount',
+            toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat',
+        });
+    </script>
+}
