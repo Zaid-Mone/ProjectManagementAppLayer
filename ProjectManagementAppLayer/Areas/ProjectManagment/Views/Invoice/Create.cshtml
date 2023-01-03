@@ -1,5 +1,6 @@
-﻿@model ProjectManagementBusinessLayer.Entities.Invoice
-
+﻿@*@model ProjectManagementBusinessLayer.Entities.Invoice*@
+@using ProjectManagementAppLayer.DTOs.Insert
+@model InsertInvoiceDTO
 @{
     ViewData["Title"] = "Create";
     var project = (List<Project>)ViewBag.projcet;
@@ -35,7 +36,7 @@
             <div class="row">
                 <div class="col-6">
                     <div class="form-group">
-                        <label asp-for="Project" class="control-label"></label>
+                        <label asp-for="ProjectId" class="control-label"></label>
                         <select asp-for="ProjectId" class="form-control" id="mySelect" onchange="myFunction()">
                             <option selected disabled>Select Project Type</option>
                             @foreach (var item1 in project)
@@ -52,8 +53,8 @@
                 </div>
                 <div class="col-6">
                     <div class="form-group">
-                        <label asp-for="Project" class="control-label"id="dropdownLabel" style="display:none;"></label>
-                        <select asp-for="ProjectId" class="form-control" id="secondDropdown" style="display:none;">
+                        <label asp-for="PaymentTermIds" class="control-label"id="dropdownLabel" style="display:none;"></label>
+                        <select asp-for="PaymentTermIds" class="form-control" id="secondDropdown" style="display:none;" multiple>
                            <option selected disabled>Select PayementTerm</option>
                         </select>
                     </div>

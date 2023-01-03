@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Newtonsoft.Json;
 using ProjectManagementBusinessLayer.Data;
 using ProjectManagementBusinessLayer.Entities;
 using ProjectManagementBusinessLayer.Repositories.Implementation;
@@ -31,17 +32,22 @@ namespace ProjectManagementAppLayer
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+
             services.AddControllersWithViews()
                              .AddJsonOptions(o => o.JsonSerializerOptions
                              .ReferenceHandler = ReferenceHandler.Preserve);
+
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
+
             services.AddDefaultIdentity<Person>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
+
             services.AddControllersWithViews();
             services.AddRazorPages();
+
             services.AddTransient<IProjectManagerRepository, ProjectManagerRepository>();
             services.AddTransient<IProjectTypeRepository, ProjectTypeRepository>();
             services.AddTransient<IProjectStatusRepository, ProjectStatusRepository>();

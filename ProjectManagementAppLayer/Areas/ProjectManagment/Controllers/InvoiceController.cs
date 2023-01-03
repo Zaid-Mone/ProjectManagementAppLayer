@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using ProjectManagementAppLayer.DTOs.Insert;
 using ProjectManagementBusinessLayer.Data;
 using ProjectManagementBusinessLayer.Entities;
 using ProjectManagementBusinessLayer.Repositories.Interfaces;
@@ -62,17 +63,32 @@ namespace ProjectManagementAppLayer.Areas.ProjectManagment.Controllers
         // POST: ProjectManagment/Invoice/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,InvoiceTitle,InvoiceDate,ProjectId")] Invoice invoice)
+        public IActionResult Create(InsertInvoiceDTO insertInvoiceDTO)
         {
             if (ModelState.IsValid)
             {
-                invoice.Id = Guid.NewGuid();
-                _context.Add(invoice);
-                await _context.SaveChangesAsync();
+                var invoice = new Invoice()
+                {
+                     InvoiceDate= insertInvoiceDTO.InvoiceDate,
+                     InvoiceTitle=insertInvoiceDTO.InvoiceTitle,
+                     ProjectId=insertInvoiceDTO.ProjectId
+                };
+                //_invoiceRepository.Insert(invoice);
+                //_invoiceRepository.Save();
+
+                //foreach (var item in insertInvoiceDTO.PaymentTermIds)
+                //{
+                //    var invoicePayment = new InvoicePaymentTerm()
+                //    {
+                //        InvoiceId =invoice.Id,
+                //        PaymentTermId =item
+                //    };
+                //    // insert
+                //}
+                //// save
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ProjectId"] = new SelectList(_context.Projects, "Id", "Id", invoice.ProjectId);
-            return View(invoice);
+            return View(insertInvoiceDTO);
         }
 
         // GET: ProjectManagment/Invoice/Edit/5
