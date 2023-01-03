@@ -1,4 +1,4 @@
-﻿@model IEnumerable<ProjectManagementBusinessLayer.Entities.Phase>
+﻿@model IEnumerable<ProjectManagementBusinessLayer.Entities.PaymentTerm>
 
 @{
     ViewData["Title"] = "Index";
@@ -6,14 +6,23 @@
 
 <h1>Index</h1>
 
-<p>
+@*<p>
     <a asp-action="Create">Create New</a>
-</p>
-<table class="table table-striped table-bordered" id="table_id">
+</p>*@
+<table class="table table-bordered table-striped" id="table_id">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.PhaseName)
+                @Html.DisplayNameFor(model => model.PaymentTermTitle)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PaymentTermAmount)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Deliverable.ProjectPhase.Project)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Deliverable.ProjectPhase.Phase)
             </th>
             <th></th>
         </tr>
@@ -21,12 +30,21 @@
     <tbody>
         @foreach (var item in Model)
         {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.PhaseName)
-                </td>
-                <partial name="_Buttons" model="@item.Id" />
-            </tr>
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.PaymentTermTitle)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PaymentTermAmount)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Deliverable.ProjectPhase.Project.ProjectName)
+            </td>    
+            <td>
+                @Html.DisplayFor(modelItem => item.Deliverable.ProjectPhase.Phase.PhaseName)
+            </td>
+            <partial name="_Buttons" model="@item.Id" />
+        </tr>
         }
     </tbody>
 </table>

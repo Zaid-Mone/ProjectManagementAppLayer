@@ -1,0 +1,58 @@
+﻿@*@model ProjectManagementBusinessLayer.Entities.ProjectPhase*@
+@using ProjectManagementAppLayer.DTOs.Update
+@model UpdateProjectPhasesDTO
+@{
+    ViewData["Title"] = "Edit";
+    var phase = (List<Phase>)ViewBag.phase;
+    var projectPhases = (ProjectPhase)ViewBag.projectPhase;
+}
+
+<h1>Edit</h1>
+
+<h4>ProjectPhase</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" name="ProjectPhaseId" value="@projectPhases.Id" />
+            <input type="hidden" name="ProjectId" value="@projectPhases.ProjectId" />
+            <input type="hidden" name="PhaseId" value="@projectPhases.PhaseId" />
+
+            
+            <div class="form-group">
+                <label asp-for="ProjectId" class="control-label"></label>
+                <input asp-for="@projectPhases.Project.ProjectName" class="form-control"disabled>
+            </div>
+            <div class="form-group">
+                <label asp-for="PhaseId" class="control-label"></label>
+                <select asp-for="@projectPhases.Phase.Id" class="form-control">
+                    <option selected value="@projectPhases.Phase.Id">@projectPhases.Phase.PhaseName</option>
+                    @foreach (var item in phase)
+                    {
+                        <option value="@item.Id">@item.PhaseName</option>
+                    }
+                </select>
+                <span asp-validation-for="PhaseId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="StartDate" class="control-label"></label>
+                <input class="form-control" name="StartDate" value="@projectPhases.StartDate" />
+                <span asp-validation-for="StartDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="EndDate" class="control-label"></label>
+                <input  class="form-control" name="EndDate" value="@projectPhases.EndDate" />
+                <span asp-validation-for="EndDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+                <a asp-action="Index" asp-route-Id="@projectPhases.ProjectId">Back to List</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

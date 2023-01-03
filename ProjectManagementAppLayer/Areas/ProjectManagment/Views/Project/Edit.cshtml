@@ -1,0 +1,138 @@
+﻿@*@model ProjectManagementBusinessLayer.Entities.Project*@
+@using ProjectManagementAppLayer.DTOs.Update
+@model UpdateProjectDTO
+@{
+    ViewData["Title"] = "Edit";
+    var project = (Project)ViewBag.project;
+    var pStatus = (List<ProjectStatus>)ViewBag.projectStatus;
+    var pType = (List<ProjectType>)ViewBag.projectType;
+    var client = (List<Client>)ViewBag.client;
+}
+
+<h1>Edit</h1>
+
+<h4>Project</h4>
+<hr />
+<div class="row">
+    <div class="col-md-12">
+        <form asp-action="Edit" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <input type="hidden" name="ProjectId" value="@project.Id" />
+            <input type="hidden" asp-for="@project.ContractFile" />
+            <input type="hidden" name="ProjectTypeId" value="@project.ProjectTypeId" />
+            <input type="hidden" name="ProjectManagerId" value="@project.ProjectManagerId" />
+            <input type="hidden" name="ProjectStatusId" value="@project.ProjectStatusId" />
+            <input type="hidden" name="ProjectManagerId" value="@project.ProjectManagerId" />
+            <input type="hidden" name="ClientId" value="@project.ClientId" />
+
+
+            <div class="row">
+                <div class="col-6">
+                    <div class="form-group">
+                        <label asp-for="ProjectName" class="control-label"></label>
+                        <input asp-for="ProjectName" class="form-control" value="@project.ProjectName" />
+                        <span asp-validation-for="ProjectName" class="text-danger"></span>
+                    </div>
+
+                </div>
+                <div class="col-6">
+                    <div class="form-group">
+                        <label asp-for="ContractAmount" class="control-label"></label>
+                        <input asp-for="ContractAmount" class="form-control" value="@project.ContractAmount" />
+                        <span asp-validation-for="ContractAmount" class="text-danger"></span>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-6">
+                    <div class="form-group">
+                        <label asp-for="StartDate" class="control-label"></label>
+                        <input name="StartDate" class="form-control" value="@project.StartDate" />
+                        <span asp-validation-for="StartDate" class="text-danger"></span>
+                    </div>
+
+                </div>
+                <div class="col-6">
+                    <div class="form-group">
+                        <label asp-for="EndDate" class="control-label"></label>
+                        <input name="EndDate" class="form-control" value="@project.EndDate" />
+                        <span asp-validation-for="EndDate" class="text-danger"></span>
+                    </div>
+
+                </div>
+            </div>
+
+
+            <div class="row">
+                <div class="col-6">
+                    <div class="form-group">
+                        <label asp-for="ProjectTypeId" class="control-label"></label>
+                        <select asp-for="@project.ProjectTypeId" class="form-control">
+                            <option selected value="@project.ProjectTypeId">@project.ProjectType.Type</option>
+                            @foreach (var item1 in pType)
+                            {
+                                <option value="@item1.Id">@item1.Type</option>
+                            }
+                        </select>
+                        <span asp-validation-for="ProjectTypeId" class="text-danger"></span>
+                    </div>
+
+                </div>
+                <div class="col-6">
+                    <div class="form-group">
+                        <label asp-for="ProjectStatusId" class="control-label"></label>
+                        <select asp-for="@project.ProjectStatusId" class="form-control">
+                            <option selected value="@project.ProjectStatusId">@project.ProjectStatus.Status</option>
+                            @foreach (var item2 in pStatus)
+                            {
+                                <option value="@item2.Id">@item2.Status</option>
+                            }
+                        </select>
+                        <span asp-validation-for="ProjectStatusId" class="text-danger"></span>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-6">
+                    <div class="form-group">
+                        <label asp-for="ContractFile" class="control-label"></label>
+                        <input asp-for="ContractFile" class="form-control" type="file" value="@project.ContractFile" />
+                        <span asp-validation-for="ContractFile" class="text-danger"></span>
+                    </div>
+
+                </div>
+                <div class="col-6">
+                    <div class="form-group">
+                        <label asp-for="ClientId" class="control-label"></label>
+                        <select asp-for="@project.ClientId" class="form-control">
+                            <option selected value="@project.ClientId">@project.Client.Name</option>
+                            @foreach (var item3 in client)
+                            {
+                                <option value="@item3.Id">@item3.Name</option>
+                            }
+                        </select>
+                        <span asp-validation-for="ClientId" class="text-danger"></span>
+                    </div>
+
+                </div>
+            </div>
+
+            <a href="/ProjectManagment/Project/ViewContract?Id=@project.Id" target="_blank" class="btn btn-info">@project.ContractFileName</a>
+
+            <div class="form-group mt-2">
+                <input type="submit" value="Save" class="btn btn-primary" />
+                <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

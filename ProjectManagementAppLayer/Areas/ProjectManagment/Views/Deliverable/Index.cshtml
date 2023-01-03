@@ -1,4 +1,4 @@
-﻿@model IEnumerable<ProjectManagementBusinessLayer.Entities.ProjectStatus>
+﻿@model IEnumerable<ProjectManagementBusinessLayer.Entities.Deliverable>
 
 @{
     ViewData["Title"] = "Index";
@@ -13,7 +13,19 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Status)
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.StartDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EndDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ProjectPhase.Project)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ProjectPhase.Phase)
             </th>
             <th></th>
         </tr>
@@ -23,9 +35,26 @@
         {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Status)
+                    @Html.Raw(item.Description)
                 </td>
-                <partial name="_Buttons" model="@item.Id" />
+                <td>
+                    @Html.DisplayFor(modelItem => item.StartDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.EndDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ProjectPhase.Project.ProjectName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ProjectPhase.Phase.PhaseName)
+                </td>
+                <td>
+                    <a asp-action="Create" asp-controller="PaymentTerm" asp-route-id="@item.Id">PaymentTerm</a> |
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                </td>
             </tr>
         }
     </tbody>

@@ -14,6 +14,7 @@ using ProjectManagementBusinessLayer.Repositories.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace ProjectManagementAppLayer
@@ -30,6 +31,9 @@ namespace ProjectManagementAppLayer
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddControllersWithViews()
+                             .AddJsonOptions(o => o.JsonSerializerOptions
+                             .ReferenceHandler = ReferenceHandler.Preserve);
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
@@ -44,6 +48,10 @@ namespace ProjectManagementAppLayer
             services.AddTransient<IProjectRepository, ProjectRepository>();
             services.AddTransient<IPhaseRepository, PhaseRepository>();
             services.AddTransient<IClientRepository, ClientRepository>();
+            services.AddTransient<IProjectPhaseRepository, ProjectPhaseRepository>();
+            services.AddTransient<IDeliverableRepository, DeliverableRepository>();
+            services.AddTransient<IPaymentTermRepository, PaymentTermRepository>();
+            services.AddTransient<IInvoiceRepository, InvoiceRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

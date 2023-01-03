@@ -51,7 +51,12 @@
     <Compile Include="Areas\Identity\Pages\Account\ResetPassword.cshtml.cs" />
     <Compile Include="Areas\Identity\Pages\Account\ResetPasswordConfirmation.cshtml.cs" />
     <Compile Include="Areas\Identity\Pages\Error.cshtml.cs" />
+    <Compile Include="Areas\ProjectManagment\Controllers\DeliverableController.cs" />
     <Compile Include="Areas\ProjectManagment\Controllers\HomeController.cs" />
+    <Compile Include="Areas\ProjectManagment\Controllers\InvoiceController.cs" />
+    <Compile Include="Areas\ProjectManagment\Controllers\PaymentTermController.cs" />
+    <Compile Include="Areas\ProjectManagment\Controllers\ProjectController.cs" />
+    <Compile Include="Areas\ProjectManagment\Controllers\ProjectPhaseController.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -84,6 +89,7 @@
     </PackageReference>
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="3.1.29" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.5" />
+    <PackageReference Include="System.Text.Json" Version="7.0.1" />
   </ItemGroup>
 
   <ItemGroup>
@@ -152,13 +158,38 @@
     <None Include="Areas\Identity\Pages\_ValidationScriptsPartial.cshtml" />
     <None Include="Areas\Identity\Pages\_ViewImports.cshtml" />
     <None Include="Areas\Identity\Pages\_ViewStart.cshtml" />
+    <None Include="Areas\ProjectManagment\Views\Deliverable\Create.cshtml" />
+    <None Include="Areas\ProjectManagment\Views\Deliverable\Delete.cshtml" />
+    <None Include="Areas\ProjectManagment\Views\Deliverable\Details.cshtml" />
+    <None Include="Areas\ProjectManagment\Views\Deliverable\Edit.cshtml" />
+    <None Include="Areas\ProjectManagment\Views\Deliverable\Index.cshtml" />
     <None Include="Areas\ProjectManagment\Views\Home\Index.cshtml" />
     <None Include="Areas\ProjectManagment\Views\Home\Privacy.cshtml" />
+    <None Include="Areas\ProjectManagment\Views\Invoice\Create.cshtml" />
+    <None Include="Areas\ProjectManagment\Views\Invoice\Delete.cshtml" />
+    <None Include="Areas\ProjectManagment\Views\Invoice\Details.cshtml" />
+    <None Include="Areas\ProjectManagment\Views\Invoice\Edit.cshtml" />
+    <None Include="Areas\ProjectManagment\Views\Invoice\Index.cshtml" />
+    <None Include="Areas\ProjectManagment\Views\PaymentTerm\Create.cshtml" />
+    <None Include="Areas\ProjectManagment\Views\PaymentTerm\Delete.cshtml" />
+    <None Include="Areas\ProjectManagment\Views\PaymentTerm\Details.cshtml" />
+    <None Include="Areas\ProjectManagment\Views\PaymentTerm\Edit - Copy.cshtml" />
+    <None Include="Areas\ProjectManagment\Views\PaymentTerm\Edit.cshtml" />
+    <None Include="Areas\ProjectManagment\Views\PaymentTerm\Index.cshtml" />
+    <None Include="Areas\ProjectManagment\Views\ProjectPhase\Create.cshtml" />
+    <None Include="Areas\ProjectManagment\Views\ProjectPhase\Delete.cshtml" />
+    <None Include="Areas\ProjectManagment\Views\ProjectPhase\Details.cshtml" />
+    <None Include="Areas\ProjectManagment\Views\ProjectPhase\Edit.cshtml" />
+    <None Include="Areas\ProjectManagment\Views\ProjectPhase\Index.cshtml" />
+    <None Include="Areas\ProjectManagment\Views\Project\Create.cshtml" />
+    <None Include="Areas\ProjectManagment\Views\Project\Delete.cshtml" />
+    <None Include="Areas\ProjectManagment\Views\Project\Details.cshtml" />
+    <None Include="Areas\ProjectManagment\Views\Project\Edit.cshtml" />
+    <None Include="Areas\ProjectManagment\Views\Project\Index.cshtml" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Controllers\" />
-    <Folder Include="DTOs\Update\" />
   </ItemGroup>
 
 </Project>
