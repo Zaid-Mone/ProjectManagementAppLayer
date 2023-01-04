@@ -82,6 +82,7 @@
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="3.1.29" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.32" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="3.1.32" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.1.32" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.32" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.32">
       <PrivateAssets>all</PrivateAssets>
@@ -173,7 +174,6 @@
     <None Include="Areas\ProjectManagment\Views\PaymentTerm\Create.cshtml" />
     <None Include="Areas\ProjectManagment\Views\PaymentTerm\Delete.cshtml" />
     <None Include="Areas\ProjectManagment\Views\PaymentTerm\Details.cshtml" />
-    <None Include="Areas\ProjectManagment\Views\PaymentTerm\Edit - Copy.cshtml" />
     <None Include="Areas\ProjectManagment\Views\PaymentTerm\Edit.cshtml" />
     <None Include="Areas\ProjectManagment\Views\PaymentTerm\Index.cshtml" />
     <None Include="Areas\ProjectManagment\Views\ProjectPhase\Create.cshtml" />

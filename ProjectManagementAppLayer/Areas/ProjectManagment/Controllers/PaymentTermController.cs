@@ -173,5 +173,20 @@ namespace ProjectManagementAppLayer.Areas.ProjectManagment.Controllers
                 .ToListAsync();
             return new JsonResult(ty);
         }
+
+
+        //get specific paymentterm based on the id 
+
+        //ProjectManagment/PaymentTerm/GetPaymentSum?id=CB41A9FA-AB5B-42E0-ACB5-C28B58FA74CC
+        public async Task<JsonResult> GetPaymentSum(Guid id)
+        {
+            var ty = await _context.PaymentTerms
+                .Include(q => q.Deliverable)
+                .Include(r => r.Deliverable.ProjectPhase)
+                .Include(v => v.Deliverable.ProjectPhase.Project)
+                .Include(v => v.Deliverable.ProjectPhase.Phase)
+                .SingleOrDefaultAsync(e=>e.Id==id);
+            return new JsonResult(ty);
+        }
     }
 }

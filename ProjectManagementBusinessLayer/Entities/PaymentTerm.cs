@@ -16,11 +16,11 @@ namespace ProjectManagementBusinessLayer.Entities
         [ForeignKey("DeliverableId")]
         public Guid DeliverableId { get; set; }
         public Deliverable Deliverable { get; set; }
-        public List<InvoicePaymentTerm> InvoicePaymentTerms { get; set; }
+        public List<InvoicePaymentTerms> InvoicePaymentTerms { get; set; }
 
         // add flag 
         // to check if it's paid or not and if it is not show it in invoice
-        //public bool IsPaid { get; set; } = false;
+        public bool IsPaid { get; set; } = false;
 
     }
 

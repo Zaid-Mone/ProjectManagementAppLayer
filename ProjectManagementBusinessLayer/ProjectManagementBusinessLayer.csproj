@@ -5,6 +5,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\20230104162159_UpadteInvoicePaymentTermAndPaymentTermTables.cs" />
+    <Compile Remove="Migrations\20230104162159_UpadteInvoicePaymentTermAndPaymentTermTables.Designer.cs" />
+    <Compile Remove="Migrations\20230104162957_addInvoicePaymentTermsTable.cs" />
+    <Compile Remove="Migrations\20230104162957_addInvoicePaymentTermsTable.Designer.cs" />
+    <Compile Remove="Migrations\20230104170203_ez.cs" />
+    <Compile Remove="Migrations\20230104170203_ez.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="3.1.29" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.29" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="3.1.29" />
