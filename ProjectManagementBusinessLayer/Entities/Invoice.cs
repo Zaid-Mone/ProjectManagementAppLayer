@@ -13,7 +13,7 @@ namespace ProjectManagementBusinessLayer.Entities
         public string InvoiceTitle { get; set; }
         [Display(Name = "Invoice Date")]
         public DateTime InvoiceDate { get; set; }
-        public List<InvoicePaymentTerm> InvoicePaymentTerms { get; set; }
+        public List<InvoicePaymentTerms> InvoicePaymentTerms { get; set; }
         [ForeignKey("ProjectId")]
         public Guid ProjectId { get; set; }
         public Project Project { get; set; }

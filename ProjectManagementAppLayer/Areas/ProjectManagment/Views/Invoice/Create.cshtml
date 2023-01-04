@@ -55,7 +55,8 @@
                     <div class="form-group">
                         <label asp-for="PaymentTermIds" class="control-label"id="dropdownLabel" style="display:none;"></label>
                         <select asp-for="PaymentTermIds" class="form-control" id="secondDropdown" style="display:none;" multiple>
-                           <option selected disabled>Select PayementTerm</option>
+                            @*onchange="GetSum()"*@
+                            <option selected disabled>Select PayementTerm</option>
                         </select>
                     </div>
 

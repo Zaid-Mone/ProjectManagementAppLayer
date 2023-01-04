@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using ProjectManagementAppLayer.DTOs.Insert;
 using ProjectManagementBusinessLayer.Data;
 using ProjectManagementBusinessLayer.Entities;
+using ProjectManagementBusinessLayer.Repositories.Implementation;
 using ProjectManagementBusinessLayer.Repositories.Interfaces;
 
 namespace ProjectManagementAppLayer.Areas.ProjectManagment.Controllers
@@ -19,13 +20,16 @@ namespace ProjectManagementAppLayer.Areas.ProjectManagment.Controllers
         private readonly ApplicationDbContext _context;
         private readonly IInvoiceRepository _invoiceRepository;
         private readonly IProjectRepository _projectRepository;
+        private readonly IInvoicePaymentTermsRepository _invoicePaymentTerms;
         public InvoiceController(ApplicationDbContext context,
-            IInvoiceRepository invoiceRepository, 
-            IProjectRepository projectRepository)
+            IInvoiceRepository invoiceRepository,
+            IProjectRepository projectRepository,
+           IInvoicePaymentTermsRepository invoicePaymentTerms )
         {
             _context = context;
             _invoiceRepository = invoiceRepository;
             _projectRepository = projectRepository;
+            _invoicePaymentTerms = invoicePaymentTerms;
         }
 
         // GET: ProjectManagment/Invoice
@@ -73,19 +77,20 @@ namespace ProjectManagementAppLayer.Areas.ProjectManagment.Controllers
                      InvoiceTitle=insertInvoiceDTO.InvoiceTitle,
                      ProjectId=insertInvoiceDTO.ProjectId
                 };
-                //_invoiceRepository.Insert(invoice);
-                //_invoiceRepository.Save();
+                _invoiceRepository.Insert(invoice);
+                _invoiceRepository.Save();
 
-                //foreach (var item in insertInvoiceDTO.PaymentTermIds)
-                //{
-                //    var invoicePayment = new InvoicePaymentTerm()
-                //    {
-                //        InvoiceId =invoice.Id,
-                //        PaymentTermId =item
-                //    };
-                //    // insert
-                //}
-                //// save
+                foreach (var item in insertInvoiceDTO.PaymentTermIds)
+                {
+                    var invoicePayment = new InvoicePaymentTerms()
+                    {
+                        InvoiceId = invoice.Id,
+                        PaymentTermId = item,
+
+                    };
+                    _invoicePaymentTerms.Insert(invoicePayment);
+                }
+                _invoicePaymentTerms.Save();
                 return RedirectToAction(nameof(Index));
             }
             return View(insertInvoiceDTO);

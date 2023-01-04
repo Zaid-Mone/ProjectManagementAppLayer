@@ -18,7 +18,7 @@ namespace ProjectManagementBusinessLayer.Data
         public DbSet<Phase> Phases { get; set; }
         public DbSet<PaymentTerm> PaymentTerms { get; set; }
         public DbSet<Invoice> Invoices { get; set; }
-        public DbSet<InvoicePaymentTerm> InvoicePaymentTerms { get; set; }
+        public DbSet<InvoicePaymentTerms> InvoicePaymentTerms { get; set; }
         public DbSet<Deliverable> Deliverables { get; set; }
         public DbSet<Client> Clients { get; set; }
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
@@ -36,6 +36,22 @@ namespace ProjectManagementBusinessLayer.Data
             builder.Entity<PaymentTerm>()
              .Property(p => p.PaymentTermAmount)
              .HasColumnType("decimal(18,4)");
+
+            builder.Entity<InvoicePaymentTerms>().HasKey(y => new { y.InvoiceId, y.PaymentTermId });
+            //builder.Entity<Invoice>()
+            // .HasMany(s => s.InvoicePaymentTerms)
+            // .WithOne(sc => sc.Invoice)
+            // .HasForeignKey(sc => sc.InvoiceId);
+            builder.Entity<InvoicePaymentTerms>()
+                     .HasOne(sc => sc.PaymentTerm)
+                     .WithMany(c => c.InvoicePaymentTerms)
+                    .HasForeignKey(sc => sc.PaymentTermId)
+                    .OnDelete(deleteBehavior: DeleteBehavior.ClientSetNull);
+            builder.Entity<InvoicePaymentTerms>()
+                    .HasOne(sc => sc.Invoice)
+                    .WithMany(c => c.InvoicePaymentTerms)
+                    .HasForeignKey(sc => sc.InvoiceId)
+                    .OnDelete(deleteBehavior:DeleteBehavior.ClientSetNull);
         }
     }
 }

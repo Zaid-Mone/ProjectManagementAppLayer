@@ -13,5 +13,5 @@ namespace ProjectManagementBusinessLayer.Repositories.Interfaces
         public void Update(Invoice invoice);
         public void Delete(Invoice invoice);
         public void Save();
-    }
+    }    
 }

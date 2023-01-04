@@ -4,9 +4,9 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ProjectManagementBusinessLayer.Entities
 {
-    public class InvoicePaymentTerm
+    public class InvoicePaymentTerms
     {
-        [Key]
+        [ForeignKey("InvoiceId")]
         public Guid InvoiceId { get; set; }
         public Invoice Invoice { get; set; }
         [ForeignKey("PaymentTermId")]
@@ -14,5 +14,6 @@ namespace ProjectManagementBusinessLayer.Entities
         public PaymentTerm PaymentTerm { get; set; }
 
     }
+
 
 }

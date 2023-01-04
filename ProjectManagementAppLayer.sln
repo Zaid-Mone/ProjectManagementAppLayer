@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.33027.164
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjectManagementAppLayer", "ProjectManagementAppLayer\ProjectManagementAppLayer.csproj", "{8EF0C526-D5CE-4F0B-92D7-F69BBFD7B996}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProjectManagementAppLayer", "ProjectManagementAppLayer\ProjectManagementAppLayer.csproj", "{8EF0C526-D5CE-4F0B-92D7-F69BBFD7B996}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjectManagementBusinessLayer", "ProjectManagementBusinessLayer\ProjectManagementBusinessLayer.csproj", "{A880C792-AD80-4E13-A1B0-2AAB60EB5EA9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProjectManagementBusinessLayer", "ProjectManagementBusinessLayer\ProjectManagementBusinessLayer.csproj", "{A880C792-AD80-4E13-A1B0-2AAB60EB5EA9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

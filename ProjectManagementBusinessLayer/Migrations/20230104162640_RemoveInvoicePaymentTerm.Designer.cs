@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ProjectManagementBusinessLayer.Data;
 
 namespace ProjectManagementBusinessLayer.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230104162640_RemoveInvoicePaymentTerm")]
+    partial class RemoveInvoicePaymentTerm
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -216,21 +218,6 @@ namespace ProjectManagementBusinessLayer.Migrations
                     b.HasIndex("ProjectId");
 
                     b.ToTable("Invoices");
-                });
-
-            modelBuilder.Entity("ProjectManagementBusinessLayer.Entities.InvoicePaymentTerms", b =>
-                {
-                    b.Property<Guid>("InvoiceId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("PaymentTermId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("InvoiceId", "PaymentTermId");
-
-                    b.HasIndex("PaymentTermId");
-
-                    b.ToTable("InvoicePaymentTerms");
                 });
 
             modelBuilder.Entity("ProjectManagementBusinessLayer.Entities.PaymentTerm", b =>
@@ -537,19 +524,6 @@ namespace ProjectManagementBusinessLayer.Migrations
                         .WithMany()
                         .HasForeignKey("ProjectId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("ProjectManagementBusinessLayer.Entities.InvoicePaymentTerms", b =>
-                {
-                    b.HasOne("ProjectManagementBusinessLayer.Entities.Invoice", "Invoice")
-                        .WithMany("InvoicePaymentTerms")
-                        .HasForeignKey("InvoiceId")
-                        .IsRequired();
-
-                    b.HasOne("ProjectManagementBusinessLayer.Entities.PaymentTerm", "PaymentTerm")
-                        .WithMany("InvoicePaymentTerms")
-                        .HasForeignKey("PaymentTermId")
                         .IsRequired();
                 });
 

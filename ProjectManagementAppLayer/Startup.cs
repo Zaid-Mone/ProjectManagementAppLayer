@@ -58,6 +58,7 @@ namespace ProjectManagementAppLayer
             services.AddTransient<IDeliverableRepository, DeliverableRepository>();
             services.AddTransient<IPaymentTermRepository, PaymentTermRepository>();
             services.AddTransient<IInvoiceRepository, InvoiceRepository>();
+            services.AddTransient<IInvoicePaymentTermsRepository, InvoicePaymentTermsRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
