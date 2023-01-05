@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ProjectManagementAppLayer.DTOs.Insert;
+using ProjectManagementAppLayer.DTOs.Update;
 using ProjectManagementBusinessLayer.Data;
 using ProjectManagementBusinessLayer.Entities;
 using ProjectManagementBusinessLayer.Repositories.Interfaces;
@@ -72,8 +74,6 @@ namespace ProjectManagementAppLayer.Areas.ProjectManagment.Controllers
         }
 
         // POST: ProjectManagment/ProjectPhase/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Create(InsertProjectPhaseDTO insertProjectPhaseDTO)
@@ -108,8 +108,9 @@ namespace ProjectManagementAppLayer.Areas.ProjectManagment.Controllers
             ViewBag.phase = phases;
             var project = await _projectRepository.GetProjectById(projectPhase.ProjectId);
             ViewBag.project = project;
-
-
+            var pPhase = await _projectPhaseRepository.GetAllProjectPhases();
+            ViewBag.projectPahse = pPhase;
+            ViewData["PhaseId"] = new SelectList(phases, "Id", "PhaseName", projectPhase.PhaseId);
             if (projectPhase == null)
             {
                 return NotFound();
@@ -118,25 +119,31 @@ namespace ProjectManagementAppLayer.Areas.ProjectManagment.Controllers
         }
 
         // POST: ProjectManagment/ProjectPhase/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(ProjectPhase projectPhase)
+        public async Task<IActionResult> Edit(UpdateProjectPhasesDTO updateProjectPhasesDTO)
         {
 
             if (ModelState.IsValid)
             {
                 try
                 {
+                    var projectPhase = new ProjectPhase()
+                    {
+                        Id=updateProjectPhasesDTO.ProjectPhaseId,
+                        EndDate =updateProjectPhasesDTO.EndDate,
+                        PhaseId=updateProjectPhasesDTO.PhaseId,
+                        ProjectId = updateProjectPhasesDTO.ProjectId,
+                        StartDate=updateProjectPhasesDTO.StartDate
+                    };
                     _projectPhaseRepository.Update(projectPhase);
                     _projectPhaseRepository.Save();
-                    ViewBag.project = await _projectRepository.GetProjectById(projectPhase.ProjectId);
+                    //ViewBag.project = await _projectRepository.GetProjectById(projectPhase.ProjectId);
                     TempData["edit"] = "Phases has been Updated Successfully ...";
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ProjectPhaseExists(projectPhase.Id))
+                    if (updateProjectPhasesDTO.ProjectPhaseId==null)
                     {
                         return NotFound();
                     }
@@ -145,11 +152,9 @@ namespace ProjectManagementAppLayer.Areas.ProjectManagment.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index),new { id=projectPhase.ProjectId});
+                return RedirectToAction(nameof(Index),new { id=updateProjectPhasesDTO.ProjectId});
             }
-            ViewData["PhaseId"] = new SelectList(_context.Phases, "Id", "Id", projectPhase.PhaseId);
-            ViewData["ProjectId"] = new SelectList(_context.Projects, "Id", "Id", projectPhase.ProjectId);
-            return View(projectPhase);
+            return View(updateProjectPhasesDTO);
         }
 
         // GET: ProjectManagment/ProjectPhase/Delete/5

@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -18,23 +20,31 @@ namespace ProjectManagementAppLayer.Areas.ProjectManagment.Controllers
         private readonly ApplicationDbContext _context;
         private readonly IPaymentTermRepository _paymentTermRepository;
         private readonly IDeliverableRepository _deliverableRepository;
-
+        private readonly UserManager<Person> _userManager;
         public PaymentTermController(
             ApplicationDbContext context,
-            IPaymentTermRepository paymentTermRepository, 
+            IPaymentTermRepository paymentTermRepository,
             IDeliverableRepository deliverableRepository
-            )
+, UserManager<Person> userManager)
         {
             _context = context;
             _paymentTermRepository = paymentTermRepository;
             _deliverableRepository = deliverableRepository;
+            _userManager = userManager;
         }
 
         // GET: ProjectManagment/PaymentTerm
         public async Task<IActionResult> Index()
         {
-            var item = await _paymentTermRepository.GetAllPaymentTerms();
-            return View(item);
+            var res = await _userManager.IsInRoleAsync(await _userManager.GetUserAsync(User), "Admin");
+            if (res)
+            {
+                var item1 = await _paymentTermRepository.GetAllPaymentTerms();
+                return View(item1);
+            }
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var item2 = await _paymentTermRepository.GetAllPaymentTermByProjectManagerId(userId);
+            return View(item2);
         }
 
         // GET: ProjectManagment/PaymentTerm/Details/5
@@ -164,20 +174,14 @@ namespace ProjectManagementAppLayer.Areas.ProjectManagment.Controllers
 
         public async Task<JsonResult> GetprojectPayments(Guid id)
         {
-            var ty = await _context.PaymentTerms
-                .Include(q => q.Deliverable)
-                .Include(r => r.Deliverable.ProjectPhase)
-                .Include(v => v.Deliverable.ProjectPhase.Project)
-                .Include(v => v.Deliverable.ProjectPhase.Phase)
-                .Where(z => z.Deliverable.ProjectPhase.Project.Id == id)
-                .ToListAsync();
+            var ty = await _paymentTermRepository.GetIsNotPaidPaymentTerm(id);
             return new JsonResult(ty);
         }
 
 
         //get specific paymentterm based on the id 
-
         //ProjectManagment/PaymentTerm/GetPaymentSum?id=CB41A9FA-AB5B-42E0-ACB5-C28B58FA74CC
+        // return paymentTerm that is not paid 
         public async Task<JsonResult> GetPaymentSum(Guid id)
         {
             var ty = await _context.PaymentTerms
@@ -185,8 +189,28 @@ namespace ProjectManagementAppLayer.Areas.ProjectManagment.Controllers
                 .Include(r => r.Deliverable.ProjectPhase)
                 .Include(v => v.Deliverable.ProjectPhase.Project)
                 .Include(v => v.Deliverable.ProjectPhase.Phase)
-                .SingleOrDefaultAsync(e=>e.Id==id);
+                .SingleOrDefaultAsync(t=>t.Id==id);
+
+            if (ty.IsPaid == true)
+            {
+                return new JsonResult(new { message = "Sorry This paymentTerm is already paid" }) ;
+            }
             return new JsonResult(ty);
         }
+        // ProjectManagment/PaymentTerm/GetPaymentTerm?id=CB41A9FA-AB5B-42E0-ACB5-C28B58FA74CC
+        //public async Task<JsonResult>GetPaymentTerm(Guid id)
+        //{
+        //    if(id == null)
+        //    {
+        //        return new JsonResult(new { message = "Sorry This paymentTerm is not found" });
+
+        //    }
+        //    var pay = await _paymentTermRepository.GetIsNotPaidPaymentTerm(id);
+        //    if (pay.IsPaid == true)
+        //    {
+        //        return new JsonResult(new { message = "Sorry This paymentTerm is already paid" });
+        //    }
+        //    return new JsonResult(pay);
+        //}
     }
 }

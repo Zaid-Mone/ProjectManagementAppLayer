@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -19,22 +20,30 @@ namespace ProjectManagementAppLayer.Areas.ProjectManagment.Controllers
         private readonly IDeliverableRepository _deliverableRepository;
         private readonly IProjectPhaseRepository _projectPhaseRepository;
         private readonly IProjectRepository _projectRepository;
+        private readonly UserManager<Person> _userManager;
 
-        public DeliverableController(IDeliverableRepository deliverableRepositor, 
-            IProjectPhaseRepository projectPhaseRepository, 
-            IProjectRepository projectRepository)
+        public DeliverableController(IDeliverableRepository deliverableRepositor,
+            IProjectPhaseRepository projectPhaseRepository,
+            IProjectRepository projectRepository, UserManager<Person> userManager)
         {
-  
+
             _deliverableRepository = deliverableRepositor;
             _projectPhaseRepository = projectPhaseRepository;
             _projectRepository = projectRepository;
+            _userManager = userManager;
         }
 
         // GET: ProjectManagment/Deliverable
         public async Task<IActionResult> Index()
         {
+            var res = await _userManager.IsInRoleAsync(await _userManager.GetUserAsync(User), "Admin");
+            if (res)
+            {
+                var item1 = await _deliverableRepository.GetAllDeliverables();
+                return View(item1);
+            }
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var item = await _deliverableRepository.GetAllDeliverables(userId);
+            var item = await _deliverableRepository.GetAllDeliverableForProjectManager(userId);
             return View(item);
         }
 

@@ -31,6 +31,16 @@ namespace ProjectManagementBusinessLayer.Repositories.Implementation
             .ToListAsync();
         }
 
+        public async Task<List<ProjectPhase>> GetAllProjectPhasesByProjectManagerId(string id)
+        {
+            return await _context.ProjectPhases
+            .Include(p => p.Phase)
+            .Include(b => b.Project)
+            .Include(q=>q.Project.ProjectManager)
+            .Where(r=>r.Project.ProjectManagerId==id)
+            .ToListAsync();
+        }
+
         public async Task<List<ProjectPhase>> GetAllSpecificProjectPhaseById(Guid? id)
         {
             return await _context.ProjectPhases

@@ -9,7 +9,9 @@ namespace ProjectManagementAppLayer.DTOs.Update
     public class UpdateProjectPhasesDTO
     {
         public Guid ProjectPhaseId { get; set; } // pk 
+        [Display(Name = "Project")]
         public Guid ProjectId { get; set; }
+        [Display(Name = "Phase")]
         public Guid PhaseId { get; set; }
 
         [DataType(DataType.Date)]

@@ -12,6 +12,7 @@ namespace ProjectManagementBusinessLayer.Entities
         [Display(Name = "Invoice Title")]
         public string InvoiceTitle { get; set; }
         [Display(Name = "Invoice Date")]
+        [DataType(DataType.Date)]
         public DateTime InvoiceDate { get; set; }
         public List<InvoicePaymentTerms> InvoicePaymentTerms { get; set; }
         [ForeignKey("ProjectId")]

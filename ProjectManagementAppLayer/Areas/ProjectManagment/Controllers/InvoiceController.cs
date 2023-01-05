@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -21,21 +22,34 @@ namespace ProjectManagementAppLayer.Areas.ProjectManagment.Controllers
         private readonly IInvoiceRepository _invoiceRepository;
         private readonly IProjectRepository _projectRepository;
         private readonly IInvoicePaymentTermsRepository _invoicePaymentTerms;
+        private readonly IPaymentTermRepository _paymentTermRepository;
+        private readonly UserManager<Person> _userManager;
+
         public InvoiceController(ApplicationDbContext context,
             IInvoiceRepository invoiceRepository,
             IProjectRepository projectRepository,
-           IInvoicePaymentTermsRepository invoicePaymentTerms )
+           IInvoicePaymentTermsRepository invoicePaymentTerms,
+           IPaymentTermRepository paymentTermRepository, UserManager<Person> userManager)
         {
             _context = context;
             _invoiceRepository = invoiceRepository;
             _projectRepository = projectRepository;
             _invoicePaymentTerms = invoicePaymentTerms;
+            _paymentTermRepository = paymentTermRepository;
+            _userManager = userManager;
         }
 
         // GET: ProjectManagment/Invoice
         public async Task<IActionResult> Index()
         {
-            var item = await _invoiceRepository.GetAllInvoices();
+            var res = await _userManager.IsInRoleAsync(await _userManager.GetUserAsync(User), "Admin");
+            if (res)
+            {
+                var item1 = await _invoiceRepository.GetAllInvoices();
+                return View(item1);
+            }
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var item = await _invoiceRepository.GetAllInvoicesByProjectManagerId(userId);
             return View(item);
         }
 
@@ -67,7 +81,7 @@ namespace ProjectManagementAppLayer.Areas.ProjectManagment.Controllers
         // POST: ProjectManagment/Invoice/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(InsertInvoiceDTO insertInvoiceDTO)
+        public async Task<IActionResult> Create(InsertInvoiceDTO insertInvoiceDTO)
         {
             if (ModelState.IsValid)
             {
@@ -75,22 +89,30 @@ namespace ProjectManagementAppLayer.Areas.ProjectManagment.Controllers
                 {
                      InvoiceDate= insertInvoiceDTO.InvoiceDate,
                      InvoiceTitle=insertInvoiceDTO.InvoiceTitle,
-                     ProjectId=insertInvoiceDTO.ProjectId
+                     ProjectId=insertInvoiceDTO.ProjectId,
+                     
                 };
                 _invoiceRepository.Insert(invoice);
                 _invoiceRepository.Save();
 
                 foreach (var item in insertInvoiceDTO.PaymentTermIds)
                 {
-                    var invoicePayment = new InvoicePaymentTerms()
-                    {
-                        InvoiceId = invoice.Id,
-                        PaymentTermId = item,
+                    
+                    var invoicePayment = new InvoicePaymentTerms();
 
-                    };
+                    invoicePayment.InvoiceId = invoice.Id;
+                    invoicePayment.PaymentTermId = item;
+
+                    // not working to set isPaid = true; object refernec =null
+                    var pTerm = await _paymentTermRepository.GetPaymentTermById(item);
+                    if (pTerm != null)
+                    {
+                        pTerm.IsPaid = true;
+                    }
                     _invoicePaymentTerms.Insert(invoicePayment);
                 }
                 _invoicePaymentTerms.Save();
+                TempData["save"] = "Invoice has been Created Successfully ...";
                 return RedirectToAction(nameof(Index));
             }
             return View(insertInvoiceDTO);
@@ -114,27 +136,21 @@ namespace ProjectManagementAppLayer.Areas.ProjectManagment.Controllers
         }
 
         // POST: ProjectManagment/Invoice/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("Id,InvoiceTitle,InvoiceDate,ProjectId")] Invoice invoice)
+        public async Task<IActionResult> Edit(Invoice invoice)
         {
-            if (id != invoice.Id)
-            {
-                return NotFound();
-            }
-
             if (ModelState.IsValid)
             {
                 try
                 {
                     _context.Update(invoice);
                     await _context.SaveChangesAsync();
+                    TempData["edit"] = "Invoice has been Updated Successfully ...";
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!InvoiceExists(invoice.Id))
+                    if (invoice.Id ==null)
                     {
                         return NotFound();
                     }
@@ -176,12 +192,10 @@ namespace ProjectManagementAppLayer.Areas.ProjectManagment.Controllers
             var invoice = await _context.Invoices.FindAsync(id);
             _context.Invoices.Remove(invoice);
             await _context.SaveChangesAsync();
+            TempData["delete"] = "Invoice has been Deleted Successfully ...";
             return RedirectToAction(nameof(Index));
         }
 
-        private bool InvoiceExists(Guid id)
-        {
-            return _context.Invoices.Any(e => e.Id == id);
-        }
+
     }
 }

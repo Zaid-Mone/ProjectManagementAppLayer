@@ -4,6 +4,7 @@ using ProjectManagementBusinessLayer.Entities;
 using ProjectManagementBusinessLayer.Repositories.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -24,12 +25,33 @@ namespace ProjectManagementBusinessLayer.Repositories.Implementation
 
         public async Task<List<Invoice>> GetAllInvoices()
         {
-            return await _context.Invoices.Include(e=>e.Project).ToListAsync();
+            return await _context.Invoices
+                .Include(t=>t.InvoicePaymentTerms)
+                .ThenInclude(r=>r.PaymentTerm)
+                .Include(e=>e.Project)
+                .Include(q=>q.Project.Client)
+                .ToListAsync();
+        }
+
+        public async Task<List<Invoice>> GetAllInvoicesByProjectManagerId(string id)
+        {
+            return await _context.Invoices
+                .Include(t => t.InvoicePaymentTerms)
+                .ThenInclude(r => r.PaymentTerm)
+                .Include(e => e.Project)
+                .Include(x=>x.Project.ProjectManager)
+                .Include(q => q.Project.Client)
+                .Where(n=>n.Project.ProjectManagerId==id)
+                .ToListAsync();
         }
 
         public async Task<Invoice> GetInvoiceById(Guid id)
         {
-           return await _context.Invoices.Include(e => e.Project).SingleOrDefaultAsync(t => t.Id == id);
+           return await _context.Invoices
+                .Include(t => t.InvoicePaymentTerms)
+                .ThenInclude(r => r.PaymentTerm)
+                .Include(e => e.Project)
+                .SingleOrDefaultAsync(t => t.Id == id);
         }
 
         public void Insert(Invoice invoice)

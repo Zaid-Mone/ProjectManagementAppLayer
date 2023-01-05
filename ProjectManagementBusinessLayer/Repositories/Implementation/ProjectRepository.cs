@@ -25,6 +25,7 @@ namespace ProjectManagementBusinessLayer.Repositories.Implementation
 
         public async Task<List<Project>> GetAllProjects()
         {
+         
             return await _context.Projects
                 .Include(z=>z.Client)
                 .Include(q=>q.ProjectManager)

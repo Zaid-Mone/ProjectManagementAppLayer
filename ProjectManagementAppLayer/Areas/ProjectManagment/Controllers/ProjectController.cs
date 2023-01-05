@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Data.SqlClient;
@@ -24,23 +25,34 @@ namespace ProjectManagementAppLayer.Areas.ProjectManagment.Controllers
         private readonly IProjectTypeRepository _projectTypeRepository;
         private readonly IProjectStatusRepository _projectStatusRepository;
         private readonly IClientRepository _clientRepository;
+        private readonly UserManager<Person> _userManager;
 
         public ProjectController(ApplicationDbContext context,
-            IProjectRepository projectRepository, IProjectTypeRepository projectTypeRepository, IProjectStatusRepository projectStatusRepository, IClientRepository clientRepository)
+            IProjectRepository projectRepository, IProjectTypeRepository projectTypeRepository, IProjectStatusRepository projectStatusRepository, IClientRepository clientRepository, UserManager<Person> userManager)
         {
             _context = context;
             this._projectRepository = projectRepository;
             _projectTypeRepository = projectTypeRepository;
             _projectStatusRepository = projectStatusRepository;
             this._clientRepository = clientRepository;
+            _userManager = userManager;
         }
 
         // GET: ProjectManagment/Project
         public async Task<IActionResult> Index()
         {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var applicationDbContext = await _projectRepository.GetProjectManagerProjects(userId);
-            return View(applicationDbContext);
+          var res =  await _userManager.IsInRoleAsync(await _userManager.GetUserAsync(User), "Admin");
+            if (res)
+            {
+                var item = await _projectRepository.GetAllProjects();
+                return View(item);
+            }
+            else
+            {
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                var applicationDbContext = await _projectRepository.GetProjectManagerProjects(userId);
+                return View(applicationDbContext);
+            }
         }
 
         // GET: ProjectManagment/Project/Details/5
@@ -131,9 +143,16 @@ namespace ProjectManagementAppLayer.Areas.ProjectManagment.Controllers
                 return NotFound();
             }
             ViewBag.project = project;
-            ViewBag.projectStatus = await _projectStatusRepository.GetAllProjectStatuses();
-            ViewBag.projectType = await _projectTypeRepository.GetAllProjectTypes();
-            ViewBag.client = await _clientRepository.GetAllClients();
+            var projectStatus = await _projectStatusRepository.GetAllProjectStatuses();
+            ViewBag.projectStatus = projectStatus;
+           var projectTypes = await _projectTypeRepository.GetAllProjectTypes();
+            ViewBag.projectType = projectTypes;
+          var clients = await _clientRepository.GetAllClients();
+            ViewBag.client = clients;
+
+            ViewData["ClientId"] = new SelectList(clients, "Id", "Name", project.ClientId);
+            ViewData["ProjectStatusId"] = new SelectList(projectStatus, "Id", "Status", project.ProjectStatusId);
+            ViewData["ProjectTypeId"] = new SelectList(projectTypes, "Id", "Type", project.ProjectTypeId);
             return View();
         }
 
@@ -146,35 +165,48 @@ namespace ProjectManagementAppLayer.Areas.ProjectManagment.Controllers
             {
                 try
                 {
-                    var project = new Project() 
-                    { 
-                         Id = updateProjectDTO.ProjectId,
-                         ClientId=updateProjectDTO.ClientId,
-                         ContractAmount=updateProjectDTO.ContractAmount,
-                         StartDate=updateProjectDTO.StartDate,
-                         EndDate=updateProjectDTO.EndDate,
-                         ProjectManagerId=updateProjectDTO.ProjectManagerId,
-                         ProjectName=updateProjectDTO.ProjectName,
-                         ProjectStatusId=updateProjectDTO.ProjectStatusId,
-                         ProjectTypeId=updateProjectDTO.ProjectTypeId,
-                          
-                    };
-                    _projectRepository.Update(project);
-                    _projectRepository.Save();
-                    TempData["edit"] = "Project has been Updated Successfully ...";
+                    //var proj = await _projectRepository.GetProjectById(updateProjectDTO.ProjectId);
+                    if (updateProjectDTO.ContractFile != null) 
+                    {
+                        var project = new Project()
+                        {
+                            Id = updateProjectDTO.ProjectId,
+                            ClientId = updateProjectDTO.ClientId,
+                            ContractAmount = updateProjectDTO.ContractAmount,
+                            StartDate = updateProjectDTO.StartDate,
+                            EndDate = updateProjectDTO.EndDate,
+                            ProjectManagerId = updateProjectDTO.ProjectManagerId,
+                            ProjectName = updateProjectDTO.ProjectName,
+                            ProjectStatusId = updateProjectDTO.ProjectStatusId,
+                            ProjectTypeId = updateProjectDTO.ProjectTypeId,
+                            ContractFileName = updateProjectDTO.ContractFile.FileName,
+                            ContractFileType = updateProjectDTO.ContractFile.ContentType,
+
+                        };
+                        Stream st = updateProjectDTO.ContractFile.OpenReadStream();
+                        using (BinaryReader bt = new BinaryReader(st))
+                        {
+                            var byteFile = bt.ReadBytes((int)st.Length);
+                            project.ContractFile = byteFile;
+                            _projectRepository.Update(project);
+                            _projectRepository.Save();
+                            TempData["edit"] = "Project has been Updated Successfully ...";
+                            return RedirectToAction(nameof(Index));
+                        }
+                    }
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    //if (!_projectRepository.ProjectExists(project.Id))
-                    //{
-                    //    return NotFound();
-                    //}
-                    //else
-                    //{
-                    //    throw;
-                    //}
+                    if (updateProjectDTO.ProjectId==null)
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
                 }
-                return RedirectToAction(nameof(Index));
+                
             }
             ViewBag.projectStatus = await _projectStatusRepository.GetAllProjectStatuses();
             ViewBag.projectType = await _projectTypeRepository.GetAllProjectTypes();
