@@ -8,6 +8,7 @@ namespace ProjectManagementBusinessLayer.Repositories.Interfaces
     public interface IProjectPhaseRepository
     {
         public Task<List<ProjectPhase>> GetAllProjectPhases();
+        public Task<List<ProjectPhase>> GetAllProjectPhasesByProjectManagerId(string id);
         public Task<ProjectPhase> GetProjectPhaseById(Guid id);
         public Task<List<ProjectPhase>> GetAllSpecificProjectPhaseById(Guid? id);
         public void Insert(ProjectPhase projectPhase);

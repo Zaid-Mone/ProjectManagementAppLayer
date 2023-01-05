@@ -25,7 +25,7 @@ namespace ProjectManagementBusinessLayer.Repositories.Implementation
             _context.Deliverables.Remove(deliverable);
         }
 
-        public async Task<List<Deliverable>> GetAllDeliverables(string id)
+        public async Task<List<Deliverable>> GetAllDeliverableForProjectManager(string id)
         {
             return await _context.Deliverables
                 .Include(v => v.ProjectPhase)
@@ -33,6 +33,16 @@ namespace ProjectManagementBusinessLayer.Repositories.Implementation
                 .ThenInclude(e => e.ProjectPhases)
                 .ThenInclude(q => q.Phase)
                 .Where(n => n.ProjectPhase.Project.ProjectManagerId == id)
+                .ToListAsync();
+        }
+
+        public async Task<List<Deliverable>> GetAllDeliverables()
+        {
+            return await _context.Deliverables
+                .Include(v => v.ProjectPhase)
+                .ThenInclude(x => x.Project)
+                .ThenInclude(e => e.ProjectPhases)
+                .ThenInclude(q => q.Phase)
                 .ToListAsync();
         }
 

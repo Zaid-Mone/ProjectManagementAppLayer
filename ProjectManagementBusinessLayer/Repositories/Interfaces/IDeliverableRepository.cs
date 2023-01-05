@@ -7,7 +7,8 @@ namespace ProjectManagementBusinessLayer.Repositories.Interfaces
 {
     public interface IDeliverableRepository
     {
-        public Task<List<Deliverable>> GetAllDeliverables(string id);
+        public Task<List<Deliverable>> GetAllDeliverables();
+        public Task<List<Deliverable>> GetAllDeliverableForProjectManager(string id);
         public Task<Deliverable> GetDeliverableById(Guid id);
         public void Insert(Deliverable deliverable);
         public void Update(Deliverable deliverable);

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ProjectManagementBusinessLayer.Entities;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -13,9 +14,11 @@ namespace ProjectManagementAppLayer.DTOs.Insert
         [Display(Name = "Invoice Title")]
         public string InvoiceTitle { get; set; }
         [Display(Name = "Invoice Date")]
+        [DataType(DataType.Date)]
         public DateTime InvoiceDate { get; set; }
         [Display(Name = "Projects")]
         public Guid ProjectId { get; set; }
+        public PaymentTerm  PaymentTerm { get; set; }
 
     }
 }

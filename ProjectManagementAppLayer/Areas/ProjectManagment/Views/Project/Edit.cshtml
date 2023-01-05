@@ -20,11 +20,11 @@
 
             <input type="hidden" name="ProjectId" value="@project.Id" />
             <input type="hidden" asp-for="@project.ContractFile" />
-            <input type="hidden" name="ProjectTypeId" value="@project.ProjectTypeId" />
+            @*<input type="hidden" name="ProjectTypeId" value="@project.ProjectTypeId" />*@
             <input type="hidden" name="ProjectManagerId" value="@project.ProjectManagerId" />
-            <input type="hidden" name="ProjectStatusId" value="@project.ProjectStatusId" />
+            @*<input type="hidden" name="ProjectStatusId" value="@project.ProjectStatusId" />*@
             <input type="hidden" name="ProjectManagerId" value="@project.ProjectManagerId" />
-            <input type="hidden" name="ClientId" value="@project.ClientId" />
+            @*<input type="hidden" name="ClientId" value="@project.ClientId" />*@
 
 
             <div class="row">
@@ -70,13 +70,7 @@
                 <div class="col-6">
                     <div class="form-group">
                         <label asp-for="ProjectTypeId" class="control-label"></label>
-                        <select asp-for="@project.ProjectTypeId" class="form-control">
-                            <option selected value="@project.ProjectTypeId">@project.ProjectType.Type</option>
-                            @foreach (var item1 in pType)
-                            {
-                                <option value="@item1.Id">@item1.Type</option>
-                            }
-                        </select>
+                        <select asp-for="ProjectTypeId" class="form-control" asp-items="ViewBag.ProjectTypeId"></select>
                         <span asp-validation-for="ProjectTypeId" class="text-danger"></span>
                     </div>
 
@@ -84,13 +78,7 @@
                 <div class="col-6">
                     <div class="form-group">
                         <label asp-for="ProjectStatusId" class="control-label"></label>
-                        <select asp-for="@project.ProjectStatusId" class="form-control">
-                            <option selected value="@project.ProjectStatusId">@project.ProjectStatus.Status</option>
-                            @foreach (var item2 in pStatus)
-                            {
-                                <option value="@item2.Id">@item2.Status</option>
-                            }
-                        </select>
+                        <select asp-for="ProjectStatusId" class="form-control" asp-items="ViewBag.ProjectStatusId"></select>
                         <span asp-validation-for="ProjectStatusId" class="text-danger"></span>
                     </div>
 
@@ -109,13 +97,7 @@
                 <div class="col-6">
                     <div class="form-group">
                         <label asp-for="ClientId" class="control-label"></label>
-                        <select asp-for="@project.ClientId" class="form-control">
-                            <option selected value="@project.ClientId">@project.Client.Name</option>
-                            @foreach (var item3 in client)
-                            {
-                                <option value="@item3.Id">@item3.Name</option>
-                            }
-                        </select>
+                        <select asp-for="ClientId" class="form-control" asp-items="ViewBag.ClientId"></select>
                         <span asp-validation-for="ClientId" class="text-danger"></span>
                     </div>
 

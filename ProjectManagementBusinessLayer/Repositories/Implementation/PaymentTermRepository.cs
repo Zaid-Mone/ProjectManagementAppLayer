@@ -24,6 +24,18 @@ namespace ProjectManagementBusinessLayer.Repositories.Implementation
             _context.PaymentTerms.Remove(paymentTerm);
         }
 
+        public async Task<List<PaymentTerm>> GetAllPaymentTermByProjectManagerId(string id)
+        {
+            return await _context.PaymentTerms
+                .Include(e => e.Deliverable)
+                .Include(q => q.Deliverable.ProjectPhase)
+                .Include(y => y.Deliverable.ProjectPhase.Project)
+                .Include(v => v.Deliverable.ProjectPhase.Phase)
+                .Include(b=>b.Deliverable.ProjectPhase.Project.ProjectManager)
+                .Where(o=>o.Deliverable.ProjectPhase.Project.ProjectManagerId==id)
+                .ToListAsync();
+        }
+
         public async Task<List<PaymentTerm>> GetAllPaymentTerms()
         {
             return await _context.PaymentTerms
@@ -31,6 +43,18 @@ namespace ProjectManagementBusinessLayer.Repositories.Implementation
                 .Include(q => q.Deliverable.ProjectPhase)
                 .Include(y => y.Deliverable.ProjectPhase.Project)
                 .Include(v => v.Deliverable.ProjectPhase.Phase)
+                .ToListAsync();
+        }
+
+        public async Task<List<PaymentTerm>> GetIsNotPaidPaymentTerm(Guid id)
+        {
+            return await _context.PaymentTerms
+                .Include(q => q.Deliverable)
+                .Include(r => r.Deliverable.ProjectPhase)
+                .Include(v => v.Deliverable.ProjectPhase.Project)
+                .Include(v => v.Deliverable.ProjectPhase.Phase)
+                .Where(z => z.Deliverable.ProjectPhase.Project.Id == id)
+                .Where(t => t.IsPaid == false)
                 .ToListAsync();
         }
 
