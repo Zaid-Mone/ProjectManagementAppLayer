@@ -20,6 +20,23 @@ namespace ProjectManagementBusinessLayer.Repositories.Implementation
         }
         public void Delete(Project project)
         {
+            var res1 = _context.Invoices.Include(p=>p.Project).Where(q => q.ProjectId == project.Id).ToList();
+            foreach (var item in res1)
+            {
+                _context.Invoices.Remove(item);
+            }
+
+            var res2 = _context.InvoicePaymentTerms
+                .Include(z => z.Invoice)
+                .Include(i=>i.Invoice.Project)
+                .Where(e=>e.Invoice.ProjectId==project.Id)
+                .ToList();
+            foreach (var item2 in res2)
+            {
+                _context.InvoicePaymentTerms.Remove(item2);
+            }
+            //_context.Remove(res1);
+            //_context.Remove(res2);
             _context.Projects.Remove(project);
         }
 

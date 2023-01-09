@@ -1,12 +1,33 @@
-﻿
+﻿////function getAll() {
+////$(document).ready(function () {
+////    $('select').on('change', function () {
+////        var $optionValue = document.getElementById("mySelect").value;
+////        $.ajax({
+////            url: `/ProjectManagment/PaymentTerm/GetprojectPayments`,
+////            dataType: { id: optionValue },
+////        }).done(function (data) {
+////            if (!jQuery.isEmptyObject(data)) {
+////                console.log(data);
+////            } else {
+////                $('select').hide();
+////            }
+////        });
+////    });
+////});
+
+////}
 
 // to get all paymentTerm based on project id
-    function myFunction() {
-    var optionValue = document.getElementById("mySelect").value; 
+function myFunction() {
+        
+        var optionValue = document.getElementById("mySelect").value;
     $.ajax({
         type: "Get",
         url: `/ProjectManagment/PaymentTerm/GetprojectPayments?id=${optionValue}`,
+       /* dataType: { id: optionValue},*/
         success: function (response) {
+            $("#secondDropdown option").remove();
+            $("#secondDropdown").append("<option selected disabled>Select PayementTerm</option>");
             for (var item of response.$values) {
                 $('#secondDropdown').append(" <option value=" +item.id+ ">" + item.paymentTermTitle +" - "+ item.deliverable.description+"</option>")
                 $('#secondDropdown option').addClass('submitButton');
@@ -15,7 +36,10 @@
         error: function (er) {
             console.log(er.responseText);
         }
-        });
+    });
+      // $('.submitButton').val('');
+        //$('#secondDropdown').empty();
+        //secondDropdown.innerHTML = "";
         console.clear();
     }
 
@@ -68,8 +92,6 @@ $(document).ready(function () {
 
 
 
-
-
 // Get Single value 
 
 //function GetSum() {
@@ -89,4 +111,41 @@ $(document).ready(function () {
 
 //    console.clear();
 
+//}
+function GetAll() {
+$('#mySelect').on('click', function () {
+    var optionValue = document.getElementById("mySelect").value;
+    $.ajax({
+        type: 'GET',
+        url: '/ProjectManagment/PaymentTerm/GetprojectPayments',
+        data: { id: optionValue },
+        success: function (data) {
+            console.log(data)
+        }
+    });
+});
+}
+//function myFunction() {
+//    $('#mySelect').on('click', function () {
+//    var optionValue = document.getElementById("mySelect").value;
+//    $.ajax({
+//        type: "Get",
+//        url: `/ProjectManagment/PaymentTerm/GetprojectPayments?id=${optionValue}`,
+//        /* dataType: { id: optionValue},*/
+//        success: function (response) {
+//            $('.ajax').remove();
+//            for (var item of response.$values) {
+//                $('#secondDropdown').append(" <option value=" + item.id + ">" + item.paymentTermTitle + " - " + item.deliverable.description + "</option>")
+//                $('#secondDropdown option').addClass('submitButton');
+//            }
+//        },
+//        error: function (er) {
+//            console.log(er.responseText);
+//        }
+//    });
+//        });
+//    // $('.submitButton').val('');
+//    //$('#secondDropdown').empty();
+//    //secondDropdown.innerHTML = "";
+//    console.clear();
 //}

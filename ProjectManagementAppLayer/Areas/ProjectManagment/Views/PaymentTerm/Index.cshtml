@@ -35,7 +35,8 @@
                 @Html.DisplayFor(modelItem => item.PaymentTermTitle)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.PaymentTermAmount)
+                @item.PaymentTermAmount.ToString("C")
+                @*@Html.DisplayFor(modelItem => item.PaymentTermAmount).ToString("C");*@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Deliverable.ProjectPhase.Project.ProjectName)

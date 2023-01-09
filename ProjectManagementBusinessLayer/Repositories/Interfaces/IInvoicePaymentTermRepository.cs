@@ -9,6 +9,7 @@ namespace ProjectManagementBusinessLayer.Repositories.Interfaces
     {
         public Task<List<InvoicePaymentTerms>> GetAllInvoicesPaymetnTerms();
         public Task<InvoicePaymentTerms> GetInvoicePaymentTermById(Guid id);
+        public Task<List<InvoicePaymentTerms>> GetInvoicePaymentTermByIdByProjectId(Guid id);
         public void Insert(InvoicePaymentTerms invoicePayment);
         public void Update(InvoicePaymentTerms invoicePayment);
         public void Delete(InvoicePaymentTerms invoicePayment);

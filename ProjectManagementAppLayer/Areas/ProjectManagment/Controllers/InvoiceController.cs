@@ -166,16 +166,14 @@ namespace ProjectManagementAppLayer.Areas.ProjectManagment.Controllers
         }
 
         // GET: ProjectManagment/Invoice/Delete/5
-        public async Task<IActionResult> Delete(Guid? id)
+        public async Task<IActionResult> Delete(Guid id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var invoice = await _context.Invoices
-                .Include(i => i.Project)
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var invoice = await _invoiceRepository.GetInvoiceById(id);
             if (invoice == null)
             {
                 return NotFound();

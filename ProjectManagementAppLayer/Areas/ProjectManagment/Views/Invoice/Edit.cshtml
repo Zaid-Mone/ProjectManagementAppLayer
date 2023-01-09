@@ -4,40 +4,53 @@
     ViewData["Title"] = "Edit";
 }
 
-<h1>Edit</h1>
 
-<h4>Invoice</h4>
+<h3>Edit Invoice</h3>
 <hr />
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-12">
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
-            <div class="form-group">
-                <label asp-for="InvoiceTitle" class="control-label"></label>
-                <input asp-for="InvoiceTitle" class="form-control" />
-                <span asp-validation-for="InvoiceTitle" class="text-danger"></span>
+            <input type="hidden" asp-for="ProjectId" />
+            <input type="hidden" asp-for="Project.ClientId" />
+            <input type="hidden" asp-for="Project.ProjectStatusId" />
+            <input type="hidden" asp-for="Project.ProjectTypeId" />
+
+            <div class="row">
+                <div class="form-group col-6">
+                    <label asp-for="Project" class="control-label"></label>
+                    <input asp-for="Project.ProjectName" class="form-control" disabled />
+                    <span asp-validation-for="ProjectId" class="text-danger"></span>
+                </div>
+                <div class="form-group col-6">
+                    <label asp-for="Project.Client" class="control-label"></label>
+                    <input asp-for="Project.Client.Email" class="form-control" disabled />
+                    <span asp-validation-for="ProjectId" class="text-danger"></span>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="InvoiceDate" class="control-label"></label>
-                <input asp-for="InvoiceDate" class="form-control" />
-                <span asp-validation-for="InvoiceDate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ProjectId" class="control-label"></label>
-                <select asp-for="ProjectId" class="form-control" asp-items="ViewBag.ProjectId"></select>
-                <span asp-validation-for="ProjectId" class="text-danger"></span>
+            <div class="row">
+                <div class="form-group col-6">
+                    <label asp-for="InvoiceTitle" class="control-label"></label>
+                    <input asp-for="InvoiceTitle" class="form-control" />
+                    <span asp-validation-for="InvoiceTitle" class="text-danger"></span>
+                </div>
+                <div class="form-group col-6">
+                    <label asp-for="InvoiceDate" class="control-label"></label>
+                    <input asp-for="InvoiceDate" class="form-control" />
+                    <span asp-validation-for="InvoiceDate" class="text-danger"></span>
+                </div>
+
             </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
+                <a asp-action="Index" class="btn btn-secondary">Back to List</a>
             </div>
         </form>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
