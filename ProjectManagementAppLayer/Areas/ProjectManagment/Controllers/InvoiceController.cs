@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ProjectManagementAppLayer.DTOs.Insert;
+using ProjectManagementAppLayer.DTOs.Update;
 using ProjectManagementBusinessLayer.Data;
 using ProjectManagementBusinessLayer.Entities;
 using ProjectManagementBusinessLayer.Repositories.Implementation;
@@ -119,38 +120,57 @@ namespace ProjectManagementAppLayer.Areas.ProjectManagment.Controllers
         }
 
         // GET: ProjectManagment/Invoice/Edit/5
-        public async Task<IActionResult> Edit(Guid? id)
+        public async Task<IActionResult> Edit(Guid id)
         {
+           
+            var invoice = await _invoiceRepository.GetInvoiceById(id);
+            ViewBag.invoice = invoice;
             if (id == null)
             {
                 return NotFound();
             }
 
-            var invoice = await _context.Invoices.FindAsync(id);
+            ViewBag.pay =  _paymentTermRepository.GetProjectPaymentTerms(invoice.ProjectId);
+            
             if (invoice == null)
             {
                 return NotFound();
             }
-            ViewData["ProjectId"] = new SelectList(_context.Projects, "Id", "Id", invoice.ProjectId);
-            return View(invoice);
+            return View();
         }
 
         // POST: ProjectManagment/Invoice/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Invoice invoice)
+        public async Task<IActionResult> Edit(UpdateInvoiceDTO updateInvoiceDTO)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    _context.Update(invoice);
-                    await _context.SaveChangesAsync();
+
+                    var invo = await _invoiceRepository.GetInvoiceById(updateInvoiceDTO.InvoiceId);
+                    invo.InvoiceDate = updateInvoiceDTO.InvoiceDate;
+                    invo.InvoiceTitle = updateInvoiceDTO.InvoiceTitle;
+                    foreach (var item in invo.InvoicePaymentTerms)
+                    {
+                        _invoicePaymentTerms.Delete(item);
+                    }
+                    foreach (var item2 in updateInvoiceDTO.InvoicePaymentsIds)
+                    {
+                        var pays = new InvoicePaymentTerms()
+                        {
+                            InvoiceId = updateInvoiceDTO.InvoiceId,
+                            PaymentTermId = item2
+                        };
+                        _invoicePaymentTerms.Insert(pays);
+                    }
+                    _invoicePaymentTerms.Save();
                     TempData["edit"] = "Invoice has been Updated Successfully ...";
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (invoice.Id ==null)
+                    if (updateInvoiceDTO.InvoiceId ==null)
                     {
                         return NotFound();
                     }
@@ -161,8 +181,7 @@ namespace ProjectManagementAppLayer.Areas.ProjectManagment.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ProjectId"] = new SelectList(_context.Projects, "Id", "Id", invoice.ProjectId);
-            return View(invoice);
+            return View(updateInvoiceDTO);
         }
 
         // GET: ProjectManagment/Invoice/Delete/5
@@ -194,6 +213,20 @@ namespace ProjectManagementAppLayer.Areas.ProjectManagment.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+
+
+
+
+
+        // /ProjectManagment/Invoice/GetPayments?id=FB950297-1BDE-41D6-989E-08DAEF5A4FCE
+        // /ProjectManagment/Invoice/GetPaymentsForInvoices?id=EA2BF9AE-A019-4B79-4F9B-08DAEE916C39
+        public async Task<JsonResult> GetPaymentsForInvoices(Guid id)
+        {
+            var res1 = await _invoiceRepository.GetInvoiceById(id);
+            //var res2 = await _invoicePaymentTerms.GetInvoicePaymentTermByIdByInvoiceId(res1.Id);
+
+            return new JsonResult(res1);
+        }
 
     }
 }

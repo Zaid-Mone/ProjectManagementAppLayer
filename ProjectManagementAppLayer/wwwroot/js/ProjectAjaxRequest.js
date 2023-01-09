@@ -125,27 +125,7 @@ $('#mySelect').on('click', function () {
     });
 });
 }
-//function myFunction() {
-//    $('#mySelect').on('click', function () {
-//    var optionValue = document.getElementById("mySelect").value;
-//    $.ajax({
-//        type: "Get",
-//        url: `/ProjectManagment/PaymentTerm/GetprojectPayments?id=${optionValue}`,
-//        /* dataType: { id: optionValue},*/
-//        success: function (response) {
-//            $('.ajax').remove();
-//            for (var item of response.$values) {
-//                $('#secondDropdown').append(" <option value=" + item.id + ">" + item.paymentTermTitle + " - " + item.deliverable.description + "</option>")
-//                $('#secondDropdown option').addClass('submitButton');
-//            }
-//        },
-//        error: function (er) {
-//            console.log(er.responseText);
-//        }
-//    });
-//        });
-//    // $('.submitButton').val('');
-//    //$('#secondDropdown').empty();
-//    //secondDropdown.innerHTML = "";
-//    console.clear();
-//}
+
+
+
+
