@@ -62,7 +62,8 @@
                 @Html.DisplayFor(modelItem => item.ProjectStatus.Status)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.ContractAmount)
+                @item.ContractAmount.ToString("C")
+                @*@Html.DisplayFor(modelItem => item.ContractAmount.ToString("C"))*@
             </td>
             <td>
                 <a href="/ProjectManagment/Project/ViewContract?Id=@item.Id" target="_blank">@item.ContractFileName</a>

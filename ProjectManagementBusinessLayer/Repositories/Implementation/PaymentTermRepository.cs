@@ -75,7 +75,7 @@ namespace ProjectManagementBusinessLayer.Repositories.Implementation
                 .Include(q => q.Deliverable.ProjectPhase)
                 .Include(y => y.Deliverable.ProjectPhase.Project)
                 .Include(v => v.Deliverable.ProjectPhase.Phase)
-           .Where(r => r.Deliverable.ProjectPhase.Project.Id == id)
+                .Where(r => r.Deliverable.ProjectPhase.Project.Id == id)
            .ToList();
         }
 

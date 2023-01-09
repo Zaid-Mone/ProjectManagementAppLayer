@@ -63,6 +63,24 @@ namespace ProjectManagementBusinessLayer.Repositories.Implementation
             _context.ProjectPhases.Add(projectPhase);
         }
 
+        public bool IsPhaseExist(Guid projectId,Guid phaseId)
+        {
+            var res = _context.ProjectPhases.SingleOrDefault(q => q.ProjectId == projectId);
+            var item = _context.ProjectPhases
+                .Where(e=>e.ProjectId==res.ProjectId)
+                .Any(e=>e.PhaseId==phaseId);
+            return item;
+        }
+
+        public bool IsPhaseExistForUpdate(Guid projectId, Guid phaseId)
+        {
+            //var res = _context.ProjectPhases.SingleOrDefault(q => q.ProjectId == projectId);
+            var item = _context.ProjectPhases
+                .Where(e => e.ProjectId == projectId)
+                .Any(e => e.PhaseId == phaseId);
+            return item;
+        }
+
         public void Save()
         {
             _context.SaveChanges();

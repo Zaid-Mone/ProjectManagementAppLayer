@@ -76,22 +76,64 @@ namespace ProjectManagementAppLayer.Areas.ProjectManagment.Controllers
         // POST: ProjectManagment/ProjectPhase/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(InsertProjectPhaseDTO insertProjectPhaseDTO)
+        public async Task<IActionResult> Create(InsertProjectPhaseDTO insertProjectPhaseDTO)
         {
             if (ModelState.IsValid)
             {
-                var projectphases = new ProjectPhase()
+                var projcet = await _projectRepository.GetProjectById(insertProjectPhaseDTO.ProjectId);
+                var phases = await _phaseRepository.GetAllPhases();
+                var projectPhase = await _projectPhaseRepository.GetAllSpecificProjectPhaseById(insertProjectPhaseDTO.ProjectId);
+                if (projcet.StartDate > insertProjectPhaseDTO.StartDate &&
+                    projcet.EndDate > insertProjectPhaseDTO.EndDate)
                 {
-                    Id = Guid.NewGuid(),
-                    ProjectId=insertProjectPhaseDTO.ProjectId,
-                    EndDate=insertProjectPhaseDTO.EndDate,
-                    PhaseId= insertProjectPhaseDTO.PhaseId,
-                    StartDate=insertProjectPhaseDTO.StartDate
-                };
-                _projectPhaseRepository.Insert(projectphases);
-                _projectPhaseRepository.Save();
-                TempData["save"] = "Phases has been Created Successfully ...";
-                return RedirectToAction("Index",new { id= insertProjectPhaseDTO.ProjectId});
+                    ModelState.AddModelError("", $"The Start Date must be bigger Than or equal {projcet.StartDate} && The End Date must be less Than or equal {projcet.EndDate}"); 
+                    ViewBag.project = projcet;
+                    ViewBag.phase = phases;
+                    return View(insertProjectPhaseDTO);
+                }
+                if (projectPhase.Count==0)
+                {
+                    var projectphases = new ProjectPhase()
+                    {
+                        Id = Guid.NewGuid(),
+                        ProjectId = insertProjectPhaseDTO.ProjectId,
+                        EndDate = insertProjectPhaseDTO.EndDate,
+                        PhaseId = insertProjectPhaseDTO.PhaseId,
+                        StartDate = insertProjectPhaseDTO.StartDate
+                    };
+                    _projectPhaseRepository.Insert(projectphases);
+                    _projectPhaseRepository.Save();
+                    TempData["save"] = "Phases has been Created Successfully ...";
+                    return RedirectToAction("Index", new { id = insertProjectPhaseDTO.ProjectId });
+                }
+                else
+                {
+                    //  check if is exist it will show error message
+                    var item = _projectPhaseRepository.IsPhaseExist(insertProjectPhaseDTO.ProjectId, insertProjectPhaseDTO.PhaseId);
+                    if (item)
+                    {
+                        ModelState.AddModelError("", "Sorry you have been used this Phase already in the project");
+                        await Create(insertProjectPhaseDTO.ProjectId);
+                        return View(insertProjectPhaseDTO);
+                    }
+                    else
+                    {
+                        // after check if not exist it will add it
+                        var projectphases = new ProjectPhase()
+                        {
+                            Id = Guid.NewGuid(),
+                            ProjectId = insertProjectPhaseDTO.ProjectId,
+                            EndDate = insertProjectPhaseDTO.EndDate,
+                            PhaseId = insertProjectPhaseDTO.PhaseId,
+                            StartDate = insertProjectPhaseDTO.StartDate
+                        };
+                        _projectPhaseRepository.Insert(projectphases);
+                        _projectPhaseRepository.Save();
+                        TempData["save"] = "Phases has been Created Successfully ...";
+                        return RedirectToAction("Index", new { id = insertProjectPhaseDTO.ProjectId });
+
+                    }
+                }
             }
             else
             {
@@ -106,8 +148,8 @@ namespace ProjectManagementAppLayer.Areas.ProjectManagment.Controllers
             ViewBag.projectPhase = projectPhase;
             var phases = await _phaseRepository.GetAllPhases();
             ViewBag.phase = phases;
-            var project = await _projectRepository.GetProjectById(projectPhase.ProjectId);
-            ViewBag.project = project;
+            //var project = await _projectRepository.GetProjectById(projectPhase.ProjectId);
+            //ViewBag.project = project;
             var pPhase = await _projectPhaseRepository.GetAllProjectPhases();
             ViewBag.projectPahse = pPhase;
             ViewData["PhaseId"] = new SelectList(phases, "Id", "PhaseName", projectPhase.PhaseId);
@@ -115,6 +157,8 @@ namespace ProjectManagementAppLayer.Areas.ProjectManagment.Controllers
             {
                 return NotFound();
             }
+           
+
             return View();
         }
 
@@ -128,7 +172,7 @@ namespace ProjectManagementAppLayer.Areas.ProjectManagment.Controllers
             {
                 try
                 {
-                    var projectPhase = new ProjectPhase()
+                    var projectPhases = new ProjectPhase()
                     {
                         Id=updateProjectPhasesDTO.ProjectPhaseId,
                         EndDate =updateProjectPhasesDTO.EndDate,
@@ -136,7 +180,22 @@ namespace ProjectManagementAppLayer.Areas.ProjectManagment.Controllers
                         ProjectId = updateProjectPhasesDTO.ProjectId,
                         StartDate=updateProjectPhasesDTO.StartDate
                     };
-                    _projectPhaseRepository.Update(projectPhase);
+                    var item = _projectPhaseRepository.IsPhaseExistForUpdate(projectPhases.ProjectId,projectPhases.PhaseId);
+                    if (item)
+                    {
+                        ModelState.AddModelError("", "Sorry you have been used this Phase already in the project");
+                        var projectPhase = await _projectPhaseRepository.GetProjectPhaseById(updateProjectPhasesDTO.ProjectPhaseId);
+                        ViewBag.projectPhase = projectPhase;
+                        var phases = await _phaseRepository.GetAllPhases();
+                        ViewBag.phase = phases;
+                        //var project = await _projectRepository.GetProjectById(projectPhase.ProjectId);
+                        //ViewBag.project = project;
+                        var pPhase = await _projectPhaseRepository.GetAllProjectPhases();
+                        ViewBag.projectPahse = pPhase;
+                        ViewData["PhaseId"] = new SelectList(phases, "Id", "PhaseName", projectPhase.PhaseId);
+                        return View(updateProjectPhasesDTO);
+                    }
+                    _projectPhaseRepository.Update(projectPhases);
                     _projectPhaseRepository.Save();
                     //ViewBag.project = await _projectRepository.GetProjectById(projectPhase.ProjectId);
                     TempData["edit"] = "Phases has been Updated Successfully ...";

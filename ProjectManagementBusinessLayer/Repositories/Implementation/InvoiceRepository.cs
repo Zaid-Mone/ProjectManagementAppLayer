@@ -51,6 +51,9 @@ namespace ProjectManagementBusinessLayer.Repositories.Implementation
                 .Include(t => t.InvoicePaymentTerms)
                 .ThenInclude(r => r.PaymentTerm)
                 .Include(e => e.Project)
+                .Include(y=>y.Project.Client)
+                .Include(s=>s.Project.ProjectStatus)
+                .Include(q=>q.Project.ProjectType)
                 .SingleOrDefaultAsync(t => t.Id == id);
         }
 

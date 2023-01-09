@@ -94,7 +94,7 @@ namespace ProjectManagementAppLayer.Areas.Administrator.Controllers
         // POST: ProjectManagerController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public ActionResult Edit(string id)
         {
             try
             {
@@ -107,18 +107,31 @@ namespace ProjectManagementAppLayer.Areas.Administrator.Controllers
         }
 
         // GET: ProjectManagerController/Delete/5
-        public ActionResult Delete(int id)
+        public async Task<ActionResult> Delete(string id)
         {
-            return View();
+            var projectManager = await _projectManagerRepository.GetProjectManagerById(id);
+            return View(projectManager);
         }
 
         // POST: ProjectManagerController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public async Task<ActionResult> Delete(ProjectManager projectManager)
         {
             try
             {
+                var projecM = await _projectManagerRepository.GetProjectManagerById(projectManager.Id);
+                if (projecM == null)
+                {
+                    return NotFound();
+                }
+               var res =  await _userManager.FindByEmailAsync(projecM.Email);
+                if(res == null)
+                {
+                    return NotFound();
+                }
+                await _userManager.DeleteAsync(res);
+                TempData["delete"] = "ProjectManager has been Deleted Successfully ...";
                 return RedirectToAction(nameof(Index));
             }
             catch

@@ -32,7 +32,11 @@ namespace ProjectManagementBusinessLayer.Repositories.Implementation
 
         public async Task<ProjectManager> GetProjectManagerById(string id)
         {
-            return await _context.ProjectManagers.SingleOrDefaultAsync(t=>t.Id==id);
+            var project = await _context.Projects
+                .Include(q => q.ProjectManager)
+                .Where(e => e.ProjectManagerId == id)
+                .ToListAsync();
+            return await _context.ProjectManagers.Include(p=>p.Projects).SingleOrDefaultAsync(t=>t.Id==id);
         }
 
     }

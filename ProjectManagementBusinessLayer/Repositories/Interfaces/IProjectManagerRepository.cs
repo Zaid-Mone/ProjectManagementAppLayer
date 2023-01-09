@@ -10,5 +10,7 @@ namespace ProjectManagementBusinessLayer.Repositories.Interfaces
         public Task<List<ProjectManager>> GetAllProjectManagers();
         public Task<ProjectManager> GetProjectManagerById(string id);
         public bool CheckExist(ProjectManager projectManager);
+        //public void Delete(ProjectManager projectManager);
+        
     }
 }

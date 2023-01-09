@@ -5,22 +5,41 @@
     var del = (Deliverable)ViewBag.deliv;
 }
 
+@if (ViewBag.msg == false)
+{
+    @section Scripts {
+        <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+        <script>
+        $(function () {
+        swal({
+        title: "warning",
+        text: "You Can't Add More Than @del.ProjectPhase.Project.ContractAmount.ToString("C")",
+        button: "Ok",
+        icon: "error",
+
+});        })
+        </script>
+    }
+
+
+}
+
 <h4>Create PaymentTerm</h4>
 <hr />
 <div class="row">
     <div class="col-md-12">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" name="DeliverableId" value="@del.Id"/>
-            <input type="hidden" name="ProjectPhaseId" value="@del.ProjectPhaseId"/>
-            <input type="hidden" name="ProjectId" value="@del.ProjectPhase.ProjectId"/>
-            <input type="hidden" name="PhaseId" value="@del.ProjectPhase.PhaseId"/>
+            <input type="hidden" name="DeliverableId" value="@del.Id" />
+            <input type="hidden" name="ProjectPhaseId" value="@del.ProjectPhaseId" />
+            <input type="hidden" name="ProjectId" value="@del.ProjectPhase.ProjectId" />
+            <input type="hidden" name="PhaseId" value="@del.ProjectPhase.PhaseId" />
 
             <div class="row">
                 <div class="col-6">
                     <div class="form-group">
                         <label asp-for="@del.ProjectPhase.Project" class="control-label"></label>
-                        <input asp-for="@del.ProjectPhase.Project.ProjectName" class="form-control" disabled/>
+                        <input asp-for="@del.ProjectPhase.Project.ProjectName" class="form-control" disabled />
                         <span asp-validation-for="@del.ProjectPhase.Project.ProjectName" class="text-danger"></span>
                     </div>
 
@@ -28,7 +47,7 @@
                 <div class="col-6">
                     <div class="form-group">
                         <label asp-for="@del.ProjectPhase.Phase" class="control-label"></label>
-                        <input asp-for="@del.ProjectPhase.Phase.PhaseName" class="form-control"disabled />
+                        <input asp-for="@del.ProjectPhase.Phase.PhaseName" class="form-control" disabled />
                         <span asp-validation-for="@del.ProjectPhase.Phase.PhaseName" class="text-danger"></span>
                     </div>
                 </div>
@@ -38,7 +57,7 @@
                 <div class="col-6">
                     <div class="form-group">
                         <label asp-for="@del.StartDate" class="control-label"></label>
-                        <input asp-for="@del.StartDate" class="form-control" disabled/>
+                        <input asp-for="@del.StartDate" class="form-control" disabled />
                         <span asp-validation-for="@del.StartDate" class="text-danger"></span>
                     </div>
 
@@ -46,7 +65,7 @@
                 <div class="col-6">
                     <div class="form-group">
                         <label asp-for="@del.EndDate" class="control-label"></label>
-                        <input asp-for="@del.EndDate" class="form-control" disabled/>
+                        <input asp-for="@del.EndDate" class="form-control" disabled />
                         <span asp-validation-for="@del.EndDate" class="text-danger"></span>
                     </div>
                 </div>
@@ -80,6 +99,6 @@
 </div>
 
 
-@section Scripts {
+@*@section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
+}*@

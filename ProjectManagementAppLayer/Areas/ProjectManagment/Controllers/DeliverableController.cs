@@ -80,19 +80,28 @@ namespace ProjectManagementAppLayer.Areas.ProjectManagment.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Deliverable deliverable)
         {
+
+
             if (ModelState.IsValid)
             {
-                deliverable.Id = Guid.NewGuid();
-                _deliverableRepository.Insert(deliverable);
-                _deliverableRepository.Save();
-                TempData["save"] = "Deliverable has been Created Successfully ...";
-                return RedirectToAction(nameof(Index));
+                var projectPhases = await _projectPhaseRepository.GetProjectPhaseById(deliverable.ProjectPhaseId);
+                var projects = await _projectRepository.GetProjectById(projectPhases.Id);
+                if (deliverable.StartDate >= projectPhases.StartDate.Date &&
+                   deliverable.EndDate <= projectPhases.EndDate.Date)
+                {
+                    deliverable.Id = Guid.NewGuid();
+                    _deliverableRepository.Insert(deliverable);
+                    _deliverableRepository.Save();
+                    TempData["save"] = "Deliverable has been Created Successfully ...";
+                    return RedirectToAction(nameof(Index));
+                }
+                // for Date Check
+                    ModelState.AddModelError("", $"The Start Date must be bigger Than or equal {projectPhases.StartDate} && The End Date must be less Than or equal {projectPhases.EndDate}");
+                    await Create(deliverable.ProjectPhaseId);
+                    return View(deliverable);
             }
-            var projectPhases = await _projectPhaseRepository.GetProjectPhaseById(deliverable.ProjectPhaseId);
-            ViewBag.projectphase = projectPhases;
-
-            var projects = await _projectRepository.GetProjectById(projectPhases.Id);
-            ViewBag.project = projects;
+            //ViewBag.projectphase = projectPhases;
+            //ViewBag.project = projects;
             return View(deliverable);
         }
 

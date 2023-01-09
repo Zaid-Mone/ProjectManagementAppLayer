@@ -14,6 +14,7 @@
     <div class="col-md-12">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            @*<input hidden asp-for="@projectPhase.Id"/>*@
             <input hidden value="@projectPhase.Id" name="ProjectPhaseId" id="ProjectPhaseId" />
             <input hidden value="@projectPhase.ProjectId" name="ProjectId" />
         <input hidden value="@projectPhase.PhaseId" name="PhaseId" />
