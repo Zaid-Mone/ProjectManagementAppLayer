@@ -42,7 +42,7 @@
                 <div class="col-6">
                     <div class="form-group">
                         <label asp-for="@projectPhase.StartDate" class="control-label"></label>
-                        <input value="@projectPhase.StartDate" class="form-control" disabled />
+                        <input value="@projectPhase.StartDate.ToString("d")" class="form-control" disabled />
                         <span asp-validation-for="@projectPhase.StartDate" class="text-danger"></span>
                     </div>
 
@@ -50,7 +50,7 @@
                 <div class="col-6">
                     <div class="form-group">
                         <label asp-for="@projectPhase.EndDate" class="control-label"></label>
-                        <input value="@projectPhase.EndDate" class="form-control" disabled />
+                        <input value="@projectPhase.EndDate.ToString("d")" class="form-control" disabled />
                         <span asp-validation-for="@projectPhase.EndDate" class="text-danger"></span>
                     </div>
 

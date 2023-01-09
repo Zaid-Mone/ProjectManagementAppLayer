@@ -1,46 +1,69 @@
-﻿@model ProjectManagementBusinessLayer.Entities.Invoice
-
+﻿@*@model ProjectManagementBusinessLayer.Entities.Invoice*@
+@using ProjectManagementAppLayer.DTOs.Update
+@model UpdateInvoiceDTO 
 @{
     ViewData["Title"] = "Edit";
+    var pay = (List<PaymentTerm>)ViewBag.pay;
+    var inv = (Invoice)ViewBag.invoice;
 }
 
-
+@*<script src="~/js/InvoiceAjaxUpdate.js"></script>*@
 <h3>Edit Invoice</h3>
 <hr />
 <div class="row">
     <div class="col-md-12">
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
-            <input type="hidden" asp-for="ProjectId" />
-            <input type="hidden" asp-for="Project.ClientId" />
-            <input type="hidden" asp-for="Project.ProjectStatusId" />
-            <input type="hidden" asp-for="Project.ProjectTypeId" />
+            <input type="hidden" name="InvoiceId" value="@inv.Id" />
+            <input type="hidden" name="ProjectId" value="@inv.ProjectId" />
+            <input type="hidden" name="ClientId" value="@inv.Project.ClientId" />
+            <input type="hidden" name="ProjectStatusId" value="@inv.Project.ProjectStatusId" />
+            <input type="hidden" name="ProjectTypeId" value="@inv.Project.ProjectTypeId" />
 
             <div class="row">
                 <div class="form-group col-6">
-                    <label asp-for="Project" class="control-label"></label>
-                    <input asp-for="Project.ProjectName" class="form-control" disabled />
-                    <span asp-validation-for="ProjectId" class="text-danger"></span>
+                    <label asp-for="@inv.Project" class="control-label"></label>
+                    <input asp-for="@inv.Project.ProjectName" class="form-control" disabled />
+                    <span asp-validation-for="@inv.ProjectId" class="text-danger"></span>
                 </div>
                 <div class="form-group col-6">
-                    <label asp-for="Project.Client" class="control-label"></label>
-                    <input asp-for="Project.Client.Email" class="form-control" disabled />
-                    <span asp-validation-for="ProjectId" class="text-danger"></span>
+                    <label asp-for="@inv.Project.Client" class="control-label"></label>
+                    <input asp-for="@inv.Project.Client.Email" class="form-control" disabled />
+                    <span asp-validation-for="@inv.Project.ClientId" class="text-danger"></span>
                 </div>
             </div>
             <div class="row">
                 <div class="form-group col-6">
                     <label asp-for="InvoiceTitle" class="control-label"></label>
-                    <input asp-for="InvoiceTitle" class="form-control" />
+                    <input asp-for="InvoiceTitle" class="form-control" value="@inv.InvoiceTitle" />
                     <span asp-validation-for="InvoiceTitle" class="text-danger"></span>
                 </div>
                 <div class="form-group col-6">
-                    <label asp-for="InvoiceDate" class="control-label"></label>
-                    <input asp-for="InvoiceDate" class="form-control" />
+                    <label class="control-label">Invoice Date</label>
+                    <input class="form-control" name="InvoiceDate" value="@inv.InvoiceDate.ToString("d")" />
+                    @*type="date"*@
                     <span asp-validation-for="InvoiceDate" class="text-danger"></span>
                 </div>
+            </div>
+            <div class="row">
 
+                <div class="form-group col-12">
+                    <label asp-for="InvoicePaymentsIds" class="control-label"></label>
+                    <select class="form-control" asp-for="InvoicePaymentsIds" multiple>
+                        @foreach (var item1 in pay)
+                        {
+                            @if (inv.InvoicePaymentTerms.Select(q => q.PaymentTermId).ToList().Contains(item1.Id))
+                            {
+                                <option selected value="@item1.Id">@item1.PaymentTermTitle</option>
+                            }
+                            else
+                            {
+                                <option value="@item1.Id">@item1.PaymentTermTitle</option>
+                            }
+                        }
+                    </select>
+                    <span asp-validation-for="InvoiceDate" class="text-danger"></span>
+                </div>
             </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
@@ -55,3 +78,16 @@
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
+
+
+
+@*<div class="form-group col-6">
+        <label asp-for="InvoicePaymentTerms" class="control-label"></label>
+        <select class="form-control" asp-for="InvoicePaymentTerms">
+            @foreach (var item in Model.InvoicePaymentTerms)
+            {
+                <option selected value="@item.PaymentTermId">@item.PaymentTerm.PaymentTermTitle</option>
+            }
+        </select>
+        <span asp-validation-for="InvoiceDate" class="text-danger"></span>
+    </div>*@
