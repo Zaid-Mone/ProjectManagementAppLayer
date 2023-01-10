@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -8,6 +9,7 @@ using ProjectManagementBusinessLayer.Entities;
 using ProjectManagementBusinessLayer.Repositories.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -19,12 +21,13 @@ namespace ProjectManagementAppLayer.Areas.Administrator.Controllers
     {
         private readonly IAdminRepository _adminRepository;
         private readonly UserManager<Person> _userManager;
-
-        public AdminController(IAdminRepository adminRepository, 
-            UserManager<Person> userManager)
+        private readonly IWebHostEnvironment _hosting;
+        public AdminController(IAdminRepository adminRepository,
+            UserManager<Person> userManager, IWebHostEnvironment hosting)
         {
             _adminRepository = adminRepository;
             _userManager = userManager;
+            _hosting = hosting;
         }
 
         // GET: AdminController
@@ -72,8 +75,8 @@ namespace ProjectManagementAppLayer.Areas.Administrator.Controllers
                         ModelState.AddModelError("", "Sorry the Email is already used");
                         return View();
                     }
+                    UploadImage(admin);
                     var res = await _userManager.CreateAsync(admin, adminDTO.Password);
-                    // to add projectmanager role to the projectmanager account
                     var role = await _userManager.AddToRoleAsync(admin, WebRoles.Admin);
                     TempData["save"] = "Admin has been Created Successfully ...";
                     return RedirectToAction(nameof(Index));
@@ -122,6 +125,26 @@ namespace ProjectManagementAppLayer.Areas.Administrator.Controllers
             catch
             {
                 return View();
+            }
+        }
+
+        private void UploadImage(Person model)
+        {
+            var file = HttpContext.Request.Form.Files;
+            if (file.Count() > 0)
+            {//@"wwwroot/"
+                string ImageName = Guid.NewGuid().ToString() + Path.GetExtension(file[0].FileName);
+                var filestream = new FileStream(Path.Combine(_hosting.WebRootPath, "Images", ImageName), FileMode.Create);
+                file[0].CopyTo(filestream);
+                model.ImageUrl = ImageName;
+            }
+            else if (model.ImageUrl == null)
+            {
+                model.ImageUrl = "noImage.png";
+            }
+            else
+            {
+                model.ImageUrl = model.ImageUrl;
             }
         }
     }
