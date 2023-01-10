@@ -11,6 +11,8 @@
     <Compile Remove="Migrations\20230104162957_addInvoicePaymentTermsTable.Designer.cs" />
     <Compile Remove="Migrations\20230104170203_ez.cs" />
     <Compile Remove="Migrations\20230104170203_ez.Designer.cs" />
+    <Compile Remove="Migrations\20230110125443_addAdmin.cs" />
+    <Compile Remove="Migrations\20230110125443_addAdmin.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

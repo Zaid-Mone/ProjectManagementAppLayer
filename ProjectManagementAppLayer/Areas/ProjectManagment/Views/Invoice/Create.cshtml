@@ -6,7 +6,6 @@
     var project = (List<Project>)ViewBag.projcet;
 }
 <script src="~/js/ProjectAjaxRequest.js"></script>
-
 <h4>Create Invoice</h4>
 <hr />
 <div class="row">
@@ -18,7 +17,7 @@
                 <div class="col-6">
                     <div class="form-group">
                         <label asp-for="InvoiceTitle" class="control-label"></label>
-                        <input asp-for="InvoiceTitle" class="form-control" />
+                        <input asp-for="InvoiceTitle" class="form-control" placeholder="Select Date" />
                         <span asp-validation-for="InvoiceTitle" class="text-danger"></span>
                     </div>
 
@@ -31,9 +30,9 @@
                     </div>
 
                 </div>
-                </div>
-            
-            
+            </div>
+
+
             <div class="row">
                 <div class="col-6">
                     <div class="form-group">
@@ -42,11 +41,11 @@
                             <option selected disabled>Select Project Type</option>
                             @foreach (var item1 in project)
                             {
-                                if(item1.ProjectManagerId == @ViewBag.user)
-                {
-                        <option value="@item1.Id">@item1.ProjectName</option>
-                }
-                                
+                                if (item1.ProjectManagerId == @ViewBag.user)
+                                {
+                                    <option value="@item1.Id">@item1.ProjectName</option>
+                                }
+
                             }
                         </select>
                     </div>
@@ -54,8 +53,8 @@
                 </div>
                 <div class="col-6">
                     <div class="form-group">
-                        <label asp-for="PaymentTermIds" class="control-label"id="dropdownLabel" style="display:none;"></label>
-                        <select asp-for="PaymentTermIds" class="form-control" id="secondDropdown" style="display:none;" multiple>
+                        <label asp-for="PaymentTermIds" class="control-label" id="dropdownLabel" style="display:none;"></label>
+                        <select asp-for="PaymentTermIds" class="js-example-basic-multiple form-control" id="secondDropdown" style="display:none;" multiple="multiple">
                             @*onchange="GetSum()"*@
                             <option selected disabled>Select PayementTerm</option>
                         </select>
@@ -76,4 +75,14 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <!--Select2.js-->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js" integrity="sha512-2ImtlRlf2VVmiGZsjm9bEyhjGW4dU7B6TNwh/hx/iSByxNENtj3WVE6o/9Lj4TJeVXPi4bnOIMXFIJJAeufa0A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('.js-example-basic-multiple').select2();
+        });
+    </script>
 }

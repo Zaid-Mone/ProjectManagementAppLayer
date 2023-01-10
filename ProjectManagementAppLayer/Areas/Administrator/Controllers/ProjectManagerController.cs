@@ -63,6 +63,7 @@ namespace ProjectManagementAppLayer.Areas.Administrator.Controllers
                     };
                     // to check if the user email exist or not
                     if (_projectManagerRepository.CheckExist(projectmanager)) {
+                        ViewBag.msg = false;
                         ModelState.AddModelError("", "Sorry the Email is already used");
                         return View();
                     }

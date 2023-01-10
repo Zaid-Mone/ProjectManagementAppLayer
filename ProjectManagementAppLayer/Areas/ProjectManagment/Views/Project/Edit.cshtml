@@ -8,23 +8,24 @@
     var pType = (List<ProjectType>)ViewBag.projectType;
     var client = (List<Client>)ViewBag.client;
 }
+<script>
+    $(function () {
+        $("#datepicker1").datepicker();
+        $("#datepicker2").datepicker();
+    });
+</script>
 
-<h1>Edit</h1>
 
-<h4>Project</h4>
+<h3>Edit Project</h3>
 <hr />
 <div class="row">
     <div class="col-md-12">
         <form asp-action="Edit" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-
             <input type="hidden" name="ProjectId" value="@project.Id" />
             <input type="hidden" asp-for="@project.ContractFile" />
-            @*<input type="hidden" name="ProjectTypeId" value="@project.ProjectTypeId" />*@
             <input type="hidden" name="ProjectManagerId" value="@project.ProjectManagerId" />
-            @*<input type="hidden" name="ProjectStatusId" value="@project.ProjectStatusId" />*@
             <input type="hidden" name="ProjectManagerId" value="@project.ProjectManagerId" />
-            @*<input type="hidden" name="ClientId" value="@project.ClientId" />*@
 
 
             <div class="row">
@@ -50,7 +51,7 @@
                 <div class="col-6">
                     <div class="form-group">
                         <label asp-for="StartDate" class="control-label"></label>
-                        <input name="StartDate" class="form-control" value="@project.StartDate.ToString("d")" />
+                        <input name="StartDate" id="datepicker1" class="form-control" value="@project.StartDate.ToString("d")" />
                         <span asp-validation-for="StartDate" class="text-danger"></span>
                     </div>
 
@@ -58,7 +59,7 @@
                 <div class="col-6">
                     <div class="form-group">
                         <label asp-for="EndDate" class="control-label"></label>
-                        <input name="EndDate" class="form-control" value="@project.EndDate.ToString("d")" />
+                        <input name="EndDate" id="datepicker2" class="form-control" value="@project.EndDate.ToString("d")" />
                         <span asp-validation-for="EndDate" class="text-danger"></span>
                     </div>
 

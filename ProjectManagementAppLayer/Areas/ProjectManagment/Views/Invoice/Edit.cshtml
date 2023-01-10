@@ -1,13 +1,20 @@
 ﻿@*@model ProjectManagementBusinessLayer.Entities.Invoice*@
 @using ProjectManagementAppLayer.DTOs.Update
-@model UpdateInvoiceDTO 
+@model UpdateInvoiceDTO
 @{
     ViewData["Title"] = "Edit";
     var pay = (List<PaymentTerm>)ViewBag.pay;
     var inv = (Invoice)ViewBag.invoice;
 }
 
-@*<script src="~/js/InvoiceAjaxUpdate.js"></script>*@
+@section Scripts {
+    <script>
+        $(function () {
+            $("#datepicker").datepicker();
+        });
+    </script>
+}
+
 <h3>Edit Invoice</h3>
 <hr />
 <div class="row">
@@ -40,7 +47,7 @@
                 </div>
                 <div class="form-group col-6">
                     <label class="control-label">Invoice Date</label>
-                    <input class="form-control" name="InvoiceDate" value="@inv.InvoiceDate.ToString("d")" />
+                    <input class="form-control" id="datepicker" name="InvoiceDate" value="@inv.InvoiceDate.ToShortDateString()" />
                     @*type="date"*@
                     <span asp-validation-for="InvoiceDate" class="text-danger"></span>
                 </div>
@@ -75,19 +82,21 @@
 
 
 
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
-
-
-
+<!--@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}-->
+<!--DatePicker-->
+<!--<link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="/resources/demos/style.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+}-->
 @*<div class="form-group col-6">
-        <label asp-for="InvoicePaymentTerms" class="control-label"></label>
-        <select class="form-control" asp-for="InvoicePaymentTerms">
-            @foreach (var item in Model.InvoicePaymentTerms)
-            {
-                <option selected value="@item.PaymentTermId">@item.PaymentTerm.PaymentTermTitle</option>
-            }
-        </select>
-        <span asp-validation-for="InvoiceDate" class="text-danger"></span>
-    </div>*@
+    <label asp-for="InvoicePaymentTerms" class="control-label"></label>
+    <select class="form-control" asp-for="InvoicePaymentTerms">
+        @foreach (var item in Model.InvoicePaymentTerms)
+        {
+        <option selected value="@item.PaymentTermId">@item.PaymentTerm.PaymentTermTitle</option>
+        }
+    </select>
+    <span asp-validation-for="InvoiceDate" class="text-danger"></span>
+</div>*@
