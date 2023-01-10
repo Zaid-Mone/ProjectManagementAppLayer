@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -8,6 +9,7 @@ using ProjectManagementBusinessLayer.Entities;
 using ProjectManagementBusinessLayer.Repositories.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -19,10 +21,13 @@ namespace ProjectManagementAppLayer.Areas.Administrator.Controllers
     {
         private readonly IProjectManagerRepository _projectManagerRepository;
         private readonly UserManager<Person> _userManager;
-        public ProjectManagerController(IProjectManagerRepository projectManagerRepository, UserManager<Person> userManager )
+        private readonly IWebHostEnvironment _hosting;
+
+        public ProjectManagerController(IProjectManagerRepository projectManagerRepository, UserManager<Person> userManager, IWebHostEnvironment hosting)
         {
             this._projectManagerRepository = projectManagerRepository;
             this._userManager = userManager;
+            _hosting = hosting;
         }
         // GET: ProjectManagerController
         public async Task<ActionResult> Index()
@@ -68,6 +73,7 @@ namespace ProjectManagementAppLayer.Areas.Administrator.Controllers
                         return View();
                     }
                     // to add projectmanager account
+                    UploadImage(projectmanager);
                     var res = await _userManager.CreateAsync(projectmanager, insertProjectManagerDTO.Password);
                     // to add projectmanager role to the projectmanager account
                     var role = await _userManager.AddToRoleAsync(projectmanager, WebRoles.ProjectManager);
@@ -140,5 +146,29 @@ namespace ProjectManagementAppLayer.Areas.Administrator.Controllers
                 return View();
             }
         }
+
+
+
+
+        private void UploadImage(Person model)
+        {
+            var file = HttpContext.Request.Form.Files;
+            if (file.Count() > 0)
+            {//@"wwwroot/"
+                string ImageName = Guid.NewGuid().ToString() + Path.GetExtension(file[0].FileName);
+                var filestream = new FileStream(Path.Combine(_hosting.WebRootPath, "Images", ImageName), FileMode.Create);
+                file[0].CopyTo(filestream);
+                model.ImageUrl = ImageName;
+            }
+            else if (model.ImageUrl == null)
+            {
+                model.ImageUrl = "noImage.png";
+            }
+            else
+            {
+                model.ImageUrl = model.ImageUrl;
+            }
+        }
+
     }
 }
