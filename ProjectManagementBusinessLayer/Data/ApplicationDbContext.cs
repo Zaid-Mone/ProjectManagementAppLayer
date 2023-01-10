@@ -21,6 +21,7 @@ namespace ProjectManagementBusinessLayer.Data
         public DbSet<InvoicePaymentTerms> InvoicePaymentTerms { get; set; }
         public DbSet<Deliverable> Deliverables { get; set; }
         public DbSet<Client> Clients { get; set; }
+        public DbSet<Admin> Admins { get; set; }
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {

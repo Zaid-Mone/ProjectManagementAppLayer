@@ -32,13 +32,13 @@
             @Html.DisplayNameFor(model => model.ProjectType)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ProjectType.Id)
+            @Html.DisplayFor(model => model.ProjectType.Type)
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.ProjectStatus)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ProjectStatus.Id)
+            @Html.DisplayFor(model => model.ProjectStatus.Status)
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.ContractAmount)
@@ -47,34 +47,16 @@
             @Html.DisplayFor(model => model.ContractAmount)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ContractFileName)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ContractFileName)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ContractFileType)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ContractFileType)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ContractFile)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ContractFile)
-        </dd>
-        <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.ProjectManager)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ProjectManager.Id)
+            @Html.DisplayFor(model => model.ProjectManager.Email)
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Client)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Client.Id)
+            @Html.DisplayFor(model => model.Client.Email)
         </dd>
     </dl>
 </div>

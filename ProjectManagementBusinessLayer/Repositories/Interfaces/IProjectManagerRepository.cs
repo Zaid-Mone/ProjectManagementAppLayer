@@ -12,5 +12,5 @@ namespace ProjectManagementBusinessLayer.Repositories.Interfaces
         public bool CheckExist(ProjectManager projectManager);
         //public void Delete(ProjectManager projectManager);
         
-    }
+    }    
 }

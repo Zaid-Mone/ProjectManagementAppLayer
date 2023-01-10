@@ -148,21 +148,32 @@ namespace ProjectManagementAppLayer.Areas.ProjectManagment.Controllers
             {
                 try
                 {
-
                     var invo = await _invoiceRepository.GetInvoiceById(updateInvoiceDTO.InvoiceId);
                     invo.InvoiceDate = updateInvoiceDTO.InvoiceDate;
                     invo.InvoiceTitle = updateInvoiceDTO.InvoiceTitle;
                     foreach (var item in invo.InvoicePaymentTerms)
                     {
+                        var pTerm = await _paymentTermRepository.GetPaymentTermById(item.PaymentTermId);
+                        if (pTerm != null)
+                        {
+                            pTerm.IsPaid = false;
+                        }
                         _invoicePaymentTerms.Delete(item);
+
                     }
                     foreach (var item2 in updateInvoiceDTO.InvoicePaymentsIds)
                     {
+                        
                         var pays = new InvoicePaymentTerms()
                         {
                             InvoiceId = updateInvoiceDTO.InvoiceId,
                             PaymentTermId = item2
                         };
+                        var pTerm = await _paymentTermRepository.GetPaymentTermById(item2);
+                        if (pTerm != null)
+                        {
+                            pTerm.IsPaid = true;
+                        }
                         _invoicePaymentTerms.Insert(pays);
                     }
                     _invoicePaymentTerms.Save();
@@ -206,9 +217,18 @@ namespace ProjectManagementAppLayer.Areas.ProjectManagment.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            var invoice = await _context.Invoices.FindAsync(id);
-            _context.Invoices.Remove(invoice);
-            await _context.SaveChangesAsync();
+            var invoice = await _invoiceRepository.GetInvoiceById(id);
+            foreach (var item in invoice.InvoicePaymentTerms)
+            {
+                var pTerm = await _paymentTermRepository.GetPaymentTermById(item.PaymentTermId);
+                if (pTerm != null)
+                {
+                    pTerm.IsPaid = false;
+                }
+                _invoicePaymentTerms.Delete(item);
+            }
+            _invoiceRepository.Delete(invoice);
+            _invoicePaymentTerms.Save();
             TempData["delete"] = "Invoice has been Deleted Successfully ...";
             return RedirectToAction(nameof(Index));
         }

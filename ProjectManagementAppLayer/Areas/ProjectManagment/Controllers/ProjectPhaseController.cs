@@ -86,7 +86,7 @@ namespace ProjectManagementAppLayer.Areas.ProjectManagment.Controllers
                 if (projcet.StartDate > insertProjectPhaseDTO.StartDate &&
                     projcet.EndDate > insertProjectPhaseDTO.EndDate)
                 {
-                    ModelState.AddModelError("", $"The Start Date must be bigger Than or equal {projcet.StartDate} && The End Date must be less Than or equal {projcet.EndDate}"); 
+                    ModelState.AddModelError("", $"The Start Date must be bigger Than or equal {projcet.StartDate.ToString("d")} && The End Date must be less Than or equal {projcet.EndDate.ToString("d")}"); 
                     ViewBag.project = projcet;
                     ViewBag.phase = phases;
                     return View(insertProjectPhaseDTO);
@@ -247,9 +247,6 @@ namespace ProjectManagementAppLayer.Areas.ProjectManagment.Controllers
             return RedirectToAction(nameof(Index),new { id=projectPhase.ProjectId});
         }
 
-        private bool ProjectPhaseExists(Guid id)
-        {
-            return _context.ProjectPhases.Any(e => e.Id == id);
-        }
+
     }
 }

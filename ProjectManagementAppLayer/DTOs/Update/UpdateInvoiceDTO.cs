@@ -15,8 +15,8 @@ namespace ProjectManagementAppLayer.DTOs.Update
         public string InvoiceTitle { get; set; }
 
         [Display(Name = "Invoice Date")]
-        [DataType(DataType.Date)]
-        //[DisplayFormat(DataFormatString = "{0:MM-dd-yyyy}", ApplyFormatInEditMode = true)]
+        //[DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:MM-dd-yyyy}", ApplyFormatInEditMode = true)]
         public DateTime InvoiceDate { get; set; }
 
         [Display(Name = "ProjectId")]
