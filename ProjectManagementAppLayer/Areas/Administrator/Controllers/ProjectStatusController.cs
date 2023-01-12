@@ -16,12 +16,12 @@ namespace ProjectManagementAppLayer.Areas.Administrator.Controllers
     [Authorize(Roles = "Admin")]
     public class ProjectStatusController : Controller
     {
-        private readonly ApplicationDbContext _context;
+       
         private readonly IProjectStatusRepository _projectStatusRepository;
-        public ProjectStatusController(ApplicationDbContext context, 
+        public ProjectStatusController( 
             IProjectStatusRepository projectStatusRepository)
         {
-            _context = context;
+      
             _projectStatusRepository = projectStatusRepository;
         }
 

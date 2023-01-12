@@ -16,11 +16,11 @@ namespace ProjectManagementAppLayer.Areas.Administrator.Controllers
     [Authorize(Roles="Admin")]
     public class ClientController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        
         private readonly IClientRepository _clientRepository;
-        public ClientController(ApplicationDbContext context, IClientRepository clientRepository)
+        public ClientController(IClientRepository clientRepository)
         {
-            _context = context;
+         
             this._clientRepository = clientRepository;
         }
 

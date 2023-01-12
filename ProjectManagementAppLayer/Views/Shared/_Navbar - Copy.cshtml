@@ -1,0 +1,62 @@
+﻿
+
+<header>
+    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <div class="container">
+            <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">ProjectManagementAppLayer</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
+                <partial name="_LoginPartial" />
+                <ul class="navbar-nav flex-grow-1">
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" asp-area="ProjectManagment" asp-controller="Home" asp-action="Index">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" asp-area="ProjectManagment" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                    </li>
+                    @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+                    {
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                More Links
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" asp-area="Administrator" asp-controller="Admin" asp-action="Index">Admin</a></li>
+                                <li><a class="dropdown-item" asp-area="Administrator" asp-controller="ProjectManager" asp-action="Index">ProjectManagers</a></li>
+                                <li><a class="dropdown-item" asp-area="Administrator" asp-controller="ProjectType" asp-action="Index">ProjectType</a></li>
+                                <li><a class="dropdown-item" asp-area="Administrator" asp-controller="ProjectStatus" asp-action="Index">ProjectStatus</a></li>
+                                <li><a class="dropdown-item" asp-area="Administrator" asp-controller="Phase" asp-action="Index">Phases</a></li>
+                                <li><a class="dropdown-item" asp-area="Administrator" asp-controller="Client" asp-action="Index">Clients</a></li>
+                                <li><a class="dropdown-item" asp-area="ProjectManagment" asp-controller="Project" asp-action="Index">Projects</a></li>
+                                <li><a class="dropdown-item" asp-area="ProjectManagment" asp-controller="Deliverable" asp-action="Index">Deliverable</a></li>
+                                <li><a class="dropdown-item" asp-area="ProjectManagment" asp-controller="PaymentTerm" asp-action="Index">PaymentTerm</a></li>
+                                <li><a class="dropdown-item" asp-area="ProjectManagment" asp-controller="Invoice" asp-action="Index">Invoice</a></li>
+
+                            </ul>
+                        </li>
+
+                    }
+                    @if (User.Identity.IsAuthenticated && User.IsInRole("ProjectManager"))
+                    {
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                More Links
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" asp-area="ProjectManagment" asp-controller="Project" asp-action="Index">Projects</a></li>
+                                <li><a class="dropdown-item" asp-area="ProjectManagment" asp-controller="Deliverable" asp-action="Index">Deliverable</a></li>
+                                <li><a class="dropdown-item" asp-area="ProjectManagment" asp-controller="PaymentTerm" asp-action="Index">PaymentTerm</a></li>
+                                <li><a class="dropdown-item" asp-area="ProjectManagment" asp-controller="Invoice" asp-action="Index">Invoice</a></li>
+                                
+                            </ul>
+                        </li>
+
+                    }
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>

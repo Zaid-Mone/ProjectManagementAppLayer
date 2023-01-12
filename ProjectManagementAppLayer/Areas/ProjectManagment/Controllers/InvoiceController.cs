@@ -57,6 +57,7 @@ namespace ProjectManagementAppLayer.Areas.ProjectManagment.Controllers
         // GET: ProjectManagment/Invoice/Details/5
         public async Task<IActionResult> Details(Guid id)
         {
+            if(User.Identity.IsAuthenticated)
             if (id == null)
             {
                 return NotFound();

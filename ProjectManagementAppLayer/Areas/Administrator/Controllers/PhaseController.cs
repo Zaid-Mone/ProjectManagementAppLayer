@@ -16,13 +16,13 @@ namespace ProjectManagementAppLayer.Areas.Administrator.Controllers
     [Authorize(Roles = "Admin")]
     public class PhaseController : Controller
     {
-        private readonly ApplicationDbContext _context;
+       
         private readonly IPhaseRepository _phaseRepository;
        
 
-        public PhaseController(ApplicationDbContext context, IPhaseRepository phaseRepository)
+        public PhaseController( IPhaseRepository phaseRepository)
         {
-            _context = context;
+      
             _phaseRepository = phaseRepository;
         }
 
