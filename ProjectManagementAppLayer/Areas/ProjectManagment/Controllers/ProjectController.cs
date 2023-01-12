@@ -20,17 +20,17 @@ namespace ProjectManagementAppLayer.Areas.ProjectManagment.Controllers
     [Area("ProjectManagment")]
     public class ProjectController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        //private readonly ApplicationDbContext _context;
         private readonly IProjectRepository _projectRepository;
         private readonly IProjectTypeRepository _projectTypeRepository;
         private readonly IProjectStatusRepository _projectStatusRepository;
         private readonly IClientRepository _clientRepository;
         private readonly UserManager<Person> _userManager;
 
-        public ProjectController(ApplicationDbContext context,
+        public ProjectController(/*ApplicationDbContext context,*/
             IProjectRepository projectRepository, IProjectTypeRepository projectTypeRepository, IProjectStatusRepository projectStatusRepository, IClientRepository clientRepository, UserManager<Person> userManager)
         {
-            _context = context;
+            //_context = context;
             this._projectRepository = projectRepository;
             _projectTypeRepository = projectTypeRepository;
             _projectStatusRepository = projectStatusRepository;

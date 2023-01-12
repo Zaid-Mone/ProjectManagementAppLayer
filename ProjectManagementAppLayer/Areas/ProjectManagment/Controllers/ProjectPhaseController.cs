@@ -17,14 +17,11 @@ namespace ProjectManagementAppLayer.Areas.ProjectManagment.Controllers
     [Area("ProjectManagment")]
     public class ProjectPhaseController : Controller
     {
-        private readonly ApplicationDbContext _context;
         private readonly IProjectRepository _projectRepository;
         private readonly IProjectPhaseRepository _projectPhaseRepository;
         private readonly IPhaseRepository _phaseRepository;
-        public ProjectPhaseController(ApplicationDbContext context, IProjectRepository projectRepository, IProjectPhaseRepository projectPhaseRepository, IPhaseRepository phaseRepository)
+        public ProjectPhaseController( IProjectRepository projectRepository, IProjectPhaseRepository projectPhaseRepository, IPhaseRepository phaseRepository)
         {
-
-            _context = context;
             _projectRepository = projectRepository;
             _projectPhaseRepository = projectPhaseRepository;
             _phaseRepository = phaseRepository;

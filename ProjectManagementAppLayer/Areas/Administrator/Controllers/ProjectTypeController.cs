@@ -16,12 +16,12 @@ namespace ProjectManagementAppLayer.Areas.Administrator.Controllers
     [Authorize(Roles ="Admin")]
     public class ProjectTypeController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        
         private readonly IProjectTypeRepository _projectTypeRepository;
-        public ProjectTypeController(ApplicationDbContext context,
+        public ProjectTypeController(
             IProjectTypeRepository projectTypeRepository)
         {
-            _context = context;
+      
             _projectTypeRepository = projectTypeRepository;
         }
 

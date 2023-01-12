@@ -16,11 +16,12 @@ namespace ProjectManagementAppLayer.Areas.Identity.Pages.Account
     {
         private readonly SignInManager<Person> _signInManager;
         private readonly ILogger<LogoutModel> _logger;
-
-        public LogoutModel(SignInManager<Person> signInManager, ILogger<LogoutModel> logger)
+        private readonly UserManager<Person> _userManager;
+        public LogoutModel(SignInManager<Person> signInManager, ILogger<LogoutModel> logger, UserManager<Person> userManager)
         {
             _signInManager = signInManager;
             _logger = logger;
+            _userManager = userManager;
         }
 
         public void OnGet()
@@ -29,6 +30,8 @@ namespace ProjectManagementAppLayer.Areas.Identity.Pages.Account
 
         public async Task<IActionResult> OnPost(string returnUrl = null)
         {
+            //var user = await _userManager.FindByEmailAsync(User.Identity.Name);
+            //user.isLoggedIn = false;
             await _signInManager.SignOutAsync();
             _logger.LogInformation("User logged out.");
             if (returnUrl != null)
