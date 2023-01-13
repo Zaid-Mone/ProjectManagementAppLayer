@@ -9,10 +9,9 @@
         {
 
             <li class="nav-header">Custom Pages</li>
-            <!--Galaray-->
             <li class="nav-item">
                 <a class="nav-link" asp-area="ProjectManagment" asp-controller="Project" asp-action="Index">
-                    <i class="nav-icon far fa-image"></i>
+                    <i class="nav-icon fa-solid fa-building-user"></i>
                     <p>
                         Project
                     </p>
@@ -21,7 +20,7 @@
 
             <li class="nav-item">
                 <a class="nav-link" asp-area="ProjectManagment" asp-controller="Deliverable" asp-action="Index">
-                    <i class="nav-icon far fa-image"></i>
+                    <i class="nav-icon fa-solid fa-truck"></i>
                     <p>
                         Deliverable
                     </p>
@@ -29,7 +28,8 @@
             </li>
             <li class="nav-item">
                 <a class="nav-link" asp-area="ProjectManagment" asp-controller="PaymentTerm" asp-action="Index">
-                    <i class="nav-icon far fa-image"></i>
+
+                    <i class="nav-icon fa-solid fa-cart-shopping"></i>
                     <p>
                         PaymentTerm
                     </p>
@@ -38,7 +38,7 @@
 
             <li class="nav-item">
                 <a class="nav-link" asp-area="ProjectManagment" asp-controller="Invoice" asp-action="Index">
-                    <i class="nav-icon far fa-image"></i>
+                    <i class="nav-icon fa-solid fa-file-invoice-dollar"></i>
                     <p>
                         Invoice
                     </p>
@@ -50,10 +50,10 @@
         @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
         {
             <li class="nav-header">Custom Pages</li>
-            <!--Galaray-->
+
             <li class="nav-item">
                 <a class="nav-link" asp-area="ProjectManagment" asp-controller="Project" asp-action="Index">
-                    <i class="nav-icon far fa-image"></i>
+                    <i class="nav-icon fa-solid fa-building-user"></i>
                     <p>
                         Project
                     </p>
@@ -61,8 +61,18 @@
             </li>
 
             <li class="nav-item">
+                <a class="nav-link" asp-area="Administrator" asp-controller="Admin" asp-action="Statistics">
+                    @*<i class="nav-icon far fa-image"></i>*@
+                    <i class="nav-icon fa-solid fa-chart-pie"></i>
+                    <p>
+                        Statistics
+                    </p>
+                </a>
+            </li>
+
+            <li class="nav-item">
                 <a class="nav-link" asp-area="ProjectManagment" asp-controller="Deliverable" asp-action="Index">
-                    <i class="nav-icon far fa-image"></i>
+                    <i class="nav-icon fa-solid fa-truck"></i>
                     <p>
                         Deliverable
                     </p>
@@ -70,7 +80,8 @@
             </li>
             <li class="nav-item">
                 <a class="nav-link" asp-area="ProjectManagment" asp-controller="PaymentTerm" asp-action="Index">
-                    <i class="nav-icon far fa-image"></i>
+
+                    <i class="nav-icon fa-solid fa-cart-shopping"></i>
                     <p>
                         PaymentTerm
                     </p>
@@ -79,31 +90,33 @@
 
             <li class="nav-item">
                 <a class="nav-link" asp-area="ProjectManagment" asp-controller="Invoice" asp-action="Index">
-                    <i class="nav-icon far fa-image"></i>
+                    <i class="nav-icon fa-solid fa-file-invoice-dollar"></i>
                     <p>
                         Invoice
                     </p>
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link"asp-area="Administrator" asp-controller="ProjectType" asp-action="Index">
-                    <i class="nav-icon far fa-image"></i>
+                <a class="nav-link" asp-area="Administrator" asp-controller="ProjectType" asp-action="Index">
+                    <i class="nav-icon fa-solid fa-quote-right"></i>
                     <p>
                         ProjectType
                     </p>
                 </a>
-            </li>       
+            </li>
+
             <li class="nav-item">
                 <a class="nav-link" asp-area="Administrator" asp-controller="ProjectStatus" asp-action="Index">
-                    <i class="nav-icon far fa-image"></i>
+                    <i class="nav-icon fa-solid fa-signal"></i>
                     <p>
                         ProjectStatus
                     </p>
                 </a>
-            </li>     
+            </li>
+
             <li class="nav-item">
                 <a class="nav-link" asp-area="Administrator" asp-controller="Phase" asp-action="Index">
-                    <i class="nav-icon far fa-image"></i>
+                    <i class="nav-icon fa-solid fa-clipboard"></i>
                     <p>
                         Phase
                     </p>

@@ -237,7 +237,10 @@ namespace ProjectManagementAppLayer.Areas.ProjectManagment.Controllers
 
 
 
-
+        public IActionResult Print()
+        {
+            return View();
+        }
 
         // /ProjectManagment/Invoice/GetPayments?id=FB950297-1BDE-41D6-989E-08DAEF5A4FCE
         // /ProjectManagment/Invoice/GetPaymentsForInvoices?id=EA2BF9AE-A019-4B79-4F9B-08DAEE916C39

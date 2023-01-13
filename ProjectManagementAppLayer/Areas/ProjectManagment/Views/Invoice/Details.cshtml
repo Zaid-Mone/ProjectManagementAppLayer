@@ -1,36 +1,137 @@
-﻿@model ProjectManagementBusinessLayer.Entities.Invoice
+﻿
+@model ProjectManagementBusinessLayer.Entities.Invoice
 
 @{
     ViewData["Title"] = "Details";
+ 
 }
 
-<h1>Details</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Invoice</title>
 
-<div>
-    <h4>Invoice</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.InvoiceTitle)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.InvoiceTitle)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.InvoiceDate)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.InvoiceDate)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Project)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Project.ProjectName)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</div>
+    <!-- Google Font: Source Sans Pro -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="~/plugins/fontawesome-free/css/all.min.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="~/dist/css/adminlte.min.css">
+</head>
+<body>
+
+    <div class="container">
+        <div class="wrapper mr-1 ">
+            <!-- Main content -->
+            <section class="invoice " style="padding: 20px; ">
+                <!-- title row -->
+                <div class="row">
+                    <div class="col-12">
+                        <h2 class="page-header">
+                            <i class="fas fa-globe"></i> PGS, Inc.
+                            <small class="float-right">Date: @Model.InvoiceDate.ToString("d")</small>
+                        </h2>
+                    </div>
+                    <!-- /.col -->
+                </div>
+                <!-- info row -->
+                <div class="row invoice-info">
+                    <div class="col-sm-4 invoice-col">
+                        From
+                        <address>
+                            <strong>PGS.INC</strong><br>
+                            795 Folsom Ave, Suite 600<br>
+                            San Francisco, CA 94107<br>
+                            Phone: @Model.Project.ProjectManager.PhoneNumber<br>
+                            Email: @Model.Project.ProjectManager.Email
+                        </address>
+                    </div>
+                    <!-- /.col -->
+                    <div class="col-sm-4 invoice-col">
+                        To
+                        <address>
+                            <strong>@Model.Project.Client.Name</strong><br>
+                            795 Folsom Ave, Suite 600<br>
+                            San Francisco, CA 94107<br>
+                            Phone: (555) 539-1037<br>
+                            Email: @Model.Project.Client.Email
+                        </address>
+                    </div>
+                    <!-- /.col -->
+                    <div class="col-sm-4 invoice-col">
+                        <b>Invoice #007612</b><br>
+                        <br>
+                        <b>Payment Due:</b> @Model.InvoiceDate.ToString("d")<br>
+                        <b>Account:</b> 968-34567
+                    </div>
+                    <!-- /.col -->
+                </div>
+                <!-- /.row -->
+                <!-- Table row -->
+                <div class="row">
+                    <div class="col-12 table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Qty</th>
+                                    <th>Product</th>
+                                    <th>Serial #</th>
+                                    <th>Description</th>
+                                    <th>Subtotal</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>1</td>
+                                    <td>Call of Duty</td>
+                                    <td>455-981-221</td>
+                                    <td>El snort testosterone trophy driving gloves handsome</td>
+                                    <td>$64.50</td>
+                                </tr>
+                                <tr>
+                                    <td>1</td>
+                                    <td>Need for Speed IV</td>
+                                    <td>247-925-726</td>
+                                    <td>Wes Anderson umami biodiesel</td>
+                                    <td>$50.00</td>
+                                </tr>
+                                <tr>
+                                    <td>1</td>
+                                    <td>Monsters DVD</td>
+                                    <td>735-845-642</td>
+                                    <td>Terry Richardson helvetica tousled street art master</td>
+                                    <td>$10.70</td>
+                                </tr>
+                                <tr>
+                                    <td>1</td>
+                                    <td>Grown Ups Blue Ray</td>
+                                    <td>422-568-642</td>
+                                    <td>Tousled lomo letterpress</td>
+                                    <td>$25.99</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- /.col -->
+                </div>
+                <!-- /.row -->
+
+
+                <a href="/ProjectManagment/Invoice/Index" class="btn btn-primary">Back</a>
+                <!-- /.row -->
+            </section>
+            <!-- /.content -->
+        </div>
+    </div>
+    <!-- jQuery -->
+    <script src="~/plugins/jquery/jquery.min.js"></script>
+    <!-- Bootstrap 4 -->
+    <script src="~/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- AdminLTE App -->
+    <script src="~/dist/js/adminlte.min.js"></script>
+    <!-- AdminLTE for demo purposes -->
+    <script src="~/dist/js/demo.js"></script>
+</body>
+</html>

@@ -26,9 +26,10 @@ namespace ProjectManagementAppLayer.Areas.ProjectManagment.Controllers
         private readonly IProjectStatusRepository _projectStatusRepository;
         private readonly IClientRepository _clientRepository;
         private readonly UserManager<Person> _userManager;
+        private readonly IProjectPhaseRepository _projectPhaseRepository;
 
         public ProjectController(/*ApplicationDbContext context,*/
-            IProjectRepository projectRepository, IProjectTypeRepository projectTypeRepository, IProjectStatusRepository projectStatusRepository, IClientRepository clientRepository, UserManager<Person> userManager)
+            IProjectRepository projectRepository, IProjectTypeRepository projectTypeRepository, IProjectStatusRepository projectStatusRepository, IClientRepository clientRepository, UserManager<Person> userManager, IProjectPhaseRepository projectPhaseRepository)
         {
             //_context = context;
             this._projectRepository = projectRepository;
@@ -36,6 +37,7 @@ namespace ProjectManagementAppLayer.Areas.ProjectManagment.Controllers
             _projectStatusRepository = projectStatusRepository;
             this._clientRepository = clientRepository;
             _userManager = userManager;
+            _projectPhaseRepository = projectPhaseRepository;
         }
 
         // GET: ProjectManagment/Project
@@ -64,6 +66,8 @@ namespace ProjectManagementAppLayer.Areas.ProjectManagment.Controllers
             }
 
             var project = await _projectRepository.GetProjectById(id);
+            var projectphases = await _projectPhaseRepository.GetAllSpecificProjectPhaseById(project.Id);
+            project.ProjectPhases = projectphases;
             if (project == null)
             {
                 return NotFound();
