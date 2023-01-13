@@ -44,7 +44,10 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Deliverable.ProjectPhase.Phase.PhaseName)
             </td>
-            <partial name="_Buttons" model="@item.Id" />
+            <td>
+                <partial name="_Buttons" model="@item.Id" />
+            </td>
+
         </tr>
         }
     </tbody>

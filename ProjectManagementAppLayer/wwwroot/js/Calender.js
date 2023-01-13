@@ -4,6 +4,7 @@ document.addEventListener('DOMContentLoaded', function () {
     var calendar = new FullCalendar.Calendar(calendarEl, {
         initialView: 'dayGridMonth',
         initialDate: today,
+        /*titleFormat: 'MMMM, dddd D, YYYY',*/
         headerToolbar: {
             left: 'prev,next today',
             center: 'title',
@@ -68,8 +69,3 @@ document.addEventListener('DOMContentLoaded', function () {
     calendar.render();
 });
 
-//  calendar.events={
-//    title:'Zaidddd',
-//    start:'2022-12-28',
-//    end:'2022-12-30'
-//  }

@@ -7,7 +7,7 @@
 <h1>Index</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create" class="btn btn-outline-primary">Create New</a>
 </p>
 <table class="table table-bordered table-striped" id="table_id">
     <thead>
@@ -25,7 +25,9 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.Type)
                 </td>
-                <partial name="_Buttons" model="@item.Id" />
+                <td>
+                    <partial name="_Buttons" model="@item.Id" />
+                </td>
             </tr>
         }
     </tbody>

@@ -54,6 +54,7 @@ namespace ProjectManagementBusinessLayer.Repositories.Implementation
                 .Include(y=>y.Project.Client)
                 .Include(s=>s.Project.ProjectStatus)
                 .Include(q=>q.Project.ProjectType)
+                .Include(b=>b.Project.ProjectManager)
                 .SingleOrDefaultAsync(t => t.Id == id);
         }
 

@@ -7,7 +7,7 @@
 
 <h3>Index </h3>
 <p>
-    <a href="/ProjectManagment/ProjectPhase/Create?id=@project.Id">Create New</a>
+    <a href="/ProjectManagment/ProjectPhase/Create?id=@project.Id" class="btn btn-outline-primary">Create New</a>
 </p>
 <table class="table table-bordered table-striped" id="table_id">
     <thead>
@@ -44,10 +44,8 @@
                     @Html.DisplayFor(modelItem => item.EndDate)
                 </td>
                 <td>
-                    <a asp-action="Create" asp-controller="Deliverable" asp-route-id="@item.Id">Deliverable</a>|
-                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    <a asp-action="Create" asp-controller="Deliverable" asp-route-id="@item.Id"><i class="fa-solid fa-truck"></i></a>|
+                    <partial name="_Buttons" model="@item.Id"/>
                 </td>
             </tr>
         }
