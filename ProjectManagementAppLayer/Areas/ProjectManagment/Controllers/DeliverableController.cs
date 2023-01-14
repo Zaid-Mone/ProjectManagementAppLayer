@@ -81,7 +81,6 @@ namespace ProjectManagementAppLayer.Areas.ProjectManagment.Controllers
         public async Task<IActionResult> Create(Deliverable deliverable)
         {
 
-
             if (ModelState.IsValid)
             {
                 var projectPhases = await _projectPhaseRepository.GetProjectPhaseById(deliverable.ProjectPhaseId);

@@ -9,48 +9,56 @@
 <p>
     <a href="/ProjectManagment/ProjectPhase/Create?id=@project.Id" class="btn btn-outline-primary">Create New</a>
 </p>
-<table class="table table-bordered table-striped" id="table_id">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Project)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Phase)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.StartDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.EndDate)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Project.ProjectName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Phase.PhaseName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.StartDate)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.EndDate)
-                </td>
-                <td>
-                    <a asp-action="Create" asp-controller="Deliverable" asp-route-id="@item.Id"><i class="fa-solid fa-truck"></i></a>|
-                    <partial name="_Buttons" model="@item.Id"/>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+<div class="row">
+    <div class="col-sm-12">
+        <p>
+            <a asp-action="Create" class="btn btn-outline-primary">Create New</a>
+        </p>
+        <table class="table table-bordered table-striped" id="table_id">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Project)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Phase)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.StartDate)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.EndDate)
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Project.ProjectName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Phase.PhaseName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.StartDate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.EndDate)
+                        </td>
+                        <td>
+                            <a asp-action="Create" asp-controller="Deliverable" asp-route-id="@item.Id"><i class="fa-solid fa-truck"></i></a>|
+                            <partial name="_Buttons" model="@item.Id" />
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+    </div>
+</div>
 @section scripts {
     <link href="/css/toastr.css" rel="stylesheet" />
     <script src="/js/toastr.js"></script>

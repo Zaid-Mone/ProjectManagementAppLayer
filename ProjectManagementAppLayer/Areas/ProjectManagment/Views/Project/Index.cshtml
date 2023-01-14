@@ -6,11 +6,8 @@
 
 <h1>Index</h1>
 <div class="row">
-    <div class="col-sm-12">
-        <p>
-            <a asp-action="Create" class="btn btn-outline-primary">Create New</a>
-        </p>
-        <table class="table table-bordered table-striped" id="table_id">
+    <div class="col-12 table-responsive">
+        <table class="table table-striped" id="table_id">
             <thead>
                 <tr>
                     <th>
@@ -65,7 +62,6 @@
                         </td>
                         <td>
                             @item.ContractAmount.ToString("C")
-                            @*@Html.DisplayFor(modelItem => item.ContractAmount.ToString("C"))*@
                         </td>
                         <td>
                             <a href="/ProjectManagment/Project/ViewContract?Id=@item.Id" target="_blank">@item.ContractFileName</a>
@@ -83,8 +79,8 @@
                 }
             </tbody>
         </table>
-
     </div>
+    <!-- /.col -->
 </div>
 @section scripts {
     <link href="/css/toastr.css" rel="stylesheet" />

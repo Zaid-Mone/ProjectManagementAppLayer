@@ -30,8 +30,9 @@ namespace ProjectManagementAppLayer.Areas.Identity.Pages.Account
 
         public async Task<IActionResult> OnPost(string returnUrl = null)
         {
-            //var user = await _userManager.FindByEmailAsync(User.Identity.Name);
-            //user.isLoggedIn = false;
+            var user = await _userManager.FindByEmailAsync(User.Identity.Name);
+            user.IsLoggedIn = false;
+            await _userManager.UpdateAsync(user);
             await _signInManager.SignOutAsync();
             _logger.LogInformation("User logged out.");
             if (returnUrl != null)

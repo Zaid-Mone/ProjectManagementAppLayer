@@ -6,52 +6,54 @@
 
 <h1>Index</h1>
 
-@*<p>
-    <a asp-action="Create">Create New</a>
-</p>*@
-<table class="table table-bordered table-striped" id="table_id">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.PaymentTermTitle)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.PaymentTermAmount)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Deliverable.ProjectPhase.Project)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Deliverable.ProjectPhase.Phase)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.PaymentTermTitle)
-            </td>
-            <td>
-                @item.PaymentTermAmount.ToString("C")
-                @*@Html.DisplayFor(modelItem => item.PaymentTermAmount).ToString("C");*@
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Deliverable.ProjectPhase.Project.ProjectName)
-            </td>    
-            <td>
-                @Html.DisplayFor(modelItem => item.Deliverable.ProjectPhase.Phase.PhaseName)
-            </td>
-            <td>
-                <partial name="_Buttons" model="@item.Id" />
-            </td>
+<div class="row">
+    <div class="col-12 table-responsive">
+        <table class="table table-striped" id="table_id">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.PaymentTermTitle)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.PaymentTermAmount)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Deliverable.ProjectPhase.Project)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Deliverable.ProjectPhase.Phase)
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.PaymentTermTitle)
+                        </td>
+                        <td>
+                            @item.PaymentTermAmount.ToString("C")
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Deliverable.ProjectPhase.Project.ProjectName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Deliverable.ProjectPhase.Phase.PhaseName)
+                        </td>
+                        <td>
+                            <partial name="_Buttons" model="@item.Id" />
+                        </td>
 
-        </tr>
-        }
-    </tbody>
-</table>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <!-- /.col -->
+</div>
+
 @section scripts {
     <link href="/css/toastr.css" rel="stylesheet" />
     <script src="/js/toastr.js"></script>

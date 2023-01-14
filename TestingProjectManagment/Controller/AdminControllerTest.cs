@@ -21,13 +21,13 @@ namespace TestingProjectManagment.Controller
         private readonly UserManager<Person> _userManager;
         private readonly IWebHostEnvironment _hosting;
 
-        public AdminControllerTest()
-        {
-            _adminRepository = A.Fake<IAdminRepository>();
-            _userManager = A.Fake<UserManager<Person>>();
-            _hosting = A.Fake<IWebHostEnvironment>();
-            adminController = new AdminController(_adminRepository,_userManager,_hosting);
-        }
+        //public AdminControllerTest()
+        //{
+        //    _adminRepository = A.Fake<IAdminRepository>();
+        //    _userManager = A.Fake<UserManager<Person>>();
+        //    _hosting = A.Fake<IWebHostEnvironment>();
+        //    adminController = new AdminController(_adminRepository,_userManager,_hosting);
+        //}
 
         //[Fact]
         //public async Task AdminController_Test_IndexAction()

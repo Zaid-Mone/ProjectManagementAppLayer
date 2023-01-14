@@ -18,6 +18,9 @@
             <th>
                 @Html.DisplayNameFor(model => model.Email)
             </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PhoneNumber)
+            </th>
             <th></th>
         </tr>
     </thead>
@@ -30,6 +33,9 @@
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Email)
+                </td>          
+                <td>
+                    @Html.DisplayFor(modelItem => item.PhoneNumber)
                 </td>
                 <td>
                     <partial name="_Buttons" model="@item.Id" />
