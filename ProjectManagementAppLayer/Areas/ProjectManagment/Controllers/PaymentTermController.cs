@@ -141,16 +141,13 @@ namespace ProjectManagementAppLayer.Areas.ProjectManagment.Controllers
                 decimal sum=0;
                 var result = await _deliverableRepository.GetDeliverableById(updatePaymentTermDTO.DeliverableId);
                 var pay = _paymentTermRepository.GetProjectPaymentTerms(result.ProjectPhase.ProjectId);
+
                 if (updatePaymentTermDTO.PaymentTermId == null) return NotFound();
                 try
                 {
-                
-                    var obj = new PaymentTerm() { 
-                    Id = updatePaymentTermDTO.PaymentTermId,
-                     DeliverableId=updatePaymentTermDTO.DeliverableId,
-                     PaymentTermAmount=updatePaymentTermDTO.PaymentTermAmount,
-                     PaymentTermTitle=updatePaymentTermDTO.PaymentTermTitle
-                    };
+                    var payment = await _paymentTermRepository.GetPaymentTermById(updatePaymentTermDTO.PaymentTermId);
+                    payment.PaymentTermTitle = updatePaymentTermDTO.PaymentTermTitle;
+                    payment.PaymentTermAmount = updatePaymentTermDTO.PaymentTermAmount;
                     foreach (var item in pay)
                     {
                         sum += item.PaymentTermAmount;
@@ -163,7 +160,7 @@ namespace ProjectManagementAppLayer.Areas.ProjectManagment.Controllers
                         await Edit(updatePaymentTermDTO.PaymentTermId);
                         return View(updatePaymentTermDTO);
                     }
-                    _paymentTermRepository.Update(obj);
+                    _paymentTermRepository.Update(payment);
                     _paymentTermRepository.Save();
                     TempData["edit"] = "PaymentTerm has been Created Successfully ...";
                 }

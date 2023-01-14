@@ -18,6 +18,7 @@ namespace ProjectManagementBusinessLayer.Entities
         [ForeignKey("ProjectId")]
         public Guid ProjectId { get; set; }
         public Project Project { get; set; }
+        public string SerialNumber { get; set; } // auto Generated unique number
     }
 
 }

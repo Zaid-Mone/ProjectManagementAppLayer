@@ -9,6 +9,7 @@ namespace ProjectManagementBusinessLayer.Entities
         [Display(Name = "Full Name")]
         public string  FullName { get; set; }
         public string  ImageUrl { get; set; }
+        public bool IsLoggedIn { get; set; } = false;
     }
 
 }

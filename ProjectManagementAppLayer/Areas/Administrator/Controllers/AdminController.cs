@@ -40,6 +40,7 @@ namespace ProjectManagementAppLayer.Areas.Administrator.Controllers
         // GET: AdminController
         public async Task<ActionResult> Index()
         {
+            
             var admin = await _adminRepository.GetAllAdmins();
             return View(admin);
         }

@@ -23,6 +23,7 @@ namespace TestingProjectManagment.Controller
         private readonly IProjectTypeRepository _projectTypeRepository;
         private readonly IClientRepository _clientRepository;
         private readonly UserManager<Person> _userManager;
+        private readonly IProjectPhaseRepository _projectPhaseRepository;
         public ProjectControllerTest()
         {
             //Dependinces
@@ -32,6 +33,7 @@ namespace TestingProjectManagment.Controller
             _projectStatusRepository = A.Fake<IProjectStatusRepository>();
             _projectTypeRepository = A.Fake<IProjectTypeRepository>();
             _userManager = A.Fake<UserManager<Person>>();
+            _projectPhaseRepository = A.Fake<IProjectPhaseRepository>();
 
             // sut => project controller
             _projectController = new ProjectController(
@@ -39,7 +41,8 @@ namespace TestingProjectManagment.Controller
                 _projectTypeRepository,
                 _projectStatusRepository,
                 _clientRepository,
-                _userManager
+                _userManager,
+                _projectPhaseRepository
                 );
         }
         [Fact]

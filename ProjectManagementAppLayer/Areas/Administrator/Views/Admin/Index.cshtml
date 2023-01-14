@@ -20,7 +20,8 @@
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.PhoneNumber)
-            </th>
+            </th>          
+
             <th></th>
         </tr>
     </thead>
@@ -36,7 +37,8 @@
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.PhoneNumber)
-                </td>
+                </td>          
+
                 <td>
                     <a asp-action="Edit" asp-route-id="@item.Id"><i class="fas fa-edit"></i></a> |
                     <a asp-action="Details" asp-route-id="@item.Id"><i class="fas fa-list-alt"></i></a> |

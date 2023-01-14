@@ -62,7 +62,6 @@ namespace ProjectManagementAppLayer.Areas.ProjectManagment.Controllers
             {
                 return NotFound();
             }
-
             var invoice = await _invoiceRepository.GetInvoiceById(id);
             if (invoice == null)
             {
@@ -92,7 +91,8 @@ namespace ProjectManagementAppLayer.Areas.ProjectManagment.Controllers
                      InvoiceDate= insertInvoiceDTO.InvoiceDate,
                      InvoiceTitle=insertInvoiceDTO.InvoiceTitle,
                      ProjectId=insertInvoiceDTO.ProjectId,
-                     
+                     SerialNumber = Math.Abs(Guid.NewGuid().GetHashCode()).ToString().Substring(0, 5),
+
                 };
                 _invoiceRepository.Insert(invoice);
                 _invoiceRepository.Save();
@@ -233,14 +233,7 @@ namespace ProjectManagementAppLayer.Areas.ProjectManagment.Controllers
             TempData["delete"] = "Invoice has been Deleted Successfully ...";
             return RedirectToAction(nameof(Index));
         }
-
-
-
-
-        public IActionResult Print()
-        {
-            return View();
-        }
+        
 
         // /ProjectManagment/Invoice/GetPayments?id=FB950297-1BDE-41D6-989E-08DAEF5A4FCE
         // /ProjectManagment/Invoice/GetPaymentsForInvoices?id=EA2BF9AE-A019-4B79-4F9B-08DAEE916C39

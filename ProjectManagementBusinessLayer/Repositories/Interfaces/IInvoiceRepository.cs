@@ -11,6 +11,7 @@ namespace ProjectManagementBusinessLayer.Repositories.Interfaces
         // return all invoice based on projectManager id
         public Task<List<Invoice>> GetAllInvoicesByProjectManagerId(string id);
         public Task<Invoice> GetInvoiceById(Guid id);
+        public Task<Invoice> GetInvoiceWithDeliverablesById(Guid id);
         public void Insert(Invoice invoice);
         public void Update(Invoice invoice);
         public void Delete(Invoice invoice);

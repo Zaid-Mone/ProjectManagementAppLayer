@@ -50,12 +50,26 @@ namespace ProjectManagementBusinessLayer.Repositories.Implementation
            return await _context.Invoices
                 .Include(t => t.InvoicePaymentTerms)
                 .ThenInclude(r => r.PaymentTerm)
+                .ThenInclude(b=>b.Deliverable)
                 .Include(e => e.Project)
                 .Include(y=>y.Project.Client)
                 .Include(s=>s.Project.ProjectStatus)
                 .Include(q=>q.Project.ProjectType)
                 .Include(b=>b.Project.ProjectManager)
+                
                 .SingleOrDefaultAsync(t => t.Id == id);
+        }
+
+        public async Task<Invoice> GetInvoiceWithDeliverablesById(Guid id)
+        {
+            var invoice = await _context.Invoices
+            .Include(q => q.Project)
+            .Include(r => r.InvoicePaymentTerms)
+            .ThenInclude(q => q.PaymentTerm)
+            .ThenInclude(v => v.Deliverable)
+            .ThenInclude(b=>b.ProjectPhase)
+            .SingleOrDefaultAsync(b => b.Id == id);
+            return invoice;
         }
 
         public void Insert(Invoice invoice)

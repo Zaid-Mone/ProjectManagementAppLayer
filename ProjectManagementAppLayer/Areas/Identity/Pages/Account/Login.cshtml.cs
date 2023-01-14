@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 using ProjectManagementBusinessLayer.Entities;
+using System.Security.Claims;
 
 namespace ProjectManagementAppLayer.Areas.Identity.Pages.Account
 {
@@ -53,6 +54,7 @@ namespace ProjectManagementAppLayer.Areas.Identity.Pages.Account
 
             [Display(Name = "Remember me?")]
             public bool RememberMe { get; set; }
+            public bool IsloggedIn { get; set; }
         }
 
         public async Task OnGetAsync(string returnUrl = null)
@@ -81,8 +83,9 @@ namespace ProjectManagementAppLayer.Areas.Identity.Pages.Account
                 // This doesn't count login failures towards account lockout
                 // To enable password failures to trigger account lockout, set lockoutOnFailure: true
                 var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: false);
-                //var user = await _userManager.FindByEmailAsync(User.Identity.Name);
-              
+                var user = await _userManager.FindByEmailAsync(Input.Email);
+                user.IsLoggedIn = true;
+                await _userManager.UpdateAsync(user);
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User logged in.");

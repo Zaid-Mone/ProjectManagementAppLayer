@@ -3,7 +3,7 @@
 
 @{
     ViewData["Title"] = "Details";
- 
+    decimal sum=0;
 }
 
 <!DOCTYPE html>
@@ -42,8 +42,6 @@
                         From
                         <address>
                             <strong>PGS.INC</strong><br>
-                            795 Folsom Ave, Suite 600<br>
-                            San Francisco, CA 94107<br>
                             Phone: @Model.Project.ProjectManager.PhoneNumber<br>
                             Email: @Model.Project.ProjectManager.Email
                         </address>
@@ -53,18 +51,15 @@
                         To
                         <address>
                             <strong>@Model.Project.Client.Name</strong><br>
-                            795 Folsom Ave, Suite 600<br>
-                            San Francisco, CA 94107<br>
-                            Phone: (555) 539-1037<br>
+                            Phone: @Model.Project.Client.PhoneNumber<br>
                             Email: @Model.Project.Client.Email
                         </address>
                     </div>
                     <!-- /.col -->
                     <div class="col-sm-4 invoice-col">
-                        <b>Invoice #007612</b><br>
-                        <br>
+                        <b>Serial Number : #@Model.SerialNumber</b><br>
+
                         <b>Payment Due:</b> @Model.InvoiceDate.ToString("d")<br>
-                        <b>Account:</b> 968-34567
                     </div>
                     <!-- /.col -->
                 </div>
@@ -75,54 +70,63 @@
                         <table class="table table-striped">
                             <thead>
                                 <tr>
-                                    <th>Qty</th>
-                                    <th>Product</th>
-                                    <th>Serial #</th>
-                                    <th>Description</th>
-                                    <th>Subtotal</th>
+                                    <th>Project</th>
+                                    <th>Serial</th>
+                                    <th>Deliverable Description</th>
+                                    <th>Payment Title</th>
+                                    <th>Payment Amount</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>1</td>
-                                    <td>Call of Duty</td>
-                                    <td>455-981-221</td>
-                                    <td>El snort testosterone trophy driving gloves handsome</td>
-                                    <td>$64.50</td>
-                                </tr>
-                                <tr>
-                                    <td>1</td>
-                                    <td>Need for Speed IV</td>
-                                    <td>247-925-726</td>
-                                    <td>Wes Anderson umami biodiesel</td>
-                                    <td>$50.00</td>
-                                </tr>
-                                <tr>
-                                    <td>1</td>
-                                    <td>Monsters DVD</td>
-                                    <td>735-845-642</td>
-                                    <td>Terry Richardson helvetica tousled street art master</td>
-                                    <td>$10.70</td>
-                                </tr>
-                                <tr>
-                                    <td>1</td>
-                                    <td>Grown Ups Blue Ray</td>
-                                    <td>422-568-642</td>
-                                    <td>Tousled lomo letterpress</td>
-                                    <td>$25.99</td>
-                                </tr>
+
+                                @foreach (var item in Model.InvoicePaymentTerms)
+                                {
+                                    sum += item.PaymentTerm.PaymentTermAmount;
+                                    <tr>
+                                        <td>@Model.Project.ProjectName</td>
+                                        <td>#@Model.SerialNumber</td>
+                                        <td>@Html.Raw(item.PaymentTerm.Deliverable.Description)</td>
+                                        <td>@item.PaymentTerm.PaymentTermTitle</td>
+                                        <td>@item.PaymentTerm.PaymentTermAmount.ToString("c")</td>
+
+                                    </tr>
+                                }
                             </tbody>
                         </table>
                     </div>
                     <!-- /.col -->
                 </div>
                 <!-- /.row -->
+                <div class="row">
 
+                    <div class="col-12">
 
-                <a href="/ProjectManagment/Invoice/Index" class="btn btn-primary">Back</a>
+                        <div class="table-responsive table-bordered">
+                            <table class="table">
+                                <tr>
+                                    <th>Total:</th>
+                                    <td>@sum.ToString("C")</td>
+                                </tr>
+                                <tr>
+                                    <th>Amount Due : </th>
+                                    <td> @Model.InvoiceDate.ToString("D")</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    <!-- /.col -->
+                </div>
+                <div class="row no-print">
+                    <div class="col-12">
+                        <a href="javascript:;" onclick="window.print()" rel="noopener" target="_blank" class="btn btn-default"><i class="fas fa-print"></i> Print</a>
+                        @*<a href="/ProjectManagment/Invoice/Print?id=@Model.Id" rel="noopener" target="_blank" class="btn btn-default"><i class="fas fa-print"></i> Print</a>*@
+                        <a href="/ProjectManagment/Invoice/Index" class="btn btn-primary">Back</a>
+                    </div>
+                </div>
                 <!-- /.row -->
             </section>
             <!-- /.content -->
+
         </div>
     </div>
     <!-- jQuery -->
@@ -133,5 +137,6 @@
     <script src="~/dist/js/adminlte.min.js"></script>
     <!-- AdminLTE for demo purposes -->
     <script src="~/dist/js/demo.js"></script>
+
 </body>
 </html>
