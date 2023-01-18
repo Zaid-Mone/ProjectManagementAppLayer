@@ -101,8 +101,9 @@ namespace ProjectManagementAppLayer.Areas.ProjectManagment.Controllers
                      InvoiceDate= insertInvoiceDTO.InvoiceDate,
                      InvoiceTitle=insertInvoiceDTO.InvoiceTitle,
                      ProjectId=insertInvoiceDTO.ProjectId,
-                     SerialNumber = Math.Abs(Guid.NewGuid().GetHashCode()).ToString().Substring(0, 5),
-
+                   SerialNumber = Math.Abs(Guid.NewGuid().GetHashCode()).ToString().Substring(0, 5),
+                    //IsApproved=false,
+                    //IsPaidInvoice=false
                 };
                 _invoiceRepository.Insert(invoice);
                 _invoiceRepository.Save();
@@ -256,18 +257,7 @@ namespace ProjectManagementAppLayer.Areas.ProjectManagment.Controllers
         }
 
 
-        // to return All  Pending Invoices only for PD
-        public async Task<IActionResult> GetAllPendingInvoiecs()
-        {
-            var item = await _invoiceRepository.GetAllPendingInvoices();
-            return View(item);
-        }       
-        // to return All  Approved Invoices only for PD
-        public async Task<IActionResult> GetAllApprovedInvoiecs()
-        {
-            var item = await _invoiceRepository.GetAllApprovedInvoices();
-            return View(item);
-        }
+      
 
 
         // to change invoice state
@@ -277,9 +267,8 @@ namespace ProjectManagementAppLayer.Areas.ProjectManagment.Controllers
             invoice.IsApproved = true;
             _invoiceRepository.Update(invoice);
             _invoiceRepository.Save();
-            return RedirectToAction("GetAllPendingInvoices", "Invoice");
+            return RedirectToAction("GetAllPendingInvoiecs", "Invoice");
         }
-
         // to change invoice state
         public async Task<IActionResult> InvoicePending(Guid id)
         {
@@ -290,12 +279,29 @@ namespace ProjectManagementAppLayer.Areas.ProjectManagment.Controllers
             return RedirectToAction("GetAllApprovedInvoiecs", "Invoice");
         }
 
+        // to return All  Pending Invoices only for PD
+        public async Task<IActionResult> GetAllPendingInvoiecs()
+        {
+            var item = await _invoiceRepository.GetAllPendingInvoices();
+            return View(item);
+        }
+        // to return All  Approved Invoices only for PD
+        public async Task<IActionResult> GetAllApprovedInvoiecs()
+        {
+            var item = await _invoiceRepository.GetAllApprovedInvoices();
+            return View(item);
+        }
+
+
         // to send message
         public async Task<IActionResult> SendMessage(Guid id)
         {
            
             var mySetting = _config.GetSection("API_KEY").Value;
             var invoice = await _invoiceRepository.GetInvoiceById(id);
+            invoice.IsPaidInvoice = true;
+            _invoiceRepository.Update(invoice);
+            _invoiceRepository.Save();
           string MESSAGE_TEXT = "PMS. Advertisement It would help if you visited us because Invoice Order No.(#" + invoice.SerialNumber + " ) is available until ("+invoice.InvoiceDate.ToString("d")+")";
          string BASE_URL = "https://5vzxyz.api.infobip.com";
          string API_KEY = mySetting;

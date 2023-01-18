@@ -42,8 +42,15 @@
                     @Html.DisplayFor(modelItem => item.SerialNumber)
                 </td>
                 <td>
-                    <a asp-action="InvoicePending" asp-controller="Invoice" asp-route-id="@item.Id" style="pointer-events: none;"><i class="fa-solid fa-lock text-success"></i></a>
-                    <a asp-action="SendMessage" asp-route-Id="@item.Id" class="btn btn-outline-warning">Send Message</a>
+                    @if (item.IsPaidInvoice == true)
+                    {
+                        <p class="text-danger">Paid</p>
+                    }
+                    else
+                    {
+                        <a asp-action="InvoicePending" asp-controller="Invoice" asp-route-id="@item.Id"><i class="fa-solid fa-lock text-success"></i></a>
+                        <a asp-action="SendMessage" asp-route-Id="@item.Id" class="btn btn-outline-warning">Send Message</a>
+                    }
                 </td>
             </tr>
         }
