@@ -80,7 +80,7 @@ namespace ProjectManagementAppLayer.Areas.Administrator.Controllers
                     var res = await _userManager.CreateAsync(projectDirector, insertProjectDirectorDTO.Password);
                     // to add projectmanager role to the projectmanager account
                     var role = await _userManager.AddToRoleAsync(projectDirector, WebRoles.ProjectDirector);
-                    TempData["save"] = "ProjectManager has been Created Successfully ...";
+                    TempData["save"] = "ProjectDirector has been Created Successfully ...";
                     return RedirectToAction(nameof(Index));
                 }
                 else
@@ -150,7 +150,7 @@ namespace ProjectManagementAppLayer.Areas.Administrator.Controllers
             }
             else if (model.ImageUrl == null)
             {
-                model.ImageUrl = "noImage.png";
+                model.ImageUrl = "userPics.png";
             }
             else
             {
