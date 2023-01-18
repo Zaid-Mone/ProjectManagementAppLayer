@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using ProjectManagementAppLayer.DTOs.Insert;
 using ProjectManagementAppLayer.DTOs.Update;
 using ProjectManagementBusinessLayer.Data;
@@ -24,7 +25,7 @@ namespace ProjectManagementAppLayer.Areas.ProjectManagment.Controllers
     public class InvoiceController : Controller
     {
 
-
+        private readonly IConfiguration _config;
         private readonly ApplicationDbContext _context;
         private readonly IInvoiceRepository _invoiceRepository;
         private readonly IProjectRepository _projectRepository;
@@ -36,7 +37,7 @@ namespace ProjectManagementAppLayer.Areas.ProjectManagment.Controllers
             IInvoiceRepository invoiceRepository,
             IProjectRepository projectRepository,
            IInvoicePaymentTermsRepository invoicePaymentTerms,
-           IPaymentTermRepository paymentTermRepository, UserManager<Person> userManager)
+           IPaymentTermRepository paymentTermRepository, UserManager<Person> userManager, IConfiguration configuration)
         {
             _context = context;
             _invoiceRepository = invoiceRepository;
@@ -44,6 +45,7 @@ namespace ProjectManagementAppLayer.Areas.ProjectManagment.Controllers
             _invoicePaymentTerms = invoicePaymentTerms;
             _paymentTermRepository = paymentTermRepository;
             _userManager = userManager;
+            _config = configuration;
         }
 
         // GET: ProjectManagment/Invoice
@@ -290,11 +292,13 @@ namespace ProjectManagementAppLayer.Areas.ProjectManagment.Controllers
 
         // to send message
         public async Task<IActionResult> SendMessage(Guid id)
-        {   
-         var invoice = await _invoiceRepository.GetInvoiceById(id);
+        {
+           
+            var mySetting = _config.GetSection("API_KEY").Value;
+            var invoice = await _invoiceRepository.GetInvoiceById(id);
           string MESSAGE_TEXT = "PMS. Advertisement It would help if you visited us because Invoice Order No.(#" + invoice.SerialNumber + " ) is available until ("+invoice.InvoiceDate.ToString("d")+")";
          string BASE_URL = "https://5vzxyz.api.infobip.com";
-         string API_KEY = "0e9f2022b6573dd52371e0ca74a4bd0a-a13e6d21-2f69-4c9c-9663-8ccd7ca2fb6b";
+         string API_KEY = mySetting;
          string SENDER = "InfoSMS";
          string RECIPIENT = "962776934286";
         var configuration = new Configuration()
@@ -332,7 +336,7 @@ namespace ProjectManagementAppLayer.Areas.ProjectManagment.Controllers
                 Console.WriteLine("Error occurred! \n\tMessage: {0}\n\tError content", apiException.ErrorContent);
             }
             TempData["save"] = "Message has been sent Successfully ...";
-            return RedirectToAction("Index");
+            return RedirectToAction("GetAllApprovedInvoiecs");
         }
 
     }
