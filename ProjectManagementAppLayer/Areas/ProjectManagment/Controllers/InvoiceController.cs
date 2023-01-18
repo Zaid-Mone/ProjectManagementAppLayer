@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Infobip.Api.Client;
+using Infobip.Api.Client.Api;
+using Infobip.Api.Client.Model;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -13,12 +16,15 @@ using ProjectManagementBusinessLayer.Data;
 using ProjectManagementBusinessLayer.Entities;
 using ProjectManagementBusinessLayer.Repositories.Implementation;
 using ProjectManagementBusinessLayer.Repositories.Interfaces;
-
+//using Vonage;
+//using Vonage.Request;
 namespace ProjectManagementAppLayer.Areas.ProjectManagment.Controllers
 {
     [Area("ProjectManagment")]
     public class InvoiceController : Controller
     {
+
+
         private readonly ApplicationDbContext _context;
         private readonly IInvoiceRepository _invoiceRepository;
         private readonly IProjectRepository _projectRepository;
@@ -43,7 +49,9 @@ namespace ProjectManagementAppLayer.Areas.ProjectManagment.Controllers
         // GET: ProjectManagment/Invoice
         public async Task<IActionResult> Index()
         {
-            var res = await _userManager.IsInRoleAsync(await _userManager.GetUserAsync(User), "Admin");
+            var user = await _userManager.GetUserAsync(User);
+            var res = await (_userManager.IsInRoleAsync(user , "Admin"))||
+                await(_userManager.IsInRoleAsync(user, "ProjectDirector"));
             if (res)
             {
                 var item1 = await _invoiceRepository.GetAllInvoices();
@@ -75,7 +83,7 @@ namespace ProjectManagementAppLayer.Areas.ProjectManagment.Controllers
         public async Task<IActionResult> Create()
         {
             ViewBag.user = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            ViewBag.projcet = await _projectRepository.GetAllProjects();
+            ViewBag.projcet = await _projectRepository.GetAllIsApprovedProjects();
             return View();
         }
 
@@ -243,6 +251,88 @@ namespace ProjectManagementAppLayer.Areas.ProjectManagment.Controllers
             //var res2 = await _invoicePaymentTerms.GetInvoicePaymentTermByIdByInvoiceId(res1.Id);
 
             return new JsonResult(res1);
+        }
+
+
+        // to return All  Pending Invoices only for PD
+        public async Task<IActionResult> GetAllPendingInvoiecs()
+        {
+            var item = await _invoiceRepository.GetAllPendingInvoices();
+            return View(item);
+        }       
+        // to return All  Approved Invoices only for PD
+        public async Task<IActionResult> GetAllApprovedInvoiecs()
+        {
+            var item = await _invoiceRepository.GetAllApprovedInvoices();
+            return View(item);
+        }
+
+
+        // to change invoice state
+        public async Task<IActionResult> InvoiceApproved(Guid id)
+        {
+            var invoice = await _invoiceRepository.GetInvoiceById(id);
+            invoice.IsApproved = true;
+            _invoiceRepository.Update(invoice);
+            _invoiceRepository.Save();
+            return RedirectToAction("GetAllPendingInvoices", "Invoice");
+        }
+
+        // to change invoice state
+        public async Task<IActionResult> InvoicePending(Guid id)
+        {
+            var invoice = await _invoiceRepository.GetInvoiceById(id);
+            invoice.IsApproved = false;
+            _invoiceRepository.Update(invoice);
+            _invoiceRepository.Save();
+            return RedirectToAction("GetAllApprovedInvoiecs", "Invoice");
+        }
+
+        // to send message
+        public async Task<IActionResult> SendMessage(Guid id)
+        {   
+         var invoice = await _invoiceRepository.GetInvoiceById(id);
+          string MESSAGE_TEXT = "PMS. Advertisement It would help if you visited us because Invoice Order No.(#" + invoice.SerialNumber + " ) is available until ("+invoice.InvoiceDate.ToString("d")+")";
+         string BASE_URL = "https://5vzxyz.api.infobip.com";
+         string API_KEY = "0e9f2022b6573dd52371e0ca74a4bd0a-a13e6d21-2f69-4c9c-9663-8ccd7ca2fb6b";
+         string SENDER = "InfoSMS";
+         string RECIPIENT = "962776934286";
+        var configuration = new Configuration()
+            {
+                BasePath = BASE_URL,
+                ApiKeyPrefix = "App",
+                ApiKey = API_KEY
+            };
+
+            var sendSmsApi = new SendSmsApi(configuration);
+
+            var smsMessage = new SmsTextualMessage()
+            {
+                From = SENDER,
+                Destinations = new List<SmsDestination>()
+                {
+                    new SmsDestination(to: RECIPIENT)
+                },
+                Text = MESSAGE_TEXT
+            };
+
+            var smsRequest = new SmsAdvancedTextualRequest()
+            {
+                Messages = new List<SmsTextualMessage>() { smsMessage }
+            };
+
+            try
+            {
+                var smsResponse = sendSmsApi.SendSmsMessage(smsRequest);
+
+                Console.WriteLine("Response: " + smsResponse.Messages.FirstOrDefault());
+            }
+            catch (ApiException apiException)
+            {
+                Console.WriteLine("Error occurred! \n\tMessage: {0}\n\tError content", apiException.ErrorContent);
+            }
+            TempData["save"] = "Message has been sent Successfully ...";
+            return RedirectToAction("Index");
         }
 
     }

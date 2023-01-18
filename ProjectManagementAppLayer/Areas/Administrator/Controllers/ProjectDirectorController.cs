@@ -16,68 +16,70 @@ using System.Threading.Tasks;
 namespace ProjectManagementAppLayer.Areas.Administrator.Controllers
 {
     [Area("Administrator")]
-    [Authorize(Roles ="Admin")]
-    public class ProjectManagerController : Controller
+    [Authorize(Roles = "Admin")]
+    public class ProjectDirectorController : Controller
     {
         private readonly IProjectManagerRepository _projectManagerRepository;
+        private readonly IProjectDirectorRepository _projectDirectorRepository;
         private readonly UserManager<Person> _userManager;
         private readonly IWebHostEnvironment _hosting;
 
-        public ProjectManagerController(IProjectManagerRepository projectManagerRepository, UserManager<Person> userManager, IWebHostEnvironment hosting)
+        public ProjectDirectorController(IProjectManagerRepository projectManagerRepository, UserManager<Person> userManager, IWebHostEnvironment hosting, IProjectDirectorRepository projectDirectorRepository)
         {
             this._projectManagerRepository = projectManagerRepository;
             this._userManager = userManager;
             _hosting = hosting;
+            _projectDirectorRepository = projectDirectorRepository;
         }
-        // GET: ProjectManagerController
+
+        // GET: ProjectDirectorController
         public async Task<ActionResult> Index()
         {
-
-            var item = await _projectManagerRepository.GetAllProjectManagers();
+            var item = await _projectDirectorRepository.GetAllProjectDirectors();
             return View(item);
         }
 
-        // GET: ProjectManagerController/Details/5
+        // GET: ProjectDirectorController/Details/5
         public ActionResult Details(int id)
         {
             return View();
         }
 
-        // GET: ProjectManagerController/Create
+        // GET: ProjectDirectorController/Create
         public ActionResult Create()
         {
-            
             return View();
         }
 
-        // POST: ProjectManagerController/Create
+        // POST: ProjectDirectorController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create(InsertProjectManagerDTO insertProjectManagerDTO)
+        public async Task<ActionResult> Create(InsertProjectDirectorDTO insertProjectDirectorDTO)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-                    var projectmanager = new ProjectManager()
+                    var projectDirector = new ProjectDirector()
                     {
-                        Email = insertProjectManagerDTO.Email,
-                        UserName = insertProjectManagerDTO.Email,
-                        PhoneNumber= insertProjectManagerDTO.PhoneNumber,
-                        EmailConfirmed=true,
-                        FullName= insertProjectManagerDTO.FullName,
+                        Email = insertProjectDirectorDTO.Email,
+                        UserName = insertProjectDirectorDTO.Email,
+                        PhoneNumber = insertProjectDirectorDTO.PhoneNumber,
+                        EmailConfirmed = true,
+                        FullName = insertProjectDirectorDTO.FullName,
                     };
                     // to check if the user email exist or not
-                    if (_projectManagerRepository.CheckExist(projectmanager)) {
+                    if (_projectDirectorRepository.CheckExist(projectDirector))
+                    {
                         ViewBag.msg = false;
                         ModelState.AddModelError("", "Sorry the Email is already used");
                         return View();
                     }
                     // to add projectmanager account
-                    UploadImage(projectmanager);
-                    var res = await _userManager.CreateAsync(projectmanager, insertProjectManagerDTO.Password);
+                    UploadImage(projectDirector);
+                    var res = await _userManager.CreateAsync(projectDirector, insertProjectDirectorDTO.Password);
                     // to add projectmanager role to the projectmanager account
-                    var role = await _userManager.AddToRoleAsync(projectmanager, WebRoles.ProjectManager);
+                    var role = await _userManager.AddToRoleAsync(projectDirector, WebRoles.ProjectDirector);
                     TempData["save"] = "ProjectManager has been Created Successfully ...";
                     return RedirectToAction(nameof(Index));
                 }
@@ -93,16 +95,16 @@ namespace ProjectManagementAppLayer.Areas.Administrator.Controllers
             }
         }
 
-        // GET: ProjectManagerController/Edit/5
+        // GET: ProjectDirectorController/Edit/5
         public ActionResult Edit(int id)
         {
             return View();
         }
 
-        // POST: ProjectManagerController/Edit/5
+        // POST: ProjectDirectorController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(string id)
+        public ActionResult Edit(int id, IFormCollection collection)
         {
             try
             {
@@ -114,32 +116,19 @@ namespace ProjectManagementAppLayer.Areas.Administrator.Controllers
             }
         }
 
-        // GET: ProjectManagerController/Delete/5
-        public async Task<ActionResult> Delete(string id)
+        // GET: ProjectDirectorController/Delete/5
+        public ActionResult Delete(int id)
         {
-            var projectManager = await _projectManagerRepository.GetProjectManagerById(id);
-            return View(projectManager);
+            return View();
         }
 
-        // POST: ProjectManagerController/Delete/5
+        // POST: ProjectDirectorController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Delete(ProjectManager projectManager)
+        public ActionResult Delete(int id, IFormCollection collection)
         {
             try
             {
-                var projecM = await _projectManagerRepository.GetProjectManagerById(projectManager.Id);
-                if (projecM == null)
-                {
-                    return NotFound();
-                }
-               var res =  await _userManager.FindByEmailAsync(projecM.Email);
-                if(res == null)
-                {
-                    return NotFound();
-                }
-                await _userManager.DeleteAsync(res);
-                TempData["delete"] = "ProjectManager has been Deleted Successfully ...";
                 return RedirectToAction(nameof(Index));
             }
             catch
@@ -147,8 +136,6 @@ namespace ProjectManagementAppLayer.Areas.Administrator.Controllers
                 return View();
             }
         }
-
-
 
 
         private void UploadImage(Person model)

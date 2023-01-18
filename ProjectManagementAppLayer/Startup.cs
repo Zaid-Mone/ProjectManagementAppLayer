@@ -60,6 +60,7 @@ namespace ProjectManagementAppLayer
             services.AddTransient<IInvoiceRepository, InvoiceRepository>();
             services.AddTransient<IInvoicePaymentTermsRepository, InvoicePaymentTermsRepository>();
             services.AddTransient<IAdminRepository, AdminRepository>();
+            services.AddTransient<IProjectDirectorRepository, ProjectDirectorRepository>();
             
         }
 

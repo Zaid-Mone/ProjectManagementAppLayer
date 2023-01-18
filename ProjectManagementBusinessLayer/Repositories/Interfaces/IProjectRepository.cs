@@ -8,6 +8,12 @@ namespace ProjectManagementBusinessLayer.Repositories.Interfaces
     public interface IProjectRepository
     {
         public Task<List<Project>> GetAllProjects();
+        // to return only pending project
+        public Task<List<Project>> GetAllPendingProjects();   
+        // to return only approved project
+        public Task<List<Project>> GetAllApprovedProjects();
+        // to find all projects based IsApproved
+        public Task<List<Project>> GetAllIsApprovedProjects();
         // to find all projects based project manager id
         public Task<List<Project>> GetProjectManagerProjects(string userId);  
         public Task<Project> GetProjectById(Guid id);

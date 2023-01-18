@@ -33,27 +33,28 @@
             <tbody>
                 @foreach (var item in Model)
                 {
-                    <tr>
-                        <td>
-                            @Html.Raw(item.Description)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.StartDate)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.EndDate)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.ProjectPhase.Project.ProjectName)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.ProjectPhase.Phase.PhaseName)
-                        </td>
+                <tr>
+                    <td>
+                        @Html.Raw(item.Description)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.StartDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.EndDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ProjectPhase.Project.ProjectName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ProjectPhase.Phase.PhaseName)
+                    </td>
+
                         <td>
                             <a asp-action="Create" asp-controller="PaymentTerm" asp-route-id="@item.Id"><i class="fa-solid fa-cart-shopping"></i></a> |
                             <partial name="_Buttons" model="@item.Id" />
                         </td>
-                    </tr>
+                </tr>
                 }
 
             </tbody>

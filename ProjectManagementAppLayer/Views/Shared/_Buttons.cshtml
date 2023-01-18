@@ -1,5 +1,19 @@
 ﻿@model Guid
-    <a asp-action="Edit" asp-route-id="@Model"><i class="fas fa-edit"></i></a> |
-    <a asp-action="Details" asp-route-id="@Model"><i class="fa-solid fa-eye"></i></a> |
+@*@if (User.IsInRole("ProjectDirector"))
+{
+    <a asp-action="ProjectApproved" asp-controller="Project" asp-route-id="@Model"><i class="fa-solid fa-lock"></i></a>
+
+}
+else
+{
+    <a asp-action="Edit" asp-route-id="@Model"><i class="fas fa-edit"></i></a>
+    <a asp-action = "Details" asp-route-id = "@Model"><i class="fa-solid fa-eye"></i></a>
     <a asp-action="Delete" asp-route-id="@Model"><i class="fas fa-trash-alt"></i></a>
+}*@
+<a asp-action="Edit" asp-route-id="@Model"><i class="fas fa-edit"></i></a>|
+<a asp-action="Details" asp-route-id="@Model"><i class="fa-solid fa-eye"></i></a>|
+<a asp-action="Delete" asp-route-id="@Model"><i class="fas fa-trash-alt"></i></a>
+
+
+
 

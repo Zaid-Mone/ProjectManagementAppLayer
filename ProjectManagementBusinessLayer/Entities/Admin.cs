@@ -8,5 +8,5 @@ namespace ProjectManagementBusinessLayer.Entities
         public List<PaymentTerm> PaymentTerms { get; set; }
         public List<Deliverable> Deliverables { get; set; }
         public List<Invoice> Invoices { get; set; }
-    }
+    }    
 }

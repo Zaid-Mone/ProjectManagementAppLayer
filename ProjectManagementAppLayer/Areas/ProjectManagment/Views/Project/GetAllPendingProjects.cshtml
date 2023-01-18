@@ -4,13 +4,7 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
-@if (User.IsInRole("Admin") || User.IsInRole("ProjectManager"))
-{
-    <p>
-        <a asp-action="Create" class="btn btn-outline-success">Create</a>
-    </p>
-}
+<h1>Pending Projects</h1>
 
 <div class="row">
     <div class="col-12 table-responsive">
@@ -41,9 +35,7 @@
                     <th>
                         @Html.DisplayNameFor(model => model.Client)
                     </th>
-                    <th>
-                        Phases
-                    </th>
+
                     <th></th>
                 </tr>
             </thead>
@@ -77,27 +69,18 @@
                             @Html.DisplayFor(modelItem => item.Client.Name)
                         </td>
                         <td>
-                            @if (item.IsApproved == false)
-                            {
-                                <p class="text-danger">Not Allow to do any actions until the project is approved</p>
-                                <a href="/ProjectManagment/ProjectPhase/Index?id=@item.Id" hidden>View Phases</a>
-                            }
-                            else
-                            {
-                                <a href="/ProjectManagment/ProjectPhase/Index?id=@item.Id">View Phases</a>
-                            }
-                        </td>
-                        <td>
+
                                 @if (item.IsApproved == false)
                                 {
-                                    <div class="butons" style="pointer-events: none;" hidden>
-                                        <partial name="_Buttons" model="@item.Id" />
-                                    </div>
+                                    <a asp-action="ProjectApproved" asp-controller="Project" asp-route-id="@item.Id"><i class="fa-solid fa-lock text-success"></i></a>
+
                                 }
                                 else
                                 {
-                                    <partial name="_Buttons" model="@item.Id" />
+                                    <a asp-action="ProjectPending" asp-controller="Project" asp-route-id="@item.Id"><i class="fa-solid fa-lock-open text-danger"></i></a>
+
                                 }
+
                         </td>
                     </tr>
                 }

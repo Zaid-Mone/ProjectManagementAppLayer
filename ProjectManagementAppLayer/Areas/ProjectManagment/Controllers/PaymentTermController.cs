@@ -41,7 +41,9 @@ namespace ProjectManagementAppLayer.Areas.ProjectManagment.Controllers
         // GET: ProjectManagment/PaymentTerm
         public async Task<IActionResult> Index()
         {
-            var res = await _userManager.IsInRoleAsync(await _userManager.GetUserAsync(User), "Admin");
+            var user = await _userManager.GetUserAsync(User);
+            var res = await (_userManager.IsInRoleAsync(user, "Admin")) ||
+                await (_userManager.IsInRoleAsync(user, "ProjectDirector"));
             if (res)
             {
                 var item1 = await _paymentTermRepository.GetAllPaymentTerms();

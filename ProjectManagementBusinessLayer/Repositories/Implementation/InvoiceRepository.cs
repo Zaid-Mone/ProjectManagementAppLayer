@@ -23,6 +23,17 @@ namespace ProjectManagementBusinessLayer.Repositories.Implementation
             _context.Invoices.Remove(invoice);
         }
 
+        public async Task<List<Invoice>> GetAllApprovedInvoices()
+        {
+            return await _context.Invoices
+                .Include(t => t.InvoicePaymentTerms)
+                .ThenInclude(r => r.PaymentTerm)
+                .Include(e => e.Project)
+                .Include(q => q.Project.Client)
+                .Where(t=>t.IsApproved==true)
+                .ToListAsync();
+        }
+
         public async Task<List<Invoice>> GetAllInvoices()
         {
             return await _context.Invoices
@@ -42,6 +53,17 @@ namespace ProjectManagementBusinessLayer.Repositories.Implementation
                 .Include(x=>x.Project.ProjectManager)
                 .Include(q => q.Project.Client)
                 .Where(n=>n.Project.ProjectManagerId==id)
+                .ToListAsync();
+        }
+
+        public async Task<List<Invoice>> GetAllPendingInvoices()
+        {
+            return await _context.Invoices
+                .Include(t => t.InvoicePaymentTerms)
+                .ThenInclude(r => r.PaymentTerm)
+                .Include(e => e.Project)
+                .Include(q => q.Project.Client)
+                .Where(t => t.IsApproved == false)
                 .ToListAsync();
         }
 

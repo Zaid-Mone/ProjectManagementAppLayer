@@ -29,24 +29,31 @@
             <tbody>
                 @foreach (var item in Model)
                 {
-                    <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.PaymentTermTitle)
-                        </td>
-                        <td>
-                            @item.PaymentTermAmount.ToString("C")
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Deliverable.ProjectPhase.Project.ProjectName)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Deliverable.ProjectPhase.Phase.PhaseName)
-                        </td>
-                        <td>
-                            <partial name="_Buttons" model="@item.Id" />
-                        </td>
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PaymentTermTitle)
+                    </td>
+                    <td>
+                        @item.PaymentTermAmount.ToString("C")
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Deliverable.ProjectPhase.Project.ProjectName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Deliverable.ProjectPhase.Phase.PhaseName)
+                    </td>
+                    <td>
+                        @if (User.IsInRole("ProjectDirector"))
+                        {
+                            <a asp-action="ProjectApproved" asp-controller="Project" asp-route-id="@item.Id"><i class="fa-solid fa-lock"></i></a>
 
-                    </tr>
+                        }
+                        else
+                        {
+                            <partial name="_Buttons" model="@item.Id" />
+                        }
+                    </td>
+                </tr>
                 }
             </tbody>
         </table>
