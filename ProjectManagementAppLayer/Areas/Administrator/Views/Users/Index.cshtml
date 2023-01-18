@@ -37,13 +37,24 @@
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.PhoneNumber)
+                        </td>   
+                        <td>
+                            @if (item.IsLoggedIn == true)
+                            {
+                                <span class="badge badge-pill badge-success">Online</span>
+                            }
+                            else
+                            {
+                                <span class="badge badge-pill badge-dark">Offline</span>
+
+                            }
                         </td>
 
-                        <td>
+                        @*<td>
                             <a asp-action="Edit" asp-route-id="@item.Id"><i class="fas fa-edit"></i></a> |
                             <a asp-action="Details" asp-route-id="@item.Id"><i class="fas fa-list-alt"></i></a> |
                             <a asp-action="Delete" asp-route-id="@item.Id"><i class="fas fa-trash-alt"></i></a>
-                        </td>
+                        </td>*@
                     </tr>
                 }
             </tbody>

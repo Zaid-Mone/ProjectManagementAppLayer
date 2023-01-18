@@ -9,6 +9,6 @@ namespace ProjectManagementAppLayer.Utility
     {
         public const string Admin = "Admin";
         public const string ProjectManager = "ProjectManager";
-        //public const string ProjectDirector = "ProjectDirector";
+        public const string ProjectDirector = "ProjectDirector";
     }
 }

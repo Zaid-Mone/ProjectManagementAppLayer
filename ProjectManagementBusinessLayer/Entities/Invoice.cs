@@ -19,6 +19,9 @@ namespace ProjectManagementBusinessLayer.Entities
         public Guid ProjectId { get; set; }
         public Project Project { get; set; }
         public string SerialNumber { get; set; } // auto Generated unique number
+        public bool IsApproved { get; set; } = false;
+        // (True )Approved in invoice mean you can't edit the invoice
+        // (False )Pending in invoice mean you can edit the invoice
     }
 
 }

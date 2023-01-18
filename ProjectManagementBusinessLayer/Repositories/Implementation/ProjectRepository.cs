@@ -40,6 +40,45 @@ namespace ProjectManagementBusinessLayer.Repositories.Implementation
             _context.Projects.Remove(project);
         }
 
+        public async Task<List<Project>> GetAllApprovedProjects()
+        {
+            return await _context.Projects
+            .Include(z => z.Client)
+            .Include(q => q.ProjectManager)
+            .Include(t => t.ProjectStatus)
+            .Include(s => s.ProjectType)
+            .Include(p => p.ProjectPhases)
+            .ThenInclude(b => b.Phase)
+            .Where(b => b.IsApproved == true)
+            .ToListAsync();
+        }
+
+        public async Task<List<Project>> GetAllIsApprovedProjects()
+        {
+            return await _context.Projects
+            .Include(z => z.Client)
+            .Include(q => q.ProjectManager)
+            .Include(t => t.ProjectStatus)
+            .Include(s => s.ProjectType)
+            .Include(p => p.ProjectPhases)
+            .ThenInclude(b => b.Phase)
+            .Where(b=>b.IsApproved==true)
+            .ToListAsync();
+        }
+
+        public async Task<List<Project>> GetAllPendingProjects()
+        {
+            return await _context.Projects
+            .Include(z => z.Client)
+            .Include(q => q.ProjectManager)
+            .Include(t => t.ProjectStatus)
+            .Include(s => s.ProjectType)
+            .Include(p => p.ProjectPhases)
+            .ThenInclude(b => b.Phase)
+            .Where(b => b.IsApproved == false)
+            .ToListAsync();
+        }
+
         public async Task<List<Project>> GetAllProjects()
         {
          

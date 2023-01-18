@@ -43,7 +43,9 @@ namespace ProjectManagementAppLayer.Areas.ProjectManagment.Controllers
         // GET: ProjectManagment/Project
         public async Task<IActionResult> Index()
         {
-          var res =  await _userManager.IsInRoleAsync(await _userManager.GetUserAsync(User), "Admin");
+            var user = await _userManager.GetUserAsync(User);
+            var res = await (_userManager.IsInRoleAsync(user, "Admin")) ||
+                await (_userManager.IsInRoleAsync(user, "ProjectDirector"));
             if (res)
             {
                 var item = await _projectRepository.GetAllProjects();
@@ -100,6 +102,7 @@ namespace ProjectManagementAppLayer.Areas.ProjectManagment.Controllers
                 var project = new Project()
                 {
                     Id = new Guid(),
+                    IsApproved=false,
                     EndDate = insertProjectDTO.EndDate,
                     StartDate = insertProjectDTO.StartDate,
                     ContractAmount = insertProjectDTO.ContractAmount,
@@ -172,6 +175,7 @@ namespace ProjectManagementAppLayer.Areas.ProjectManagment.Controllers
                     var proj = await _projectRepository.GetProjectById(updateProjectDTO.ProjectId);
                     if (updateProjectDTO.ContractFile == null)
                     {
+                        proj.IsApproved = false;
                         proj.ClientId = updateProjectDTO.ClientId;
                         proj.ContractAmount = updateProjectDTO.ContractAmount;
                         proj.StartDate = updateProjectDTO.StartDate;
@@ -270,62 +274,38 @@ namespace ProjectManagementAppLayer.Areas.ProjectManagment.Controllers
         }
 
 
-        //[HttpPost] // solve the error when update the file deleted
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> Edit(UpdateProjectDTO updateProjectDTO)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        try
-        //        {
-        //            //var proj = await _projectRepository.GetProjectById(updateProjectDTO.ProjectId);
-        //            if (updateProjectDTO.ContractFile != null)
-        //            {
-        //                var project = new Project()
-        //                {
-        //                    Id = updateProjectDTO.ProjectId,
-        //                    ClientId = updateProjectDTO.ClientId,
-        //                    ContractAmount = updateProjectDTO.ContractAmount,
-        //                    StartDate = updateProjectDTO.StartDate,
-        //                    EndDate = updateProjectDTO.EndDate,
-        //                    ProjectManagerId = updateProjectDTO.ProjectManagerId,
-        //                    ProjectName = updateProjectDTO.ProjectName,
-        //                    ProjectStatusId = updateProjectDTO.ProjectStatusId,
-        //                    ProjectTypeId = updateProjectDTO.ProjectTypeId,
-        //                    ContractFileName = updateProjectDTO.ContractFile.FileName,
-        //                    ContractFileType = updateProjectDTO.ContractFile.ContentType,
 
-        //                };
-        //                Stream st = updateProjectDTO.ContractFile.OpenReadStream();
-        //                using (BinaryReader bt = new BinaryReader(st))
-        //                {
-        //                    var byteFile = bt.ReadBytes((int)st.Length);
-        //                    project.ContractFile = byteFile;
-        //                    _projectRepository.Update(project);
-        //                    _projectRepository.Save();
-        //                    TempData["edit"] = "Project has been Updated Successfully ...";
-        //                    return RedirectToAction(nameof(Index));
-        //                }
-        //            }
-        //        }
-        //        catch (DbUpdateConcurrencyException)
-        //        {
-        //            if (updateProjectDTO.ProjectId == null)
-        //            {
-        //                return NotFound();
-        //            }
-        //            else
-        //            {
-        //                throw;
-        //            }
-        //        }
+        public async Task<IActionResult> ProjectApproved(Guid id)
+        {
+            var project = await _projectRepository.GetProjectById(id);
+            project.IsApproved = true;
+            _projectRepository.Update(project);
+            _projectRepository.Save();
+            ViewBag.msg = true;
+            return RedirectToAction("GetAllPendingProjects", "Project");
+        }
 
-        //    }
-        //    ViewBag.projectStatus = await _projectStatusRepository.GetAllProjectStatuses();
-        //    ViewBag.projectType = await _projectTypeRepository.GetAllProjectTypes();
-        //    ViewBag.client = await _clientRepository.GetAllClients();
-        //    return View();
-        //}
+        public async Task<IActionResult> ProjectPending(Guid id)
+        {
+            var project = await _projectRepository.GetProjectById(id);
+            project.IsApproved = false;
+            _projectRepository.Update(project);
+            _projectRepository.Save();
+            return RedirectToAction("GetAllApprovedProjects", "Project"); 
+        }
+
+        // to return all pending project only
+        public async Task<IActionResult> GetAllPendingProjects()
+        {
+            var item = await _projectRepository.GetAllPendingProjects();
+            return View(item);
+        }
+        // to return all approved project only
+        public async Task<IActionResult> GetAllApprovedProjects()
+        {
+            var item = await _projectRepository.GetAllApprovedProjects();
+            return View(item);
+        }
 
     }
 }

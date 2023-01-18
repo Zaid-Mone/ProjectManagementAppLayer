@@ -147,6 +147,12 @@
                         </a>
                     </li>
                     <li class="nav-item">
+                        <a asp-area="Administrator" asp-controller="ProjectDirector" asp-action="Index" class="nav-link">
+                            <i class="far fa-circle nav-icon"></i>
+                            <p>Create ProjectDirector</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
                         <a asp-area="Administrator" asp-controller="ProjectManager" asp-action="Index" class="nav-link">
                             <i class="far fa-circle nav-icon"></i>
                             <p>Create ProjectManager</p>
@@ -164,6 +170,47 @@
 
         }
 
+        @if (User.Identity.IsAuthenticated && User.IsInRole("ProjectDirector"))
+        {
+            <li class="nav-header">Custom Pages</li>
+
+            <li class="nav-item">
+                <a class="nav-link" asp-area="ProjectManagment" asp-controller="Project" asp-action="GetAllPendingProjects">
+                    <i class="nav-icon fa-solid fa-building-user"></i>
+                    <p>
+                        Pending Projects
+                    </p>
+                </a>
+            </li>           
+            <li class="nav-item">
+                <a class="nav-link" asp-area="ProjectManagment" asp-controller="Project" asp-action="GetAllApprovedProjects">
+                    <i class="nav-icon fa-solid fa-building-user"></i>
+                    <p>
+                        Approved Projects
+                    </p>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" asp-area="ProjectManagment" asp-controller="Invoice" asp-action="GetAllPendingInvoiecs">
+
+                    <i class="nav-icon fa-solid fa-cart-shopping"></i>
+                    <p>
+                        Pending Invoices
+                    </p>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" asp-area="ProjectManagment" asp-controller="Invoice" asp-action="GetAllApprovedInvoiecs">
+                    <i class="nav-icon fa-solid fa-file-invoice-dollar"></i>
+                    <p>
+                        Approved Invoice
+                    </p>
+                </a>
+            </li>
+
+        }
 
     </ul>
 </nav>

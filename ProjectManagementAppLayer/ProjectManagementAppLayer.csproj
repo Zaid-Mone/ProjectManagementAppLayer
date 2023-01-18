@@ -17,6 +17,7 @@
     <Compile Include="Areas\Administrator\Controllers\AdminController.cs" />
     <Compile Include="Areas\Administrator\Controllers\ClientController.cs" />
     <Compile Include="Areas\Administrator\Controllers\PhaseController.cs" />
+    <Compile Include="Areas\Administrator\Controllers\ProjectDirectorController.cs" />
     <Compile Include="Areas\Administrator\Controllers\ProjectManagerController.cs" />
     <Compile Include="Areas\Administrator\Controllers\ProjectStatusController.cs" />
     <Compile Include="Areas\Administrator\Controllers\ProjectTypeController.cs" />
@@ -81,6 +82,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Infobip.Api.Client" Version="2.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="3.1.29" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.32" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="3.1.32" />
@@ -114,6 +116,8 @@
     <None Include="Areas\Administrator\Views\Phase\Details.cshtml" />
     <None Include="Areas\Administrator\Views\Phase\Edit.cshtml" />
     <None Include="Areas\Administrator\Views\Phase\Index.cshtml" />
+    <None Include="Areas\Administrator\Views\ProjectDirector\Create.cshtml" />
+    <None Include="Areas\Administrator\Views\ProjectDirector\Index.cshtml" />
     <None Include="Areas\Administrator\Views\ProjectManager\Create.cshtml" />
     <None Include="Areas\Administrator\Views\ProjectManager\Delete.cshtml" />
     <None Include="Areas\Administrator\Views\ProjectManager\Index.cshtml" />
@@ -178,6 +182,8 @@
     <None Include="Areas\ProjectManagment\Views\Invoice\Delete.cshtml" />
     <None Include="Areas\ProjectManagment\Views\Invoice\Details.cshtml" />
     <None Include="Areas\ProjectManagment\Views\Invoice\Edit.cshtml" />
+    <None Include="Areas\ProjectManagment\Views\Invoice\GetAllApprovedInvoiecs.cshtml" />
+    <None Include="Areas\ProjectManagment\Views\Invoice\GetAllPendingInvoiecs.cshtml" />
     <None Include="Areas\ProjectManagment\Views\Invoice\Index.cshtml" />
     <None Include="Areas\ProjectManagment\Views\PaymentTerm\Create.cshtml" />
     <None Include="Areas\ProjectManagment\Views\PaymentTerm\Delete.cshtml" />
@@ -193,6 +199,8 @@
     <None Include="Areas\ProjectManagment\Views\Project\Delete.cshtml" />
     <None Include="Areas\ProjectManagment\Views\Project\Details.cshtml" />
     <None Include="Areas\ProjectManagment\Views\Project\Edit.cshtml" />
+    <None Include="Areas\ProjectManagment\Views\Project\GetAllApprovedProjects.cshtml" />
+    <None Include="Areas\ProjectManagment\Views\Project\GetAllPendingProjects.cshtml" />
     <None Include="Areas\ProjectManagment\Views\Project\Index.cshtml" />
     <None Include="wwwroot\assorts\js\main.js" />
     <None Include="wwwroot\assorts\vendor\aos\aos.js" />

@@ -33,6 +33,11 @@ namespace ProjectManagementAppLayer.Areas.ProjectManagment.Controllers
                 IsAdmin();
                 return View();
             }
+            else if (User.IsInRole("ProjectDirector"))
+            {
+                IsProjectDirector();
+                return View();
+            }
             else
             {
                 IsProjectManager();
@@ -52,7 +57,7 @@ namespace ProjectManagementAppLayer.Areas.ProjectManagment.Controllers
         }
 
 
-        public  void IsAdmin()
+        public void IsAdmin()
         {
             ViewBag.projectCount = _db.Projects
                 .Include(a => a.ProjectStatus)
@@ -139,5 +144,29 @@ namespace ProjectManagementAppLayer.Areas.ProjectManagment.Controllers
 
 
         }
+        public void IsProjectDirector()
+        {
+            ViewBag.PendingProject = _db.Projects
+                .Where(e => e.IsApproved==false)
+                .Include(a => a.ProjectStatus)
+                .Include(t => t.ProjectType)
+                .ToList().Count;
+            ViewBag.ApprovedProject = _db.Projects
+                .Where(e => e.IsApproved == true)
+                .Include(a => a.ProjectStatus)
+                .Include(t => t.ProjectType)
+                .ToList().Count;    
+            ViewBag.PendingInvoice = _db.Invoices // pending in invoice mean you can edit the invoice
+                .Where(e => e.IsApproved == false)
+                .Include(a => a.Project)
+                .ToList().Count;        
+            ViewBag.ApprovedInvoice = _db.Invoices // Approved in invoice mean you can't edit the invoice
+                .Where(e => e.IsApproved == true)
+                .Include(a => a.Project)
+                .ToList().Count;
+
+        }
+    
+    
     }
 }

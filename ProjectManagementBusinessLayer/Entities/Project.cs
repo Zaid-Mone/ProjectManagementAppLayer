@@ -37,6 +37,8 @@ namespace ProjectManagementBusinessLayer.Entities
         [ForeignKey("ClientId")]
         public Guid ClientId { get; set; }
         public Client Client { get; set; }
+        //public string ProjectState { get; set; } = "Pending";
+        public bool IsApproved { get; set; } = false;
 
     }
 
