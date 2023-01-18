@@ -148,7 +148,7 @@ namespace ProjectManagementAppLayer.Areas.Administrator.Controllers
             }
             else if (model.ImageUrl == null)
             {
-                model.ImageUrl = "noImage.png";
+                model.ImageUrl = "userPics.png";
             }
             else
             {

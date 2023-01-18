@@ -11,7 +11,9 @@ namespace ProjectManagementBusinessLayer.Repositories.Interfaces
         // return all pending invoices
         public Task<List<Invoice>> GetAllPendingInvoices();
         // return all approved invoices
-        public Task<List<Invoice>> GetAllApprovedInvoices();
+        public Task<List<Invoice>> GetAllApprovedInvoices();   
+        // return all paid invoices
+        public Task<List<Invoice>> GetAllPaidInvoices();
         // return all invoice based on projectManager id
         public Task<List<Invoice>> GetAllInvoicesByProjectManagerId(string id);
         public Task<Invoice> GetInvoiceById(Guid id);

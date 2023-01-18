@@ -22,6 +22,8 @@ namespace ProjectManagementBusinessLayer.Entities
         public bool IsApproved { get; set; } = false;
         // (True )Approved in invoice mean you can't edit the invoice
         // (False )Pending in invoice mean you can edit the invoice
+        public bool IsPaidInvoice { get; set; } = false;
+        // if true means i can't send sms messages anymore and can't make it pending anymore too
     }
 
 }

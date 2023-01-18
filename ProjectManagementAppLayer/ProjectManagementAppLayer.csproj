@@ -183,6 +183,7 @@
     <None Include="Areas\ProjectManagment\Views\Invoice\Details.cshtml" />
     <None Include="Areas\ProjectManagment\Views\Invoice\Edit.cshtml" />
     <None Include="Areas\ProjectManagment\Views\Invoice\GetAllApprovedInvoiecs.cshtml" />
+    <None Include="Areas\ProjectManagment\Views\Invoice\GetAllPaidInvoiecs.cshtml" />
     <None Include="Areas\ProjectManagment\Views\Invoice\GetAllPendingInvoiecs.cshtml" />
     <None Include="Areas\ProjectManagment\Views\Invoice\Index.cshtml" />
     <None Include="Areas\ProjectManagment\Views\PaymentTerm\Create.cshtml" />

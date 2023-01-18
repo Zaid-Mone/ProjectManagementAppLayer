@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using ProjectManagementAppLayer.DTOs.Insert;
 using ProjectManagementAppLayer.DTOs.Update;
 using ProjectManagementBusinessLayer.Data;
@@ -24,7 +25,7 @@ namespace ProjectManagementAppLayer.Areas.ProjectManagment.Controllers
     public class InvoiceController : Controller
     {
 
-
+        private readonly IConfiguration _config;
         private readonly ApplicationDbContext _context;
         private readonly IInvoiceRepository _invoiceRepository;
         private readonly IProjectRepository _projectRepository;
@@ -36,7 +37,7 @@ namespace ProjectManagementAppLayer.Areas.ProjectManagment.Controllers
             IInvoiceRepository invoiceRepository,
             IProjectRepository projectRepository,
            IInvoicePaymentTermsRepository invoicePaymentTerms,
-           IPaymentTermRepository paymentTermRepository, UserManager<Person> userManager)
+           IPaymentTermRepository paymentTermRepository, UserManager<Person> userManager, IConfiguration configuration)
         {
             _context = context;
             _invoiceRepository = invoiceRepository;
@@ -44,6 +45,7 @@ namespace ProjectManagementAppLayer.Areas.ProjectManagment.Controllers
             _invoicePaymentTerms = invoicePaymentTerms;
             _paymentTermRepository = paymentTermRepository;
             _userManager = userManager;
+            _config = configuration;
         }
 
         // GET: ProjectManagment/Invoice
@@ -99,8 +101,9 @@ namespace ProjectManagementAppLayer.Areas.ProjectManagment.Controllers
                      InvoiceDate= insertInvoiceDTO.InvoiceDate,
                      InvoiceTitle=insertInvoiceDTO.InvoiceTitle,
                      ProjectId=insertInvoiceDTO.ProjectId,
-                     SerialNumber = Math.Abs(Guid.NewGuid().GetHashCode()).ToString().Substring(0, 5),
-
+                   SerialNumber = Math.Abs(Guid.NewGuid().GetHashCode()).ToString().Substring(0, 5),
+                    //IsApproved=false,
+                    //IsPaidInvoice=false
                 };
                 _invoiceRepository.Insert(invoice);
                 _invoiceRepository.Save();
@@ -254,18 +257,7 @@ namespace ProjectManagementAppLayer.Areas.ProjectManagment.Controllers
         }
 
 
-        // to return All  Pending Invoices only for PD
-        public async Task<IActionResult> GetAllPendingInvoiecs()
-        {
-            var item = await _invoiceRepository.GetAllPendingInvoices();
-            return View(item);
-        }       
-        // to return All  Approved Invoices only for PD
-        public async Task<IActionResult> GetAllApprovedInvoiecs()
-        {
-            var item = await _invoiceRepository.GetAllApprovedInvoices();
-            return View(item);
-        }
+      
 
 
         // to change invoice state
@@ -275,9 +267,8 @@ namespace ProjectManagementAppLayer.Areas.ProjectManagment.Controllers
             invoice.IsApproved = true;
             _invoiceRepository.Update(invoice);
             _invoiceRepository.Save();
-            return RedirectToAction("GetAllPendingInvoices", "Invoice");
+            return RedirectToAction("GetAllPendingInvoiecs", "Invoice");
         }
-
         // to change invoice state
         public async Task<IActionResult> InvoicePending(Guid id)
         {
@@ -288,13 +279,38 @@ namespace ProjectManagementAppLayer.Areas.ProjectManagment.Controllers
             return RedirectToAction("GetAllApprovedInvoiecs", "Invoice");
         }
 
+        // to return All  Pending Invoices only for PD
+        public async Task<IActionResult> GetAllPendingInvoiecs()
+        {
+            var item = await _invoiceRepository.GetAllPendingInvoices();
+            return View(item);
+        }
+        // to return All  Approved Invoices only for PD
+        public async Task<IActionResult> GetAllApprovedInvoiecs()
+        {
+            var item = await _invoiceRepository.GetAllApprovedInvoices();
+            return View(item);
+        }    
+        // to return All  paid Invoices only for PD
+        public async Task<IActionResult> GetAllPaidInvoiecs()
+        {
+            var item = await _invoiceRepository.GetAllPaidInvoices();
+            return View(item);
+        }
+
+
         // to send message
         public async Task<IActionResult> SendMessage(Guid id)
-        {   
-         var invoice = await _invoiceRepository.GetInvoiceById(id);
+        {
+           
+            var mySetting = _config.GetSection("API_KEY").Value;
+            var invoice = await _invoiceRepository.GetInvoiceById(id);
+            invoice.IsPaidInvoice = true;
+            _invoiceRepository.Update(invoice);
+            _invoiceRepository.Save();
           string MESSAGE_TEXT = "PMS. Advertisement It would help if you visited us because Invoice Order No.(#" + invoice.SerialNumber + " ) is available until ("+invoice.InvoiceDate.ToString("d")+")";
          string BASE_URL = "https://5vzxyz.api.infobip.com";
-         string API_KEY = "0e9f2022b6573dd52371e0ca74a4bd0a-a13e6d21-2f69-4c9c-9663-8ccd7ca2fb6b";
+         string API_KEY = mySetting;
          string SENDER = "InfoSMS";
          string RECIPIENT = "962776934286";
         var configuration = new Configuration()
@@ -332,7 +348,7 @@ namespace ProjectManagementAppLayer.Areas.ProjectManagment.Controllers
                 Console.WriteLine("Error occurred! \n\tMessage: {0}\n\tError content", apiException.ErrorContent);
             }
             TempData["save"] = "Message has been sent Successfully ...";
-            return RedirectToAction("Index");
+            return RedirectToAction("GetAllApprovedInvoiecs");
         }
 
     }
