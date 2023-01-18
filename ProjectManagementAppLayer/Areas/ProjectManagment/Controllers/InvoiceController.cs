@@ -290,6 +290,12 @@ namespace ProjectManagementAppLayer.Areas.ProjectManagment.Controllers
         {
             var item = await _invoiceRepository.GetAllApprovedInvoices();
             return View(item);
+        }    
+        // to return All  paid Invoices only for PD
+        public async Task<IActionResult> GetAllPaidInvoiecs()
+        {
+            var item = await _invoiceRepository.GetAllPaidInvoices();
+            return View(item);
         }
 
 
