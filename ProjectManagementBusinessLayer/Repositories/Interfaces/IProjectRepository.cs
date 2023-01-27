@@ -14,6 +14,8 @@ namespace ProjectManagementBusinessLayer.Repositories.Interfaces
         public Task<List<Project>> GetAllApprovedProjects();
         // to find all projects based IsApproved
         public Task<List<Project>> GetAllIsApprovedProjects();
+        // to return only Count of pending project for notification
+        public void GetAllPendingProjectsCount();
         // to find all projects based project manager id
         public Task<List<Project>> GetProjectManagerProjects(string userId);  
         public Task<Project> GetProjectById(Guid id);

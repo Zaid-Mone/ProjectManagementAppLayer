@@ -79,6 +79,13 @@ namespace ProjectManagementBusinessLayer.Repositories.Implementation
             .ToListAsync();
         }
 
+        public void GetAllPendingProjectsCount()
+        {
+            var count = _context.Projects
+                .Where(e => e.IsApproved == false)
+                .ToList().Count;
+        }
+
         public async Task<List<Project>> GetAllProjects()
         {
          

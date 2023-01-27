@@ -101,21 +101,19 @@ namespace ProjectManagementAppLayer.Areas.ProjectManagment.Controllers
                      InvoiceDate= insertInvoiceDTO.InvoiceDate,
                      InvoiceTitle=insertInvoiceDTO.InvoiceTitle,
                      ProjectId=insertInvoiceDTO.ProjectId,
-                   SerialNumber = Math.Abs(Guid.NewGuid().GetHashCode()).ToString().Substring(0, 5),
+                    SerialNumber = Math.Abs(Guid.NewGuid().GetHashCode()).ToString().Substring(0, 5),
                     //IsApproved=false,
                     //IsPaidInvoice=false
                 };
-                _invoiceRepository.Insert(invoice);
+                _invoiceRepository.Insert(invoice); // 1
                 _invoiceRepository.Save();
 
                 foreach (var item in insertInvoiceDTO.PaymentTermIds)
                 {
                     
                     var invoicePayment = new InvoicePaymentTerms();
-
-                    invoicePayment.InvoiceId = invoice.Id;
+                    invoicePayment.InvoiceId = invoice.Id; 
                     invoicePayment.PaymentTermId = item;
-
                     // not working to set isPaid = true; object refernec =null
                     var pTerm = await _paymentTermRepository.GetPaymentTermById(item);
                     if (pTerm != null)

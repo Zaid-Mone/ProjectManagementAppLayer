@@ -19,29 +19,47 @@
 
 // to get all paymentTerm based on project id
 function myFunction() {
-        
-        var optionValue = document.getElementById("mySelect").value;
-    $.ajax({
-        type: "Get",
-        url: `/ProjectManagment/PaymentTerm/GetprojectPayments?id=${optionValue}`,
-       /* dataType: { id: optionValue},*/
-        success: function (response) {
+    var optionValue = document.getElementById("mySelect").value;
+    axios.get(`/ProjectManagment/PaymentTerm/GetprojectPayments?id=${optionValue}`)
+        .then(function (response) {
             $("#secondDropdown option").remove();
             $("#secondDropdown").append("<option selected disabled>Select PayementTerm</option>");
-            for (var item of response.$values) {
-                $('#secondDropdown').append(" <option value=" +item.id+ ">" + item.paymentTermTitle +" - "+ item.deliverable.description+"</option>")
+            for (var item of response.data) {
+                $('#secondDropdown').append(" <option value=" + item.id + ">" + item.paymentTermTitle + " - " + item.deliverable.description + "</option>")
                 $('#secondDropdown option').addClass('submitButton');
+                console.log(response);
             }
-        },
-        error: function (er) {
-            console.log(er.responseText);
-        }
-    });
-      // $('.submitButton').val('');
-        //$('#secondDropdown').empty();
-        //secondDropdown.innerHTML = "";
-        console.clear();
-    }
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
+    console.clear();
+}
+
+//function myFunction() {
+//        var optionValue = document.getElementById("mySelect").value;
+//    $.ajax({
+//        type: "Get",
+//        url: `/ProjectManagment/PaymentTerm/GetprojectPayments?id=${optionValue}`,
+//       /* dataType: { id: optionValue},*/
+//        success: function (response) {
+//            console.log(response)
+//            $("#secondDropdown option").remove();
+//            $("#secondDropdown").append("<option selected disabled>Select PayementTerm</option>");
+//            for (var item of response) {
+//                $('#secondDropdown').append(" <option value=" +item.id+ ">" + item.paymentTermTitle +" - "+ item.deliverable.description+"</option>")
+//                $('#secondDropdown option').addClass('submitButton');
+//            }
+//        },
+//        error: function (er) {
+//            console.log(er.responseText);
+//        }
+//    });
+//      // $('.submitButton').val('');
+//        //$('#secondDropdown').empty();
+//        //secondDropdown.innerHTML = "";
+//        console.clear();
+//    }
 
 
 // to show the hide select list
@@ -69,6 +87,8 @@ $(document).ready(function () {
 $(document).ready(function () {
     $('.submitButton').click(function () {
         var selectedValues = $.map($('#secondDropdown option:selected'), function (option) {
+            debugger
+            console.log(selectedValues);
             return option.value;
         });
         console.clear()
