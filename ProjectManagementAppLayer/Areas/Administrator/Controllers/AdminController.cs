@@ -157,43 +157,47 @@ namespace ProjectManagementAppLayer.Areas.Administrator.Controllers
         }
 
         
-        public IActionResult Statistics()
+        public async Task<IActionResult> Statistics()
         {
-            //var usr = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            ViewBag.projectCount = _db.Projects
-                .Include(a => a.ProjectStatus)
-                .Include(t => t.ProjectType)
-                .ToList().Count;
+            Dictionary<string, int> My_diction = new Dictionary<string, int>();
+            var users = await _userManager.GetUsersInRoleAsync("ProjectManager");
+            //var proj1 = _db.Projects.Count();
 
-
-            // for count all user payements
-            var res = _db.PaymentTerms
-                .Include(q => q.Deliverable)
-                .ThenInclude(r => r.ProjectPhase)
-                .ThenInclude(v => v.Project)
-                .ToList();
-            decimal sum = 0;
-            foreach (var item in res)
+            foreach (var item in users)
             {
-                sum += item.PaymentTermAmount;
+                var proj1 = _db.Projects.Where(q => q.ProjectManagerId == item.Id).Count();
+                My_diction.Add(item.FullName, proj1);
             }
-            ViewBag.sumation = sum.ToString("C");
-
-            var pstatus = _db.ProjectStatuses.ToList();
-
+            var dict= My_diction;
+            ViewBag.diction = dict;
+         
             // get count of pending projects
-            var res1 = _db.Projects
+            var res12 = _db.Projects
                .Include(e => e.ProjectStatus)
-               .Where(y => y.ProjectStatus.Status == "Pending").ToList().Count;
+               .Where(y => y.IsApproved==false).ToList().Count;
 
-            ViewBag.status = res1;
+            ViewBag.state1 = res12;
 
-            // get count of active projects
-            var res2 = _db.Projects
+            // get count of Approved projects
+            var res11 = _db.Projects
                .Include(e => e.ProjectStatus)
-               .Where(y => y.ProjectStatus.Status == "Active").ToList().Count;
+               .Where(y => y.IsApproved == true).ToList().Count;
 
-            ViewBag.active = res2;
+            ViewBag.state2 = res11;
+
+            // get count of Pending invoice
+            var inv1 = _db.Invoices
+            .Where(t => t.IsApproved == false).ToList().Count;
+            ViewBag.Pendinginvoice = inv1;
+
+            // get count of Approved invoice
+            var inv2 = _db.Invoices
+                .Where(t => t.IsApproved == true).ToList().Count;
+            ViewBag.Approvedinvoice = inv2;
+
+
+            //////////////////
+
 
             return View();
         }

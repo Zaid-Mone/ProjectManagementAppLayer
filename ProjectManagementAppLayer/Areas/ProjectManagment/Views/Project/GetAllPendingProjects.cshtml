@@ -69,17 +69,18 @@
                             @Html.DisplayFor(modelItem => item.Client.Name)
                         </td>
                         <td>
+                            <a asp-action="ProjectApproved" asp-controller="Project" asp-route-id="@item.Id" onclick="SWAL()"><i class="fa-solid fa-lock text-success"></i></a>
 
-                                @if (item.IsApproved == false)
-                                {
-                                    <a asp-action="ProjectApproved" asp-controller="Project" asp-route-id="@item.Id"><i class="fa-solid fa-lock text-success"></i></a>
+                            @*@if (item.IsApproved == false)
+        {
+            <a asp-action="ProjectApproved" asp-controller="Project" asp-route-id="@item.Id" onclick="SWAL()"><i class="fa-solid fa-lock text-success"></i></a>
 
-                                }
-                                else
-                                {
-                                    <a asp-action="ProjectPending" asp-controller="Project" asp-route-id="@item.Id"><i class="fa-solid fa-lock-open text-danger"></i></a>
+        }
+        else
+        {
+            <a asp-action="ProjectPending" asp-controller="Project" asp-route-id="@item.Id"><i class="fa-solid fa-lock-open text-danger"></i></a>
 
-                                }
+        }*@
 
                         </td>
                     </tr>
@@ -101,21 +102,33 @@
         });
     </script>
 
-    @if (@ViewBag.msg == true)
-    {
-        <script>
-            $(function () {
-                swal({
-                    title: "Congratulations",
-                    text: "The Prject Is Approved Successfully",
-                    button: "Ok",
-                    icon: "Success",
 
-                });
-            })
+        <script type="text/javascript">
+            function SWAL() {
+
+                setTimeout($(function () {
+                    swal({
+                        title: "Congrats",
+                        text: "Project has been successfully Approved",
+                        button: "Ok",
+                        icon: "success",
+
+                    })
+                }), 10000);
+                //$(function () {
+                //    swal({
+                //        title: "Congrats",
+                //        text: "Project has been successfully Approved",
+                //        button: "Ok",
+                //        icon: "success",
+
+                //    });
+                //})
+            }
+
         </script>
 
-    }
+    
     <script type="text/javascript">
         $(function(){
             var save = '@TempData["save"]'

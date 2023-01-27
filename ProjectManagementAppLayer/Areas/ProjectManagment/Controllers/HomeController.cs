@@ -98,6 +98,9 @@ namespace ProjectManagementAppLayer.Areas.ProjectManagment.Controllers
 
             ViewBag.active = res2;
 
+
+
+
         }
         public void IsProjectManager()
         {
@@ -166,7 +169,6 @@ namespace ProjectManagementAppLayer.Areas.ProjectManagment.Controllers
                 .ToList().Count;
 
         }
-    
     
     }
 }

@@ -11,6 +11,7 @@ namespace ProjectManagementAppLayer.DTOs.Insert
     {
         [Display(Name ="PaymentTerms")]
         public List<Guid> PaymentTermIds { get; set; }
+        
         [Display(Name = "Invoice Title")]
         [Required]
         public string InvoiceTitle { get; set; }

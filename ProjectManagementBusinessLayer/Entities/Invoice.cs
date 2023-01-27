@@ -24,6 +24,8 @@ namespace ProjectManagementBusinessLayer.Entities
         // (False )Pending in invoice mean you can edit the invoice
         public bool IsPaidInvoice { get; set; } = false;
         // if true means i can't send sms messages anymore and can't make it pending anymore too
+        // add bool want to not pay it all 
+        // decimal remeaning 
     }
 
 }

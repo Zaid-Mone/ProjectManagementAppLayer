@@ -1,9 +1,12 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.2.3/axios.min.js" integrity="sha512-L4lHq2JI/GoKsERT8KYa72iCwfSrKYWEyaBxzJeeITM9Lub5vlTj8tufqYk056exhjo2QDEipJrg6zen/DDtoQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
 @if (User.Identity.IsAuthenticated && User.IsInRole("ProjectDirector"))
 {
-    <script src="~/js/Calender.js"></script>
+    <!-- /.row -->
     <div class="row">
 
         <div class="col-lg-3 col-6">
@@ -17,7 +20,7 @@
                 <div class="icon">
                     <i class="ion ion-bag"></i>
                 </div>
-                <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                <a asp-area="ProjectManagment" asp-controller="Project" asp-action="GetAllPendingProjects" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
             </div>
         </div>
         <!-- ./col -->
@@ -32,7 +35,7 @@
                 <div class="icon">
                     <i class="ion ion-stats-bars"></i>
                 </div>
-                <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                <a asp-area="ProjectManagment" asp-controller="Project" asp-action="GetAllApprovedProjects" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
             </div>
         </div>
         <!-- ./col -->
@@ -47,7 +50,7 @@
                 <div class="icon">
                     <i class="ion ion-person-add"></i>
                 </div>
-                <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                <a asp-area="ProjectManagment" asp-controller="Invoice" asp-action="GetAllPendingInvoiecs" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
             </div>
         </div>
         <!-- ./col -->
@@ -62,113 +65,288 @@
                 <div class="icon">
                     <i class="ion ion-pie-graph"></i>
                 </div>
-                <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                <a asp-area="ProjectManagment" asp-controller="Invoice" asp-action="GetAllApprovedInvoiecs" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+            </div>
+        </div>
+    </div>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.min.css" />
+    <div id="calendar"></div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/6.0.3/index.min.js" integrity="sha512-6JYYNVTxA5xwcs3VFsX5cqw2ZglAVwcng/z8u15yq4gV6RiQVattCVcBHMsBxZ6OfLwakrb/IF/YnK64dw2OWQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="~/js/Calender.js"></script>
+    <script>
+
+        var events = Array();
+        axios.get('/ProjectManagment/Project/GetAllProjectForCalenderAdminAndProjectDirector')
+            .then(function (response) {
+                console.log(response)
+                response.data.forEach(function (item) {
+                    events.push({
+                        title: item.projectName,
+                        start: item.startDate.slice(0, 10),
+                        end: item.endDate.slice(0, 10)
+                    })
+                    //    console.log(item.endDate, item.startDate, item.projectName);
+                });
+                console.log(events)
+                console.log('Title')
+                GenerateCalendar(events);
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+
+
+        function GenerateCalendar(events) {
+            //$('#calendar').fullCalendar('destroy'); //clear first
+            var today = new Date().toISOString().slice(0, 10);
+            document.addEventListener('DOMContentLoaded', function () {
+                var calendarEl = document.getElementById('calendar');
+                var calendar = new FullCalendar.Calendar(calendarEl, {
+                    initialView: 'dayGridMonth',
+                    initialDate: today,
+                    /*titleFormat: 'MMMM, dddd D, YYYY',*/
+                    headerToolbar: {
+                        left: 'prev,next today',
+                        center: 'title',
+                        right: 'dayGridMonth,timeGridWeek,timeGridDay'
+                    },
+                    events: events
+                });
+
+                calendar.render();
+            });
+
+        }
+    </script>
+
+}
+else if (User.Identity.IsAuthenticated && User.IsInRole("ProjectManager"))
+{
+    <!-- /.row -->
+    <div class="row">
+        <div class="col-lg-3 col-6">
+            <!-- small box -->
+            <div class="small-box bg-info">
+                <div class="inner">
+                    <h3>@ViewBag.projectCount</h3>
+
+                    <p>Projects Count</p>
+                </div>
+                <div class="icon">
+                    <i class="ion ion-bag"></i>
+                </div>
+                <a asp-area="ProjectManagment" asp-controller="Project" asp-action="GetAllPendingProjects" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+            </div>
+        </div>
+        <!-- ./col -->
+        <div class="col-lg-3 col-6">
+            <!-- small box -->
+            <div class="small-box bg-success">
+                <div class="inner">
+                    <h3>@ViewBag.sumation</h3>
+
+                    <p>Total Projects Income</p>
+                </div>
+                <div class="icon">
+                    <i class="ion ion-stats-bars"></i>
+                </div>
+                <a asp-area="ProjectManagment" asp-controller="Project" asp-action="GetAllApprovedProjects" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+            </div>
+        </div>
+        <!-- ./col -->
+        <div class="col-lg-3 col-6">
+            <!-- small box -->
+            <div class="small-box bg-warning">
+                <div class="inner">
+                    <h3>@ViewBag.status</h3>
+
+                    <p>Projects Pending</p>
+                </div>
+                <div class="icon">
+                    <i class="ion ion-person-add"></i>
+                </div>
+                <a asp-area="ProjectManagment" asp-controller="Invoice" asp-action="GetAllPendingInvoiecs" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+            </div>
+        </div>
+        <!-- ./col -->
+        <div class="col-lg-3 col-6">
+            <!-- small box -->
+            <div class="small-box bg-danger">
+                <div class="inner">
+                    <h3>@ViewBag.active</h3>
+                    <p>Active Project</p>
+                </div>
+                <div class="icon">
+                    <i class="ion ion-pie-graph"></i>
+                </div>
+                <a asp-area="ProjectManagment" asp-controller="Invoice" asp-action="GetAllApprovedInvoiecs" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
             </div>
         </div>
     </div>
     <!-- /.row -->
-
     <div id="calendar"></div>
+    <script src="~/js/Calender.js"></script>
+    <script>
+
+        var events = Array();
+        axios.get('/ProjectManagment/Project/GetAllProjectForCalenderProjectManager')
+            .then(function (response) {
+                console.log(response)
+                response.data.forEach(function (item) {
+                    events.push({
+                        title: item.projectName,
+                        start: item.startDate.slice(0, 10),
+                        end: item.endDate.slice(0, 10)
+                    })
+                    //    console.log(item.endDate, item.startDate, item.projectName);
+                });
+                console.log(events)
+                console.log('Title')
+                GenerateCalendar(events);
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+
+
+        function GenerateCalendar(events) {
+            //$('#calendar').fullCalendar('destroy'); //clear first
+            var today = new Date().toISOString().slice(0, 10);
+            document.addEventListener('DOMContentLoaded', function () {
+                var calendarEl = document.getElementById('calendar');
+                var calendar = new FullCalendar.Calendar(calendarEl, {
+                    initialView: 'dayGridMonth',
+                    initialDate: today,
+                    /*titleFormat: 'MMMM, dddd D, YYYY',*/
+                    headerToolbar: {
+                        left: 'prev,next today',
+                        center: 'title',
+                        right: 'dayGridMonth,timeGridWeek,timeGridDay'
+                    },
+                    events: events
+                });
+
+                calendar.render();
+            });
+
+        }
+    </script>
 
 }
-<!-- .row -->
-@if (User.Identity.IsAuthenticated)
+else if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
 {
-    @if (!User.IsInRole("ProjectDirector"))
-    {
-        <script src="~/js/Calender.js"></script>
-        <div class="row">
-            <div class="col-lg-3 col-6">
-                <!-- small box -->
-                <div class="small-box bg-info">
-                    <div class="inner">
-                        <h3>@ViewBag.projectCount</h3>
+    <!-- /.row -->
+    <div class="row">
 
-                        <p>Projects</p>
-                    </div>
-                    <div class="icon">
-                        <i class="ion ion-bag"></i>
-                    </div>
-                    <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+        <div class="col-lg-3 col-6">
+            <!-- small box -->
+            <div class="small-box bg-info">
+                <div class="inner">
+                    <h3>@ViewBag.projectCount</h3>
+
+                    <p>Projects Count</p>
                 </div>
+                <div class="icon">
+                    <i class="ion ion-bag"></i>
+                </div>
+                <a asp-area="ProjectManagment" asp-controller="Project" asp-action="GetAllPendingProjects" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
             </div>
-            <!-- ./col -->
-            <div class="col-lg-3 col-6">
-                <!-- small box -->
-                <div class="small-box bg-success">
-                    <div class="inner">
-                        <h3>@ViewBag.sumation</h3>
-
-                        <p>Total Project Amount</p>
-                    </div>
-                    <div class="icon">
-                        <i class="ion ion-stats-bars"></i>
-                    </div>
-                    <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-                </div>
-            </div>
-            @if (User.IsInRole("Admin"))
-            {
-                <!-- ./col -->
-                <div class="col-lg-3 col-6">
-                    <!-- small box -->
-                    <div class="small-box bg-warning">
-                        <div class="inner">
-                            <h3>@ViewBag.users</h3>
-
-                            <p>Users</p>
-                        </div>
-                        <div class="icon">
-                            <i class="ion ion-person-add"></i>
-                        </div>
-                        <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-                    </div>
-                </div>
-                <!-- ./col -->
-            }
-            else
-            {
-                <!-- ./col -->
-                <div class="col-lg-3 col-6">
-                    <!-- small box -->
-                    <div class="small-box bg-warning">
-                        <div class="inner">
-                            <h3>@ViewBag.status</h3>
-
-                            <p>Pending Projects</p>
-                        </div>
-                        <div class="icon">
-                            <i class="ion ion-person-add"></i>
-                        </div>
-                        <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-                    </div>
-                </div>
-                <!-- ./col -->
-
-            }
-            <div class="col-lg-3 col-6">
-                <!-- small box -->
-                <div class="small-box bg-danger">
-                    <div class="inner">
-                        <h3>@ViewBag.active</h3>
-
-                        <p>Active Projects</p>
-                    </div>
-                    <div class="icon">
-                        <i class="ion ion-pie-graph"></i>
-                    </div>
-                    <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-                </div>
-            </div>
-            <!-- ./col -->
         </div>
-        <!-- /.row -->
+        <!-- ./col -->
+        <div class="col-lg-3 col-6">
+            <!-- small box -->
+            <div class="small-box bg-success">
+                <div class="inner">
+                    <h3>@ViewBag.sumation</h3>
 
-        <div id="calendar"></div>
-    }
+                    <p>Total Projects Income</p>
+                </div>
+                <div class="icon">
+                    <i class="ion ion-stats-bars"></i>
+                </div>
+                <a asp-area="ProjectManagment" asp-controller="Project" asp-action="GetAllApprovedProjects" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+            </div>
+        </div>
+        <!-- ./col -->
+        <div class="col-lg-3 col-6">
+            <!-- small box -->
+            <div class="small-box bg-warning">
+                <div class="inner">
+                    <h3>@ViewBag.active</h3>
 
+                    <p>Active Projects</p>
+                </div>
+                <div class="icon">
+                    <i class="ion ion-person-add"></i>
+                </div>
+                <a asp-area="ProjectManagment" asp-controller="Invoice" asp-action="GetAllPendingInvoiecs" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+            </div>
+        </div>
+        <!-- ./col -->
+        <div class="col-lg-3 col-6">
+            <!-- small box -->
+            <div class="small-box bg-danger">
+                <div class="inner">
+                    <h3>@ViewBag.users</h3>
+
+                    <p>Users</p>
+                </div>
+                <div class="icon">
+                    <i class="ion ion-pie-graph"></i>
+                </div>
+                <a asp-area="ProjectManagment" asp-controller="Invoice" asp-action="GetAllApprovedInvoiecs" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+            </div>
+        </div>
+    </div>
+    <!-- /.row -->
+    <div id="calendar"></div>
+    <script src="~/js/Calender.js"></script>
+    <script>
+
+        var events = Array();
+        axios.get('/ProjectManagment/Project/GetAllProjectForCalenderAdminAndProjectDirector')
+            .then(function (response) {
+                console.log(response)
+                response.data.forEach(function (item) {
+                    events.push({
+                        title: item.projectName,
+                        start: item.startDate.slice(0, 10),
+                        end: item.endDate.slice(0, 10)
+                    })
+                    //    console.log(item.endDate, item.startDate, item.projectName);
+                });
+                console.log(events)
+                console.log('Title')
+                GenerateCalendar(events);
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+
+
+        function GenerateCalendar(events) {
+            //$('#calendar').fullCalendar('destroy'); //clear first
+            var today = new Date().toISOString().slice(0, 10);
+            document.addEventListener('DOMContentLoaded', function () {
+                var calendarEl = document.getElementById('calendar');
+                var calendar = new FullCalendar.Calendar(calendarEl, {
+                    initialView: 'dayGridMonth',
+                    initialDate: today,
+                    /*titleFormat: 'MMMM, dddd D, YYYY',*/
+                    headerToolbar: {
+                        left: 'prev,next today',
+                        center: 'title',
+                        right: 'dayGridMonth,timeGridWeek,timeGridDay'
+                    },
+                    events: events
+                });
+
+                calendar.render();
+            });
+
+        }
+    </script>
 }
-
 else
 {
     <!-- ======= Team Section ======= -->
@@ -264,4 +442,3 @@ else
     </section>
     <!-- End Team Section -->
 }
-

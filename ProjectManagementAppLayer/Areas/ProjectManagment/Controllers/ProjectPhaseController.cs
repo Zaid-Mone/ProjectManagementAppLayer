@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -15,6 +16,7 @@ using ProjectManagementBusinessLayer.Repositories.Interfaces;
 namespace ProjectManagementAppLayer.Areas.ProjectManagment.Controllers
 {
     [Area("ProjectManagment")]
+    [Authorize]
     public class ProjectPhaseController : Controller
     {
         private readonly IProjectRepository _projectRepository;
@@ -80,10 +82,11 @@ namespace ProjectManagementAppLayer.Areas.ProjectManagment.Controllers
                 var projcet = await _projectRepository.GetProjectById(insertProjectPhaseDTO.ProjectId);
                 var phases = await _phaseRepository.GetAllPhases();
                 var projectPhase = await _projectPhaseRepository.GetAllSpecificProjectPhaseById(insertProjectPhaseDTO.ProjectId);
+
                 if (projcet.StartDate > insertProjectPhaseDTO.StartDate &&
                     projcet.EndDate > insertProjectPhaseDTO.EndDate)
                 {
-                    ModelState.AddModelError("", $"The Start Date must be bigger Than or equal {projcet.StartDate.ToString("d")} && The End Date must be less Than or equal {projcet.EndDate.ToString("d")}"); 
+                    ModelState.AddModelError("", $"The Start Date must be bigger Than or equal {projcet.StartDate.ToString("d")} && The End Date must be less Than or equal {projcet.EndDate.ToString("d")}");
                     ViewBag.project = projcet;
                     ViewBag.phase = phases;
                     return View(insertProjectPhaseDTO);

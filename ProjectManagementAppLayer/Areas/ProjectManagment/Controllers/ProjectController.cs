@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -18,9 +19,10 @@ using ProjectManagementBusinessLayer.Repositories.Interfaces;
 namespace ProjectManagementAppLayer.Areas.ProjectManagment.Controllers
 {
     [Area("ProjectManagment")]
+    [Authorize]
     public class ProjectController : Controller
     {
-        //private readonly ApplicationDbContext _context;
+        private readonly ApplicationDbContext _context;
         private readonly IProjectRepository _projectRepository;
         private readonly IProjectTypeRepository _projectTypeRepository;
         private readonly IProjectStatusRepository _projectStatusRepository;
@@ -28,10 +30,16 @@ namespace ProjectManagementAppLayer.Areas.ProjectManagment.Controllers
         private readonly UserManager<Person> _userManager;
         private readonly IProjectPhaseRepository _projectPhaseRepository;
 
-        public ProjectController(/*ApplicationDbContext context,*/
-            IProjectRepository projectRepository, IProjectTypeRepository projectTypeRepository, IProjectStatusRepository projectStatusRepository, IClientRepository clientRepository, UserManager<Person> userManager, IProjectPhaseRepository projectPhaseRepository)
+        public ProjectController(
+            ApplicationDbContext context,
+            IProjectRepository projectRepository, 
+            IProjectTypeRepository projectTypeRepository, 
+            IProjectStatusRepository projectStatusRepository,
+            IClientRepository clientRepository,
+            UserManager<Person> userManager, 
+            IProjectPhaseRepository projectPhaseRepository)
         {
-            //_context = context;
+            _context = context;
             this._projectRepository = projectRepository;
             _projectTypeRepository = projectTypeRepository;
             _projectStatusRepository = projectStatusRepository;
@@ -305,6 +313,66 @@ namespace ProjectManagementAppLayer.Areas.ProjectManagment.Controllers
         {
             var item = await _projectRepository.GetAllApprovedProjects();
             return View(item);
+        }
+
+
+        public async Task<JsonResult> GetAllProjectForCalenderAdminAndProjectDirector()
+        {
+            if (User.IsInRole("Admin") || User.IsInRole("ProjectDirector"))
+            {
+                var project = await _context.Projects.ToListAsync();
+                //var project = await _projectRepository.GetAllProjects();
+                return new JsonResult(project);
+            }
+            else
+            {
+                return await GetAllProjectForCalenderProjectManager();
+            }
+        }
+
+
+        public async Task<JsonResult> GetAllProjectForCalenderAdminAndProjectDirectors()
+        {
+
+                var project = await _context.Projects.ToListAsync();
+                //var project = await _projectRepository.GetAllProjects();
+                return new JsonResult(project);
+
+        }
+        //public async Task<JsonResult> GetAllProjectForCalenderProjectDirector()
+        //{
+        //    if (User.IsInRole("ProjectDirector"))
+        //    {
+        //        var project = await _context.Projects.ToListAsync();
+        //        //var project = await _projectRepository.GetAllProjects();
+        //        return new JsonResult(project);
+        //    }
+        //    else
+        //    {
+        //        return await GetAllProjectForCalenderProjectManager();
+        //    }
+        //}
+        public async Task<JsonResult> GetAllProjectForCalenderProjectManager()
+        {
+            //var userId =  User.FindFirstValue(ClaimTypes.NameIdentifier);
+            //var user = await _userManager.FindByIdAsync(userId);
+            if (User.IsInRole("ProjectManager"))
+            {
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                var applicationDbContext = await _projectRepository.GetProjectManagerProjects(userId);
+                // var project = await _context.Projects
+                //.Include(z => z.Client)
+                //.Include(q => q.ProjectManager)
+                //.Where(e => e.ProjectManagerId == userId)
+                //.ToListAsync();
+                //var project = await _projectRepository.GetProjectManagerProjects(user.Id);
+                return new JsonResult(applicationDbContext);
+            }
+            else
+            {
+                return await GetAllProjectForCalenderAdminAndProjectDirector();
+            }
+
         }
 
     }

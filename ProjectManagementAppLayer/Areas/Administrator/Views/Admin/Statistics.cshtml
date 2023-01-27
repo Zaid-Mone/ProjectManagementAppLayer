@@ -1,63 +1,122 @@
-﻿@if (User.IsInRole("Admin"))
-{
-    <script src="~/js/Calender.js"></script>
-    <div class="row">
-        <div class="col-lg-3 col-6">
-            <!-- small box -->
-            <div class="small-box bg-info">
-                <div class="inner">
-                    <h3>@ViewBag.projectCount</h3>
+﻿
+@{
+    ViewData["Title"] = "Statistics";
+    var dict = (Dictionary<String, int>)ViewBag.diction;
+}
 
-                    <p>Projects</p>
-                </div>
-                <div class="icon">
-                    <i class="ion ion-bag"></i>
-                </div>
-            </div>
-        </div>
-        <!-- ./col -->
-        <div class="col-lg-3 col-6">
-            <!-- small box -->
-            <div class="small-box bg-success">
-                <div class="inner">
-                    <h3>@ViewBag.sumation</h3>
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+<script src="https://code.highcharts.com/modules/export-data.js"></script>
+<script src="https://code.highcharts.com/modules/accessibility.js"></script>
 
-                    <p>Total Project Amount</p>
-                </div>
-                <div class="icon">
-                    <i class="ion ion-stats-bars"></i>
-                </div>
-            </div>
-        </div>
-        <!-- ./col -->
-        <div class="col-lg-3 col-6">
-            <!-- small box -->
-            <div class="small-box bg-warning">
-                <div class="inner">
-                    <h3>@ViewBag.status</h3>
-
-                    <p>Pending Projects</p>
-                </div>
-                <div class="icon">
-                    <i class="ion ion-person-add"></i>
-                </div>
-            </div>
-        </div>
-        <!-- ./col -->
-        <div class="col-lg-3 col-6">
-            <!-- small box -->
-            <div class="small-box bg-danger">
-                <div class="inner">
-                    <h3>@ViewBag.active</h3>
-
-                    <p>Active Projects</p>
-                </div>
-                <div class="icon">
-                    <i class="ion ion-pie-graph"></i>
-                </div>
-            </div>
-        </div>
-        <!-- ./col -->
+<div class="row">
+    <div class="col-12">
+        <div id="pie-chart"></div>
     </div>
-    <div id="calendar"></div>
+</div>
+<hr />
+<div class="row">
+    <div class="col-12">
+        <figure class="highcharts-figure">
+            <div id="container"></div>
+        </figure>
+    </div>
+</div>
+
+@section Scripts{
+
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script>
+    var chart = new Highcharts.Chart({
+        chart: {
+            plotShadow: true,
+            renderTo: 'pie-chart',
+            type: 'pie'
+        },
+        title: {
+            text: 'Pending && Approved'
+        },
+        series: [{
+            name: 'Percentage',
+            data: [
+                ['PendingProject', @ViewBag.state1],
+                ['ApprovedProjects', @ViewBag.state2],
+                ['PendingInvoice', @ViewBag.Pendinginvoice],
+                ['ApprovedInvoice', @ViewBag.Approvedinvoice]
+            ]
+        }]
+    });
+    </script>
+
+
+
+<script>
+    @{
+        List<string> data1 = new List<string>();
+        List<int> label1 = new List<int>();
+        foreach (var item in dict)
+        {
+            data1.Add(item.Key);
+            label1.Add(item.Value);
+        }
+
+     }
+    var arrData = []
+    var arrLabel = []
+    var newArr = []
+  
+    var items1 = @Html.Raw(Json.Serialize(data1))
+    var items2 = @Html.Raw(Json.Serialize(label1))
+    
+    console.log(items1);
+    console.log(items2);
+    console.log(items1.$values)
+    for (var i = 0; i < items1.$values.length; i++) {
+        var obj = {
+            name: items1.$values[i],
+            y: items2.$values[i]
+        }
+        console.log(`THis is Object `, obj)
+        newArr.push(obj)
+    }
+    console.log(newArr)
+    // Data retrieved from https://netmarketshare.com
+    Highcharts.chart('container', {
+        chart: {
+            plotBackgroundColor: true,
+            plotBorderWidth: true,
+            plotShadow: true,
+            type: 'pie'
+        },
+        title: {
+            text: 'Browser market shares in May, 2020',
+            align: 'center'
+        },
+        tooltip: {
+            pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+        },
+        accessibility: {
+            point: {
+                valueSuffix: '%'
+            }
+        },
+        plotOptions: {
+            pie: {
+                allowPointSelect: true,
+                cursor: 'pointer',
+                dataLabels: {
+                    enabled: true,
+                    format: '<b>{point.name}</b>: {point.percentage:.1f} %'
+                }
+            }
+        },
+        series: [{
+            name: 'Brands',
+            colorByPoint: true,
+            data: newArr
+        }]
+    });
+
+</script>
+
 }

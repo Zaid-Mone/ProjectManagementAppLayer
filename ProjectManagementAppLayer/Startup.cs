@@ -35,7 +35,7 @@ namespace ProjectManagementAppLayer
 
             services.AddControllersWithViews()
                              .AddJsonOptions(o => o.JsonSerializerOptions
-                             .ReferenceHandler = ReferenceHandler.Preserve);
+                             .ReferenceHandler = ReferenceHandler.IgnoreCycles);
 
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
