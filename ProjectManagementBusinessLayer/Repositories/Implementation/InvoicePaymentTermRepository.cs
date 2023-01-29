@@ -5,6 +5,7 @@ using ProjectManagementBusinessLayer.Repositories.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -22,6 +23,39 @@ namespace ProjectManagementBusinessLayer.Repositories.Implementation
         public void Delete(InvoicePaymentTerms invoicePayment)
         {
             _context.InvoicePaymentTerms.Remove(invoicePayment);
+        }
+
+        public async Task<List<InvoicePaymentTerms>> FindAllByCondition(Expression<Func<InvoicePaymentTerms, bool>> predicate)
+        {
+            return await _context.InvoicePaymentTerms
+                .Include(q => q.Invoice)
+                .Include(w => w.PaymentTerm)
+                .Include(e => e.PaymentTerm.Deliverable)
+                .Include(r => r.PaymentTerm.Deliverable.ProjectPhase)
+                .Include(y => y.PaymentTerm.Deliverable.ProjectPhase.Phase)
+                .Include(t => t.PaymentTerm.Deliverable.ProjectPhase.Project)
+                .Include(o => o.PaymentTerm.Deliverable.ProjectPhase.Project.Client)
+                .Include(f => f.PaymentTerm.Deliverable.ProjectPhase.Project.ProjectType)
+                .Include(g => g.PaymentTerm.Deliverable.ProjectPhase.Project.ProjectStatus)
+                .Include(u => u.PaymentTerm.Deliverable.ProjectPhase.Project.ProjectManager)
+                .Where(predicate)
+                .ToListAsync();
+        }
+
+        public async Task<InvoicePaymentTerms> FindConditionById(Expression<Func<InvoicePaymentTerms, bool>> predicate)
+        {
+            return await _context.InvoicePaymentTerms
+                    .Include(q => q.Invoice)
+                    .Include(w => w.PaymentTerm)
+                    .Include(e => e.PaymentTerm.Deliverable)
+                    .Include(r => r.PaymentTerm.Deliverable.ProjectPhase)
+                    .Include(y => y.PaymentTerm.Deliverable.ProjectPhase.Phase)
+                    .Include(t => t.PaymentTerm.Deliverable.ProjectPhase.Project)
+                    .Include(o => o.PaymentTerm.Deliverable.ProjectPhase.Project.Client)
+                    .Include(f => f.PaymentTerm.Deliverable.ProjectPhase.Project.ProjectType)
+                    .Include(g => g.PaymentTerm.Deliverable.ProjectPhase.Project.ProjectStatus)
+                    .Include(u => u.PaymentTerm.Deliverable.ProjectPhase.Project.ProjectManager)
+                    .SingleOrDefaultAsync(predicate);
         }
 
         public async Task<List<InvoicePaymentTerms>> GetAllInvoicesPaymetnTerms()

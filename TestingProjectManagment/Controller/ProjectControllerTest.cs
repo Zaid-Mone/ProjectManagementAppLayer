@@ -11,6 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 using FluentAssertions;
+using ProjectManagementBusinessLayer.Data;
 
 namespace TestingProjectManagment.Controller
 {
@@ -24,6 +25,7 @@ namespace TestingProjectManagment.Controller
         private readonly IClientRepository _clientRepository;
         private readonly UserManager<Person> _userManager;
         private readonly IProjectPhaseRepository _projectPhaseRepository;
+        private readonly ApplicationDbContext _context;
         public ProjectControllerTest()
         {
             //Dependinces
@@ -34,15 +36,18 @@ namespace TestingProjectManagment.Controller
             _projectTypeRepository = A.Fake<IProjectTypeRepository>();
             _userManager = A.Fake<UserManager<Person>>();
             _projectPhaseRepository = A.Fake<IProjectPhaseRepository>();
+            _context = A.Fake<ApplicationDbContext>();
 
             // sut => project controller
             _projectController = new ProjectController(
+                _context,
                 _projectRepository,
                 _projectTypeRepository,
                 _projectStatusRepository,
                 _clientRepository,
                 _userManager,
                 _projectPhaseRepository
+                
                 );
         }
         [Fact]

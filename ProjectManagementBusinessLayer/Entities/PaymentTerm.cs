@@ -10,8 +10,10 @@ namespace ProjectManagementBusinessLayer.Entities
         [Key]
         public Guid Id { get; set; }
         [Display(Name = "PaymentTerm Title")]
+        [Required]
         public string PaymentTermTitle { get; set; }
         [Display(Name = "PaymentTerm Amount")]
+        [Required]
         public decimal PaymentTermAmount { get; set; }
         [ForeignKey("DeliverableId")]
         public Guid DeliverableId { get; set; }

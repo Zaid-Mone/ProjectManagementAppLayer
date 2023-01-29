@@ -1,6 +1,7 @@
 ﻿using ProjectManagementBusinessLayer.Entities;
 using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace ProjectManagementBusinessLayer.Repositories.Interfaces
@@ -17,6 +18,8 @@ namespace ProjectManagementBusinessLayer.Repositories.Interfaces
         public void Update(ProjectPhase projectPhase);
         public void Delete(ProjectPhase projectPhase);
         public void Save();
+        public Task<List<ProjectPhase>> FindAllByCondition(Expression<Func<ProjectPhase, bool>> predicate);
+        public Task<ProjectPhase> FindConditionById(Expression<Func<ProjectPhase, bool>> predicate);
     }
 
 }

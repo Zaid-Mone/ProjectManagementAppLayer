@@ -5,6 +5,7 @@ using ProjectManagementBusinessLayer.Repositories.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -23,6 +24,18 @@ namespace ProjectManagementBusinessLayer.Repositories.Implementation
         {
             var check = _context.ProjectDirectors.Any(r => r.Email == projectDirector.Email);
             return check;
+        }
+
+        public async Task<List<ProjectDirector>> FindAllByCondition(Expression<Func<ProjectDirector, bool>> predicate)
+        {
+            return await _context.ProjectDirectors.Where(predicate).ToListAsync();
+        }
+
+        public async Task<ProjectDirector> FindConditionById(Expression<Func<ProjectDirector, bool>> predicate)
+        {
+            return await _context.ProjectDirectors
+                .Include(p => p.Projects)
+                .SingleOrDefaultAsync(predicate);
         }
 
         public async Task<List<ProjectDirector>> GetAllProjectDirectors()

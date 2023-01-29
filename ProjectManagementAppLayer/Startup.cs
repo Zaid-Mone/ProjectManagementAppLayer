@@ -61,6 +61,10 @@ namespace ProjectManagementAppLayer
             services.AddTransient<IInvoicePaymentTermsRepository, InvoicePaymentTermsRepository>();
             services.AddTransient<IAdminRepository, AdminRepository>();
             services.AddTransient<IProjectDirectorRepository, ProjectDirectorRepository>();
+            services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromMinutes(120);
+            });
             
         }
 
@@ -85,7 +89,7 @@ namespace ProjectManagementAppLayer
 
             app.UseAuthentication();
             app.UseAuthorization();
-           
+            app.UseSession();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(

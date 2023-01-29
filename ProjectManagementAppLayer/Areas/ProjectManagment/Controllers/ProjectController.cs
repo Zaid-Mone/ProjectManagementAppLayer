@@ -93,8 +93,6 @@ namespace ProjectManagementAppLayer.Areas.ProjectManagment.Controllers
             ViewBag.projectStatus = await _projectStatusRepository.GetAllProjectStatuses();
             ViewBag.projectType = await _projectTypeRepository.GetAllProjectTypes();
             ViewBag.client = await _clientRepository.GetAllClients();
-            //dbcontext.Database.ExecuteSqlCommand("Select c.Name,c.Email from Projects s right join Clients c on s.ClientId = c.Id where s.ClientId is null; ", user);
-
             return View();
 
 
@@ -321,7 +319,6 @@ namespace ProjectManagementAppLayer.Areas.ProjectManagment.Controllers
             if (User.IsInRole("Admin") || User.IsInRole("ProjectDirector"))
             {
                 var project = await _context.Projects.ToListAsync();
-                //var project = await _projectRepository.GetAllProjects();
                 return new JsonResult(project);
             }
             else
@@ -331,41 +328,21 @@ namespace ProjectManagementAppLayer.Areas.ProjectManagment.Controllers
         }
 
 
-        public async Task<JsonResult> GetAllProjectForCalenderAdminAndProjectDirectors()
-        {
-
-                var project = await _context.Projects.ToListAsync();
-                //var project = await _projectRepository.GetAllProjects();
-                return new JsonResult(project);
-
-        }
-        //public async Task<JsonResult> GetAllProjectForCalenderProjectDirector()
+        //public async Task<JsonResult> GetAllProjectForCalenderAdminAndProjectDirectors()
         //{
-        //    if (User.IsInRole("ProjectDirector"))
-        //    {
+
         //        var project = await _context.Projects.ToListAsync();
         //        //var project = await _projectRepository.GetAllProjects();
         //        return new JsonResult(project);
-        //    }
-        //    else
-        //    {
-        //        return await GetAllProjectForCalenderProjectManager();
-        //    }
+
         //}
+
         public async Task<JsonResult> GetAllProjectForCalenderProjectManager()
         {
-            //var userId =  User.FindFirstValue(ClaimTypes.NameIdentifier);
-            //var user = await _userManager.FindByIdAsync(userId);
             if (User.IsInRole("ProjectManager"))
             {
                 var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
                 var applicationDbContext = await _projectRepository.GetProjectManagerProjects(userId);
-                // var project = await _context.Projects
-                //.Include(z => z.Client)
-                //.Include(q => q.ProjectManager)
-                //.Where(e => e.ProjectManagerId == userId)
-                //.ToListAsync();
-                //var project = await _projectRepository.GetProjectManagerProjects(user.Id);
                 return new JsonResult(applicationDbContext);
             }
             else

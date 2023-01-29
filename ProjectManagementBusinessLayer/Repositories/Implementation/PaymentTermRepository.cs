@@ -5,6 +5,7 @@ using ProjectManagementBusinessLayer.Repositories.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -22,6 +23,27 @@ namespace ProjectManagementBusinessLayer.Repositories.Implementation
         public void Delete(PaymentTerm paymentTerm)
         {
             _context.PaymentTerms.Remove(paymentTerm);
+        }
+
+        public async Task<List<PaymentTerm>> FindAllByCondition(Expression<Func<PaymentTerm, bool>> predicate)
+        {
+            return await _context.PaymentTerms
+                .Include(q => q.Deliverable)
+                .Include(r => r.Deliverable.ProjectPhase)
+                .Include(v => v.Deliverable.ProjectPhase.Project)
+                .Include(v => v.Deliverable.ProjectPhase.Phase)
+                .Where(predicate)
+                .ToListAsync();
+        }
+
+        public async Task<PaymentTerm> FindConditionById(Expression<Func<PaymentTerm, bool>> predicate)
+        {
+            return await _context.PaymentTerms
+                .Include(e => e.Deliverable)
+                .Include(q => q.Deliverable.ProjectPhase)
+                .Include(y => y.Deliverable.ProjectPhase.Project)
+                .Include(v => v.Deliverable.ProjectPhase.Phase)
+                .SingleOrDefaultAsync(predicate);
         }
 
         public async Task<List<PaymentTerm>> GetAllPaymentTermByProjectManagerId(string id)

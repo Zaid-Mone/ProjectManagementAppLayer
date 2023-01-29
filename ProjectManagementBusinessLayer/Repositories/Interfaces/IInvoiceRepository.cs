@@ -1,6 +1,7 @@
 ﻿using ProjectManagementBusinessLayer.Entities;
 using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace ProjectManagementBusinessLayer.Repositories.Interfaces
@@ -16,6 +17,9 @@ namespace ProjectManagementBusinessLayer.Repositories.Interfaces
         public Task<List<Invoice>> GetAllPaidInvoices();
         // return all invoice based on projectManager id
         public Task<List<Invoice>> GetAllInvoicesByProjectManagerId(string id);
+
+        public Task<List<Invoice>> FindAllByCondition(Expression<Func<Invoice, bool>> predicate);
+        public Task<Invoice> FindConditionById(Expression<Func<Invoice, bool>> predicate);
         public Task<Invoice> GetInvoiceById(Guid id);
         public Task<Invoice> GetInvoiceWithDeliverablesById(Guid id);
         public void Insert(Invoice invoice);
