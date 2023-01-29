@@ -1,12 +1,15 @@
 ﻿using ProjectManagementBusinessLayer.Entities;
 using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace ProjectManagementBusinessLayer.Repositories.Interfaces
 {
     public interface IProjectRepository
     {
+        public Task<List<Project>> FindAllByCondition(Expression<Func<Project, bool>> predicate);
+        public Task<Project> FindConditionById(Expression<Func<Project, bool>> predicate);
         public Task<List<Project>> GetAllProjects();
         // to return only pending project
         public Task<List<Project>> GetAllPendingProjects();   

@@ -5,6 +5,7 @@ using ProjectManagementBusinessLayer.Repositories.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -23,6 +24,27 @@ namespace ProjectManagementBusinessLayer.Repositories.Implementation
         public void Delete(Deliverable deliverable)
         {
             _context.Deliverables.Remove(deliverable);
+        }
+
+        public async Task<List<Deliverable>> FindAllByCondition(Expression<Func<Deliverable, bool>> predicate)
+        {
+            return await _context.Deliverables
+                .Include(v => v.ProjectPhase)
+                .ThenInclude(x => x.Project)
+                .ThenInclude(e => e.ProjectPhases)
+                .ThenInclude(q => q.Phase)
+                .Where(predicate)
+                .ToListAsync();
+        }
+
+        public async Task<Deliverable> FindConditionById(Expression<Func<Deliverable, bool>> predicate)
+        {
+            return await _context.Deliverables
+                .Include(v => v.ProjectPhase)
+                .ThenInclude(x => x.Project)
+                .ThenInclude(e => e.ProjectPhases)
+                .ThenInclude(q => q.Phase)
+                .SingleOrDefaultAsync(predicate);
         }
 
         public async Task<List<Deliverable>> GetAllDeliverableForProjectManager(string id)

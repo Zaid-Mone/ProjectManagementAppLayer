@@ -56,8 +56,6 @@ namespace ProjectManagementAppLayer.Areas.Administrator.Controllers
         }
 
         // POST: Administrator/Phase/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Create(Phase phase)
@@ -98,8 +96,6 @@ namespace ProjectManagementAppLayer.Areas.Administrator.Controllers
         }
 
         // POST: Administrator/Phase/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Edit(Phase phase)

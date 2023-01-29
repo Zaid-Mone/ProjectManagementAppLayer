@@ -99,7 +99,8 @@ namespace ProjectManagementAppLayer.Areas.ProjectManagment.Controllers
                     return RedirectToAction(nameof(Index));
                 }
                 // for Date Check
-                    ModelState.AddModelError("", $"The Start Date must be bigger Than or equal {projectPhases.StartDate} && The End Date must be less Than or equal {projectPhases.EndDate}");
+                ViewBag.msg = false;
+                    //ModelState.AddModelError("", $"The Start Date must be bigger Than or equal {projectPhases.StartDate.ToString("d")} && The End Date must be less Than or equal {projectPhases.EndDate.ToString("d")}");
                     await Create(deliverable.ProjectPhaseId);
                     return View(deliverable);
             }

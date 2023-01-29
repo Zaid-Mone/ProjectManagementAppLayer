@@ -5,6 +5,7 @@ using ProjectManagementBusinessLayer.Repositories.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -21,6 +22,23 @@ namespace ProjectManagementBusinessLayer.Repositories.Implementation
         public void Delete(ProjectPhase projectPhase)
         {
             _context.ProjectPhases.Remove(projectPhase);
+        }
+
+        public async Task<List<ProjectPhase>> FindAllByCondition(Expression<Func<ProjectPhase, bool>> predicate)
+        {
+            return await _context.ProjectPhases
+            .Include(p => p.Phase)
+            .Include(b => b.Project)
+            .Where(predicate)
+            .ToListAsync();
+        }
+
+        public async Task<ProjectPhase> FindConditionById(Expression<Func<ProjectPhase, bool>> predicate)
+        {
+            return await _context.ProjectPhases
+                .Include(p => p.Phase)
+                .Include(b => b.Project)
+                .SingleOrDefaultAsync(predicate);
         }
 
         public async Task<List<ProjectPhase>> GetAllProjectPhases()

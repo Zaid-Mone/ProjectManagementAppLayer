@@ -88,20 +88,15 @@ namespace ProjectManagementAppLayer.Areas.ProjectManagment.Controllers
         {
             if (ModelState.IsValid)
             {
- 
                 var result = await _deliverableRepository.GetDeliverableById(paymentTerm.DeliverableId);
-                var pay = _paymentTermRepository.GetProjectPaymentTerms(result.ProjectPhase.ProjectId);
-                    decimal sum = 0;
-                    paymentTerm.Id = Guid.NewGuid();
-                    foreach (var item in pay)
+                var sumation = await GetProjectPaymentTermSumation(paymentTerm);
+                var res =   await GetPaymentSumation(paymentTerm);
+                    if (res > result.ProjectPhase.Project.ContractAmount)
                     {
-                        sum += item.PaymentTermAmount;
-                    }
-                    sum += paymentTerm.PaymentTermAmount;
-                    if (sum > result.ProjectPhase.Project.ContractAmount)
-                    {
+                    var getsum =  (result.ProjectPhase.Project.ContractAmount- sumation).ToString("C");
+                    ViewBag.balance = getsum;
                         ViewBag.msg = false;
-                        ModelState.AddModelError("", $"The Total Project Amount is {result.ProjectPhase.Project.ContractAmount.ToString("C")} You can't Add More than this..");
+                        ModelState.AddModelError("", $"The balance of the total project value is {getsum}");
                         await Create(paymentTerm.DeliverableId);
                         return View(paymentTerm);
                     }
@@ -110,10 +105,6 @@ namespace ProjectManagementAppLayer.Areas.ProjectManagment.Controllers
                     TempData["save"] = "PaymentTerm has been Created Successfully ...";
                     return RedirectToAction(nameof(Index));
                 
-                //ModelState.AddModelError("", $"The Start Date must be bigger Than or equal {result.ProjectPhase.Project.StartDate.Date} && The End Date must be less Than or equal {result.ProjectPhase.Project.EndDate.Date}");
-                //ModelState.AddModelError("", $"The Amount of PaymentTerm mustn't be bigger than Project Amount {result.ProjectPhase.Project.ContractAmount.ToString("C")}");
-                //await Create(paymentTerm.DeliverableId);
-                //return View(paymentTerm);
             }
             return View(paymentTerm);
         }
@@ -213,15 +204,11 @@ namespace ProjectManagementAppLayer.Areas.ProjectManagment.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-
-
-
         public async Task<JsonResult> GetprojectPayments(Guid id)
         {
             var ty = await _paymentTermRepository.GetIsNotPaidPaymentTerm(id);
             return new JsonResult(ty);
         }
-
 
         //get specific paymentterm based on the id 
         //ProjectManagment/PaymentTerm/GetPaymentSum?id=CB41A9FA-AB5B-42E0-ACB5-C28B58FA74CC
@@ -256,21 +243,31 @@ namespace ProjectManagementAppLayer.Areas.ProjectManagment.Controllers
             return new JsonResult(invoicesPayment);
         }
 
+        public async Task<decimal> GetPaymentSumation(PaymentTerm paymentTerm)
+        {
+            var result = await _deliverableRepository.GetDeliverableById(paymentTerm.DeliverableId);
+            var pay = _paymentTermRepository.GetProjectPaymentTerms(result.ProjectPhase.ProjectId);
+            decimal sum = 0;
+            paymentTerm.Id = Guid.NewGuid();
+            foreach (var item in pay)
+            {
+                sum += item.PaymentTermAmount;
+            }
+            sum += paymentTerm.PaymentTermAmount;
+            return sum;
+        }
 
-        // ProjectManagment/PaymentTerm/GetPaymentTerm?id=CB41A9FA-AB5B-42E0-ACB5-C28B58FA74CC
-        //public async Task<JsonResult>GetPaymentTerm(Guid id)
-        //{
-        //    if(id == null)
-        //    {
-        //        return new JsonResult(new { message = "Sorry This paymentTerm is not found" });
-
-        //    }
-        //    var pay = await _paymentTermRepository.GetIsNotPaidPaymentTerm(id);
-        //    if (pay.IsPaid == true)
-        //    {
-        //        return new JsonResult(new { message = "Sorry This paymentTerm is already paid" });
-        //    }
-        //    return new JsonResult(pay);
-        //}
+        public async Task<decimal> GetProjectPaymentTermSumation(PaymentTerm paymentTerm)
+        {
+            var result = await _deliverableRepository.GetDeliverableById(paymentTerm.DeliverableId);
+            var pay = _paymentTermRepository.GetProjectPaymentTerms(result.ProjectPhase.ProjectId);
+            decimal sum = 0;
+            paymentTerm.Id = Guid.NewGuid();
+            foreach (var item in pay)
+            {
+                sum += item.PaymentTermAmount;
+            }
+            return sum;
+        }
     }
 }

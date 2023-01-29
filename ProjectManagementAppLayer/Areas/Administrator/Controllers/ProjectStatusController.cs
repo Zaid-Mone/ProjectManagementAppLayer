@@ -38,7 +38,6 @@ namespace ProjectManagementAppLayer.Areas.Administrator.Controllers
             {
                 return NotFound();
             }
-
             var projectStatus = await _projectStatusRepository.GetProjectStatusById(id);
             if (projectStatus == null)
             {
@@ -55,8 +54,6 @@ namespace ProjectManagementAppLayer.Areas.Administrator.Controllers
         }
 
         // POST: Administrator/ProjectStatus/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Create(ProjectStatus projectStatus)
@@ -89,8 +86,6 @@ namespace ProjectManagementAppLayer.Areas.Administrator.Controllers
         }
 
         // POST: Administrator/ProjectStatus/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Edit( ProjectStatus projectStatus)

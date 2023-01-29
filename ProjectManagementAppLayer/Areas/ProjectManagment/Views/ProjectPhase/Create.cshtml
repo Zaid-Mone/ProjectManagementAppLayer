@@ -7,7 +7,23 @@
     var project = (Project)ViewBag.project;
     var phases = (List<Phase>)ViewBag.phase;
 }
+@if (ViewBag.msg == false)
+{
+    @section Scripts {
+        <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+        <script>
+        $(function () {
+        swal({
+        title: "warning",
+        text: "The Start Date must be bigger Than or equal @project.StartDate.ToString("d") && The End Date must be less Than or equal @project.EndDate.ToString("d")",
+        button: "Ok",
+        icon: "error",
 
+});        })
+        </script>
+    }
+
+}
 <h1></h1>
 
 <h4>Create Phase</h4>
@@ -64,7 +80,4 @@
     </div>
 </div>
 
-
-@section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}

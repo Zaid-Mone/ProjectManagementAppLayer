@@ -54,8 +54,6 @@ namespace ProjectManagementAppLayer.Areas.Administrator.Controllers
         }
 
         // POST: Administrator/Client/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create(Client client)
@@ -88,8 +86,6 @@ namespace ProjectManagementAppLayer.Areas.Administrator.Controllers
         }
 
         // POST: Administrator/Client/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Edit(Client client)

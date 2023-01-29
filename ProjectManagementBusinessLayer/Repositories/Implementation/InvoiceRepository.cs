@@ -5,6 +5,7 @@ using ProjectManagementBusinessLayer.Repositories.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -21,6 +22,31 @@ namespace ProjectManagementBusinessLayer.Repositories.Implementation
         public void Delete(Invoice invoice)
         {
             _context.Invoices.Remove(invoice);
+        }
+
+        public async Task<List<Invoice>> FindAllByCondition(Expression<Func<Invoice, bool>> predicate)
+        {
+            return await _context.Invoices
+                .Include(t => t.InvoicePaymentTerms)
+                .ThenInclude(r => r.PaymentTerm)
+                .Include(e => e.Project)
+                .Include(q => q.Project.Client)
+                .Where(predicate)
+                .ToListAsync();
+        }
+
+        public async Task<Invoice> FindConditionById(Expression<Func<Invoice, bool>> predicate)
+        {
+            return await _context.Invoices
+                 .Include(t => t.InvoicePaymentTerms)
+                 .ThenInclude(r => r.PaymentTerm)
+                 .ThenInclude(b => b.Deliverable)
+                 .Include(e => e.Project)
+                 .Include(y => y.Project.Client)
+                 .Include(s => s.Project.ProjectStatus)
+                 .Include(q => q.Project.ProjectType)
+                 .Include(b => b.Project.ProjectManager)
+                 .SingleOrDefaultAsync(predicate);
         }
 
         public async Task<List<Invoice>> GetAllApprovedInvoices()
@@ -90,7 +116,6 @@ namespace ProjectManagementBusinessLayer.Repositories.Implementation
                 .Include(s=>s.Project.ProjectStatus)
                 .Include(q=>q.Project.ProjectType)
                 .Include(b=>b.Project.ProjectManager)
-                
                 .SingleOrDefaultAsync(t => t.Id == id);
         }
 

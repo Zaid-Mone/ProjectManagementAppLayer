@@ -1,6 +1,7 @@
 ﻿using ProjectManagementBusinessLayer.Entities;
 using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace ProjectManagementBusinessLayer.Repositories.Interfaces
@@ -18,6 +19,8 @@ namespace ProjectManagementBusinessLayer.Repositories.Interfaces
         public Task<List<PaymentTerm>> GetIsNotPaidPaymentTerm(Guid id);
         // to get all payment belong to project manager id
         public Task<List<PaymentTerm>> GetAllPaymentTermByProjectManagerId(string id);
+        public Task<List<PaymentTerm>> FindAllByCondition(Expression<Func<PaymentTerm, bool>> predicate);
+        public Task<PaymentTerm> FindConditionById(Expression<Func<PaymentTerm, bool>> predicate);
         public void Insert(PaymentTerm paymentTerm);
         public void Update(PaymentTerm paymentTerm);
         public void Delete(PaymentTerm paymentTerm);

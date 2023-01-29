@@ -6,9 +6,8 @@
     var projects = (Project)ViewBag.project;
 }
 
-<h1>Create</h1>
 
-<h4>Deliverable</h4>
+<h3>Create Deliverable</h3>
 <hr />
 <div class="row">
     <div class="col-md-12">
@@ -17,7 +16,7 @@
             @*<input hidden asp-for="@projectPhase.Id"/>*@
             <input hidden value="@projectPhase.Id" name="ProjectPhaseId" id="ProjectPhaseId" />
             <input hidden value="@projectPhase.ProjectId" name="ProjectId" />
-        <input hidden value="@projectPhase.PhaseId" name="PhaseId" />
+            <input hidden value="@projectPhase.PhaseId" name="PhaseId" />
 
             <div class="row">
                 <div class="col-6">
@@ -37,7 +36,7 @@
 
                 </div>
             </div>
-           
+
             <div class="row">
                 <div class="col-6">
                     <div class="form-group">
@@ -83,13 +82,13 @@
                 <div class="col-12">
                     <div class="form-group">
                         <label asp-for="Description" class="control-label"></label>
-                        <textarea asp-for="Description" class="form-control"></textarea>
+                        <textarea asp-for="Description" class="form-control" rows="10"></textarea>
                         <span asp-validation-for="Description" class="text-danger"></span>
                     </div>
 
                 </div>
             </div>
-           
+
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-outline-success" />
                 <a asp-action="Index" class="btn btn-outline-secondary">Back to List</a>
@@ -102,6 +101,20 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @if (ViewBag.msg == false)
+    {
+        <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+        <script>
+        $(function () {
+        swal({
+            title: "warning",
+            text: "The Start Date must be bigger Than or equal Phase Start Date && The End Date must be less Than or equal Phase Start Date",
+        button: "Ok",
+        icon: "error",
+
+});        })
+        </script>
+    }
     <script>
         tinymce.init({
             selector: 'textarea',

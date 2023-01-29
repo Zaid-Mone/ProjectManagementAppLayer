@@ -5,6 +5,7 @@ using ProjectManagementBusinessLayer.Repositories.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -27,6 +28,16 @@ namespace ProjectManagementBusinessLayer.Repositories.Implementation
         public void Delete(Client client)
         {
             _context.Clients.Remove(client);
+        }
+
+        public async Task<List<Client>> FindAllByCondition(Expression<Func<Client, bool>> predicate)
+        {
+            return await _context.Clients.Where(predicate).ToListAsync();
+        }
+
+        public async Task<Client> FindConditionById(Expression<Func<Client, bool>> predicate)
+        {
+            return await _context.Clients.SingleOrDefaultAsync(predicate);
         }
 
         public async Task<List<Client>> GetAllClients()
