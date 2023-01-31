@@ -306,7 +306,7 @@ else if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
         var events = Array();
         axios.get('/ProjectManagment/Project/GetAllProjectForCalenderAdminAndProjectDirector')
             .then(function (response) {
-                console.log(response)
+                //console.log(response)
                 response.data.forEach(function (item) {
                     events.push({
                         title: item.projectName,
@@ -315,8 +315,8 @@ else if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
                     })
                     //    console.log(item.endDate, item.startDate, item.projectName);
                 });
-                console.log(events)
-                console.log('Title')
+                //console.log(events)
+                //console.log('Title')
                 GenerateCalendar(events);
             })
             .catch(function (error) {

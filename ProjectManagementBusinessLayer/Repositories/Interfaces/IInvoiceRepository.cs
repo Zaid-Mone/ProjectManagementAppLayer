@@ -17,7 +17,6 @@ namespace ProjectManagementBusinessLayer.Repositories.Interfaces
         public Task<List<Invoice>> GetAllPaidInvoices();
         // return all invoice based on projectManager id
         public Task<List<Invoice>> GetAllInvoicesByProjectManagerId(string id);
-
         public Task<List<Invoice>> FindAllByCondition(Expression<Func<Invoice, bool>> predicate);
         public Task<Invoice> FindConditionById(Expression<Func<Invoice, bool>> predicate);
         public Task<Invoice> GetInvoiceById(Guid id);
@@ -26,5 +25,8 @@ namespace ProjectManagementBusinessLayer.Repositories.Interfaces
         public void Update(Invoice invoice);
         public void Delete(Invoice invoice);
         public void Save();
-    }    
+    } 
+  
+    
+
 }

@@ -49,7 +49,7 @@
                     else
                     {
                         <a asp-action="InvoicePending" asp-controller="Invoice" asp-route-id="@item.Id"><i class="fa-solid fa-lock text-success"></i></a>
-                        <a asp-action="SendMessage" asp-route-Id="@item.Id" class="btn btn-outline-warning">Send Message</a>
+                        <a asp-action="SendMessage" asp-route-Id="@item.Id" class="btn btn-outline-primary"><i class="fa-solid fa-comment-sms text-dark"></i> Send Message</a>
                     }
                 </td>
             </tr>
