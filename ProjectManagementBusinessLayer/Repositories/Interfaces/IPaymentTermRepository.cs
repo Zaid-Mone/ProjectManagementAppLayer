@@ -8,7 +8,6 @@ namespace ProjectManagementBusinessLayer.Repositories.Interfaces
 {
     public interface IPaymentTermRepository
     {
-
         // to Get All Payments
         public Task<List<PaymentTerm>> GetAllPaymentTerms();
         // to get All Payments based on Project id
@@ -26,4 +25,6 @@ namespace ProjectManagementBusinessLayer.Repositories.Interfaces
         public void Delete(PaymentTerm paymentTerm);
         public void Save();
     }
+
+
 }

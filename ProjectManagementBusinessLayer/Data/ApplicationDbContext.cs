@@ -23,6 +23,7 @@ namespace ProjectManagementBusinessLayer.Data
         public DbSet<Client> Clients { get; set; }
         public DbSet<Admin> Admins { get; set; }
         public DbSet<ProjectDirector> ProjectDirectors { get; set; }
+        //public DbSet<Notification> Notifications { get; set; }
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {

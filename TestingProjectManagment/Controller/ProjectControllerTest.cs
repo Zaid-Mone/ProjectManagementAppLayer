@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using Xunit;
 using FluentAssertions;
 using ProjectManagementBusinessLayer.Data;
+using AutoMapper;
 
 namespace TestingProjectManagment.Controller
 {
@@ -26,6 +27,7 @@ namespace TestingProjectManagment.Controller
         private readonly UserManager<Person> _userManager;
         private readonly IProjectPhaseRepository _projectPhaseRepository;
         private readonly ApplicationDbContext _context;
+        private readonly IMapper _mapper;
         public ProjectControllerTest()
         {
             //Dependinces
@@ -37,7 +39,7 @@ namespace TestingProjectManagment.Controller
             _userManager = A.Fake<UserManager<Person>>();
             _projectPhaseRepository = A.Fake<IProjectPhaseRepository>();
             _context = A.Fake<ApplicationDbContext>();
-
+            _mapper =A.Fake<IMapper>();
             // sut => project controller
             _projectController = new ProjectController(
                 _context,
@@ -46,8 +48,8 @@ namespace TestingProjectManagment.Controller
                 _projectStatusRepository,
                 _clientRepository,
                 _userManager,
-                _projectPhaseRepository
-                
+                _projectPhaseRepository,
+                _mapper
                 );
         }
         [Fact]
@@ -69,7 +71,7 @@ namespace TestingProjectManagment.Controller
             
             //Arrange
             var project = A.Fake<Project>();
-            A.CallTo(() =>  _projectRepository.GetPhaseByProjectId(id)).Returns(project);
+            A.CallTo(() =>  _projectRepository.GetProjectById(id)).Returns(project);
             // act
             var result = _projectController.Details(id);
             // assert object chcek actions

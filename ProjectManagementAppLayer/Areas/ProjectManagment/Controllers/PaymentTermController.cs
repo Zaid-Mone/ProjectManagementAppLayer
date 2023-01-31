@@ -29,8 +29,9 @@ namespace ProjectManagementAppLayer.Areas.ProjectManagment.Controllers
             ApplicationDbContext context,
             IPaymentTermRepository paymentTermRepository,
             IDeliverableRepository deliverableRepository,
-           UserManager<Person> userManager,
-            IInvoiceRepository invoiceRepository, IInvoicePaymentTermsRepository invoicePaymentTermsRepository)
+            UserManager<Person> userManager,
+            IInvoiceRepository invoiceRepository, 
+            IInvoicePaymentTermsRepository invoicePaymentTermsRepository)
         {
             _context = context;
             _paymentTermRepository = paymentTermRepository;
@@ -94,7 +95,7 @@ namespace ProjectManagementAppLayer.Areas.ProjectManagment.Controllers
                     if (res > result.ProjectPhase.Project.ContractAmount)
                     {
                     var getsum =  (result.ProjectPhase.Project.ContractAmount- sumation).ToString("C");
-                    ViewBag.balance = getsum;
+                        ViewBag.balance = getsum;
                         ViewBag.msg = false;
                         ModelState.AddModelError("", $"The balance of the total project value is {getsum}");
                         await Create(paymentTerm.DeliverableId);

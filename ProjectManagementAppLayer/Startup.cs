@@ -1,3 +1,4 @@
+using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -8,6 +9,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json;
+using ProjectManagementAppLayer.Helper;
 using ProjectManagementBusinessLayer.Data;
 using ProjectManagementBusinessLayer.Entities;
 using ProjectManagementBusinessLayer.Repositories.Implementation;
@@ -48,6 +50,14 @@ namespace ProjectManagementAppLayer
             services.AddControllersWithViews();
             services.AddRazorPages();
 
+
+            var mapperConfig = new MapperConfiguration(mc =>
+            {
+                mc.AddProfile(new MappingProfile());
+            });
+            IMapper mapper = mapperConfig.CreateMapper();
+            services.AddSingleton(mapper);
+
             services.AddTransient<IProjectManagerRepository, ProjectManagerRepository>();
             services.AddTransient<IProjectTypeRepository, ProjectTypeRepository>();
             services.AddTransient<IProjectStatusRepository, ProjectStatusRepository>();
@@ -65,6 +75,8 @@ namespace ProjectManagementAppLayer
             {
                 options.IdleTimeout = TimeSpan.FromMinutes(120);
             });
+
+
             
         }
 

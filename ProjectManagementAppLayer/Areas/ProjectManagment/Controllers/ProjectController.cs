@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -29,15 +30,15 @@ namespace ProjectManagementAppLayer.Areas.ProjectManagment.Controllers
         private readonly IClientRepository _clientRepository;
         private readonly UserManager<Person> _userManager;
         private readonly IProjectPhaseRepository _projectPhaseRepository;
-
+        private readonly IMapper _mapper;
         public ProjectController(
             ApplicationDbContext context,
-            IProjectRepository projectRepository, 
-            IProjectTypeRepository projectTypeRepository, 
+            IProjectRepository projectRepository,
+            IProjectTypeRepository projectTypeRepository,
             IProjectStatusRepository projectStatusRepository,
             IClientRepository clientRepository,
-            UserManager<Person> userManager, 
-            IProjectPhaseRepository projectPhaseRepository)
+            UserManager<Person> userManager,
+            IProjectPhaseRepository projectPhaseRepository, IMapper mapper)
         {
             _context = context;
             this._projectRepository = projectRepository;
@@ -46,6 +47,7 @@ namespace ProjectManagementAppLayer.Areas.ProjectManagment.Controllers
             this._clientRepository = clientRepository;
             _userManager = userManager;
             _projectPhaseRepository = projectPhaseRepository;
+            _mapper = mapper;
         }
 
         // GET: ProjectManagment/Project
@@ -105,21 +107,11 @@ namespace ProjectManagementAppLayer.Areas.ProjectManagment.Controllers
         {
             if (ModelState.IsValid)
             {
-                var project = new Project()
-                {
-                    Id = new Guid(),
-                    IsApproved=false,
-                    EndDate = insertProjectDTO.EndDate,
-                    StartDate = insertProjectDTO.StartDate,
-                    ContractAmount = insertProjectDTO.ContractAmount,
-                    ProjectName = insertProjectDTO.ProjectName,
-                    ProjectStatusId = insertProjectDTO.ProjectStatusId,
-                    ProjectTypeId = insertProjectDTO.ProjectTypeId,
-                    ContractFileName = insertProjectDTO.ContractFile.FileName,
-                    ContractFileType = insertProjectDTO.ContractFile.ContentType,
-                    ClientId=insertProjectDTO.ClientId,
-                    ProjectManagerId = User.FindFirstValue(ClaimTypes.NameIdentifier)
-                };
+                // aut mapper
+                var project = _mapper.Map<Project>(insertProjectDTO);
+                project.ContractFileName = insertProjectDTO.ContractFile.FileName;
+                project.ContractFileType = insertProjectDTO.ContractFile.ContentType;
+                project.ProjectManagerId = User.FindFirstValue(ClaimTypes.NameIdentifier);
                 Stream st = insertProjectDTO.ContractFile.OpenReadStream();
                 using (BinaryReader bt = new BinaryReader(st))
                 {
@@ -181,7 +173,8 @@ namespace ProjectManagementAppLayer.Areas.ProjectManagment.Controllers
                     var proj = await _projectRepository.GetProjectById(updateProjectDTO.ProjectId);
                     if (updateProjectDTO.ContractFile == null)
                     {
-                        proj.IsApproved = false;
+
+                        
                         proj.ClientId = updateProjectDTO.ClientId;
                         proj.ContractAmount = updateProjectDTO.ContractAmount;
                         proj.StartDate = updateProjectDTO.StartDate;
