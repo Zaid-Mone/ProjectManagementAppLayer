@@ -1,5 +1,4 @@
 ﻿@*@model ProjectManagementBusinessLayer.Entities.ProjectPhase*@
-
 @using ProjectManagementAppLayer.DTOs.Insert
 @model InsertProjectPhaseDTO
 @{
@@ -34,6 +33,24 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input hidden name="ProjectId" value="@project.Id" />
 
+            <div class="row">
+                <div class="col-6">
+                    <div class="form-group">
+                        <label asp-for="@project.StartDate" class="control-label"></label>
+                        <input asp-for="@project.StartDate" class="form-control" disabled/>
+                        <span asp-validation-for="@project.StartDate" class="text-danger"></span>
+                    </div>
+
+                </div>
+                <div class="col-6">
+                    <div class="form-group">
+                        <label asp-for="@project.EndDate" class="control-label"></label>
+                        <input asp-for="@project.EndDate" class="form-control" disabled/>
+                        <span asp-validation-for="@project.EndDate" class="text-danger"></span>
+                    </div>
+
+                </div>
+            </div>
 
             <div class="row">
                 <div class="col-6">
@@ -63,14 +80,22 @@
                             <option selected disabled>Select Phase</option>
                             @foreach (var item in phases)
                             {
-                                <option value="@item.Id">@item.PhaseName</option>
+                                @if (project.ProjectPhases.Select(q => q.PhaseId).ToList().Contains(item.Id))
+                                {
+                                    <option value="@item.Id" style="display:none">@item.PhaseName</option>
+                                }
+                                else
+                                {
+                                    <option value="@item.Id">@item.PhaseName</option>
+                                }
+
+
                             }
                         </select>
                     </div>
 
                 </div>
             </div>
-
 
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-outline-success" />

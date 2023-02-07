@@ -40,7 +40,6 @@ namespace ProjectManagementBusinessLayer.Repositories.Implementation
             //_context.Remove(res2);
             _context.Projects.Remove(project);
         }
-
         public async Task<List<Project>> FindAllByCondition(Expression<Func<Project, bool>> predicate)
         {
             return await _context.Projects
@@ -53,7 +52,6 @@ namespace ProjectManagementBusinessLayer.Repositories.Implementation
             .Where(predicate)
             .ToListAsync();
         }
-
         public async Task<Project> FindConditionById(Expression<Func<Project, bool>> predicate)
         {
             return await _context.Projects
@@ -63,7 +61,6 @@ namespace ProjectManagementBusinessLayer.Repositories.Implementation
             .Include(x => x.ProjectType)
             .SingleOrDefaultAsync(predicate);
         }
-
         public async Task<List<Project>> GetAllApprovedProjects()
         {
             return await _context.Projects
@@ -76,7 +73,6 @@ namespace ProjectManagementBusinessLayer.Repositories.Implementation
             .Where(b => b.IsApproved == true)
             .ToListAsync();
         }
-
         public async Task<List<Project>> GetAllIsApprovedProjects()
         {
             return await _context.Projects
@@ -137,6 +133,7 @@ namespace ProjectManagementBusinessLayer.Repositories.Implementation
         {
             return await _context.Projects
             .Include(z => z.Client)
+            .Include(p=>p.ProjectPhases)
             .Include(q => q.ProjectManager)
             .Include(z => z.ProjectStatus)
             .Include(x => x.ProjectType)

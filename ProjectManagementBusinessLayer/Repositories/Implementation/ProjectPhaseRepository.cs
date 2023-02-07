@@ -89,6 +89,8 @@ namespace ProjectManagementBusinessLayer.Repositories.Implementation
                 .Any(e=>e.PhaseId==phaseId);
             return item;
         }
+        // list to check if the value is in it foreah on the 
+        // forech on the phases that not used like  != phaseId
 
         public bool IsPhaseExistForUpdate(Guid projectId, Guid phaseId)
         {
