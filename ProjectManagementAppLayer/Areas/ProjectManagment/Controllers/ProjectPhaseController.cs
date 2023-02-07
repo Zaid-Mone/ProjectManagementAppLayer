@@ -92,49 +92,19 @@ namespace ProjectManagementAppLayer.Areas.ProjectManagment.Controllers
                     ViewBag.phase = phases;
                     return View(insertProjectPhaseDTO);
                 }
-                if (projectPhase.Count==0)
+                var projectphases = new ProjectPhase()
                 {
-                    var projectphases = new ProjectPhase()
-                    {
-                        Id = Guid.NewGuid(),
-                        ProjectId = insertProjectPhaseDTO.ProjectId,
-                        EndDate = insertProjectPhaseDTO.EndDate,
-                        PhaseId = insertProjectPhaseDTO.PhaseId,
-                        StartDate = insertProjectPhaseDTO.StartDate
-                    };
-                    _projectPhaseRepository.Insert(projectphases);
-                    _projectPhaseRepository.Save();
-                    TempData["save"] = "Phases has been Created Successfully ...";
-                    return RedirectToAction("Index", new { id = insertProjectPhaseDTO.ProjectId });
-                }
-                else
-                {
-                    //  check if is exist it will show error message
-                    var item = _projectPhaseRepository.IsPhaseExist(insertProjectPhaseDTO.ProjectId, insertProjectPhaseDTO.PhaseId);
-                    if (item)
-                    {
-                        ModelState.AddModelError("", "Sorry you have been used this Phase already in the project");
-                        await Create(insertProjectPhaseDTO.ProjectId);
-                        return View(insertProjectPhaseDTO);
-                    }
-                    else
-                    {
-                        // after check if not exist it will add it
-                        var projectphases = new ProjectPhase()
-                        {
-                            Id = Guid.NewGuid(),
-                            ProjectId = insertProjectPhaseDTO.ProjectId,
-                            EndDate = insertProjectPhaseDTO.EndDate,
-                            PhaseId = insertProjectPhaseDTO.PhaseId,
-                            StartDate = insertProjectPhaseDTO.StartDate
-                        };
-                        _projectPhaseRepository.Insert(projectphases);
-                        _projectPhaseRepository.Save();
-                        TempData["save"] = "Phases has been Created Successfully ...";
-                        return RedirectToAction("Index", new { id = insertProjectPhaseDTO.ProjectId });
+                    Id = Guid.NewGuid(),
+                    ProjectId = insertProjectPhaseDTO.ProjectId,
+                    EndDate = insertProjectPhaseDTO.EndDate,
+                    PhaseId = insertProjectPhaseDTO.PhaseId,
+                    StartDate = insertProjectPhaseDTO.StartDate
+                };
+                _projectPhaseRepository.Insert(projectphases);
+                _projectPhaseRepository.Save();
+                TempData["save"] = "Phases has been Created Successfully ...";
+                return RedirectToAction("Index", new { id = insertProjectPhaseDTO.ProjectId });
 
-                    }
-                }
             }
             else
             {
@@ -247,7 +217,6 @@ namespace ProjectManagementAppLayer.Areas.ProjectManagment.Controllers
             ViewBag.project = await _projectRepository.GetProjectById(projectPhase.ProjectId);
             return RedirectToAction(nameof(Index),new { id=projectPhase.ProjectId});
         }
-
 
     }
 }

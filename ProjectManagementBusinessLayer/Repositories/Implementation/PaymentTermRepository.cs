@@ -35,7 +35,6 @@ namespace ProjectManagementBusinessLayer.Repositories.Implementation
                 .Where(predicate)
                 .ToListAsync();
         }
-
         public async Task<PaymentTerm> FindConditionById(Expression<Func<PaymentTerm, bool>> predicate)
         {
             return await _context.PaymentTerms
@@ -45,7 +44,6 @@ namespace ProjectManagementBusinessLayer.Repositories.Implementation
                 .Include(v => v.Deliverable.ProjectPhase.Phase)
                 .SingleOrDefaultAsync(predicate);
         }
-
         public async Task<List<PaymentTerm>> GetAllPaymentTermByProjectManagerId(string id)
         {
             return await _context.PaymentTerms
@@ -57,7 +55,6 @@ namespace ProjectManagementBusinessLayer.Repositories.Implementation
                 .Where(o=>o.Deliverable.ProjectPhase.Project.ProjectManagerId==id)
                 .ToListAsync();
         }
-
         public async Task<List<PaymentTerm>> GetAllPaymentTerms()
         {
             return await _context.PaymentTerms
@@ -67,7 +64,6 @@ namespace ProjectManagementBusinessLayer.Repositories.Implementation
                 .Include(v => v.Deliverable.ProjectPhase.Phase)
                 .ToListAsync();
         }
-
         public async Task<List<PaymentTerm>> GetIsNotPaidPaymentTerm(Guid id)
         {
             return await _context.PaymentTerms
@@ -79,6 +75,7 @@ namespace ProjectManagementBusinessLayer.Repositories.Implementation
                 .Where(t => t.IsPaid == false)
                 .ToListAsync();
         }
+
 
         public async Task<PaymentTerm> GetPaymentTermById(Guid id)
         {

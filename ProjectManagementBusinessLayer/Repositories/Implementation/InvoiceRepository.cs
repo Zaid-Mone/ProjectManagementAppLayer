@@ -23,7 +23,6 @@ namespace ProjectManagementBusinessLayer.Repositories.Implementation
         {
             _context.Invoices.Remove(invoice);
         }
-
         public async Task<List<Invoice>> FindAllByCondition(Expression<Func<Invoice, bool>> predicate)
         {
             return await _context.Invoices
@@ -34,7 +33,6 @@ namespace ProjectManagementBusinessLayer.Repositories.Implementation
                 .Where(predicate)
                 .ToListAsync();
         }
-
         public async Task<Invoice> FindConditionById(Expression<Func<Invoice, bool>> predicate)
         {
             return await _context.Invoices
@@ -48,7 +46,6 @@ namespace ProjectManagementBusinessLayer.Repositories.Implementation
                  .Include(b => b.Project.ProjectManager)
                  .SingleOrDefaultAsync(predicate);
         }
-
         public async Task<List<Invoice>> GetAllApprovedInvoices()
         {
             return await _context.Invoices
@@ -60,7 +57,6 @@ namespace ProjectManagementBusinessLayer.Repositories.Implementation
                 .Where(r=>r.IsPaidInvoice==false)
                 .ToListAsync();
         }
-
         public async Task<List<Invoice>> GetAllInvoices()
         {
             return await _context.Invoices
@@ -70,7 +66,6 @@ namespace ProjectManagementBusinessLayer.Repositories.Implementation
                 .Include(q=>q.Project.Client)
                 .ToListAsync();
         }
-
         public async Task<List<Invoice>> GetAllInvoicesByProjectManagerId(string id)
         {
             return await _context.Invoices

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Infobip.Api.Client;
 using Infobip.Api.Client.Api;
 using Infobip.Api.Client.Model;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -22,6 +23,7 @@ using ProjectManagementBusinessLayer.Repositories.Interfaces;
 namespace ProjectManagementAppLayer.Areas.ProjectManagment.Controllers
 {
     [Area("ProjectManagment")]
+    [Authorize]
     public class InvoiceController : Controller
     {
 
@@ -67,7 +69,7 @@ namespace ProjectManagementAppLayer.Areas.ProjectManagment.Controllers
         // GET: ProjectManagment/Invoice/Details/5
         public async Task<IActionResult> Details(Guid id)
         {
-            if(User.Identity.IsAuthenticated)
+            //if(User.Identity.IsAuthenticated)
             if (id == null)
             {
                 return NotFound();
@@ -80,6 +82,9 @@ namespace ProjectManagementAppLayer.Areas.ProjectManagment.Controllers
 
             return View(invoice);
         }
+
+
+
 
         // GET: ProjectManagment/Invoice/Create
         public async Task<IActionResult> Create()
@@ -254,10 +259,6 @@ namespace ProjectManagementAppLayer.Areas.ProjectManagment.Controllers
             return new JsonResult(res1);
         }
 
-
-      
-
-
         // to change invoice state
         public async Task<IActionResult> InvoiceApproved(Guid id)
         {
@@ -349,5 +350,5 @@ namespace ProjectManagementAppLayer.Areas.ProjectManagment.Controllers
             return RedirectToAction("GetAllApprovedInvoiecs");
         }
 
+        }
     }
-}
