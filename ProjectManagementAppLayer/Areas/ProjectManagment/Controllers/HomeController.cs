@@ -50,6 +50,15 @@ namespace ProjectManagementAppLayer.Areas.ProjectManagment.Controllers
             return View();
         }
 
+        public IActionResult Chatting()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var user = _db.Users.FirstOrDefault(q => q.Id == userId);
+            //user.ImageUrl
+            //user.FullName
+            ViewBag.user = user;
+            return View();
+        }
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
