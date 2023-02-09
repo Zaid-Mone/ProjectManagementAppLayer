@@ -21,7 +21,6 @@ namespace ProjectManagementAppLayer.Hubs
         {
          await Clients.All.SendAsync("SendUserMessage", username, message, sendAt, avatar);
         }
-
         // to show the name of the user that enter the room
         public async Task JoinRoom(string user)
         {
@@ -35,12 +34,10 @@ namespace ProjectManagementAppLayer.Hubs
             return base.OnDisconnectedAsync(exception);
         }
 
-
         public async Task IsTypeing(string user)
         {
             await Clients.Others.SendAsync("isType", user);
         }
-
 
     }
 }
