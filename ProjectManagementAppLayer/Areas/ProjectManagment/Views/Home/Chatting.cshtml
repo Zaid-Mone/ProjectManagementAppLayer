@@ -35,7 +35,6 @@
 <!--Coded With Love By Mutiullah Samim-->
 <body>
     <input hidden value="@person.FullName" id="hiddenInputName"/>
-    @*<input hidden value="@person.ImageUrl" id="hiddenInputImage"/>*@
     <img src="~/Images/@person.ImageUrl"  id="hiddenInputImage" hidden/>
     <div class="container-fluid h-100">
         <div class="row justify-content-center h-100">
@@ -54,10 +53,13 @@
                     <div class="card-body msg_card_body" id="msgsContainer">
                         <!---->
                     </div>
+
                     <div class="card-footer">
+                        @*<span id="istypingUser"></span>*@
+                        <span id="typingIndicator"></span>
+
                         <div class="input-group">
-                            <textarea 
-                                      class="form-control type_msg"
+                            <textarea class="form-control type_msg"
                                       placeholder="Type your message..." id="messages"></textarea>
                             <div class="input-group-append">
                                 <span class="input-group-text send_btn">
@@ -66,7 +68,9 @@
                                     </button>
                                 </span>
                             </div>
+
                         </div>
+
                     </div>
                 </div>
             </div>
@@ -76,12 +80,60 @@
         <script src="~/lib/jquery/dist/jquery.js"></script>
         <script src="~/microsoft/signalr/dist/browser/signalr.js"></script>
         <script>
+            function showFiled(arr) {
+                console.log(arr)
+                if (arr.length > 0) {
+                    if (arr.length >= 3) {
+                        $("#typingIndicator").text(arr[0] + " " + arr[1] + "... is typing...");
+                    }
+                    else {
+                        $("#typingIndicator").text(arr.join(' ') + " is typing...");
+                    }
 
+                }
+                else {
+                    $("#typingIndicator").text("");
+                }
+            }
+            var arr = []
             // to open connection between client and server
             var connection = new signalR.HubConnectionBuilder()
                 .withUrl("/hub/chatHub")
                 .build();
 
+            // Start typing
+            $("#messages").on("keydown", function () {
+                var user = $('#hiddenInputName').val()
+                connection.invoke("IsTypeing", user).catch(function (err) {
+                    return console.error(err.toString());
+                });
+            });
+
+            // Stop typing
+            $("#messages").on("keyup", function () {
+                    connection.invoke("IsTypeing", "").catch(function (err) {
+                        return console.error(err.toString());
+                    });
+            });
+            // show is typing
+            connection.on("isType", function (user) {
+                if (!arr.includes(user) && user!='') {
+                    arr.push(user)
+                }
+                setTimeout(() => {
+                arr = arr.filter((el) => {
+                    if (el != user) {
+                        return el
+                    }
+                })
+                    showFiled(arr);
+                }, 10000)
+
+                showFiled(arr);
+
+            });
+
+            // send the message
             connection.on("SendUserMessage", function (sender, message, sendAt,avatar) {
                 $("#msgsContainer").append(`
                         <div class="d-flex justify-content-start mb-4">
@@ -101,13 +153,8 @@
             function fullfiled() {
                 var Usermsgs = $('#hiddenInputName').val()
                 var avatar = $('#hiddenInputImage').attr("src");
-                console.log(avatar)
-                
-                console.log(Usermsgs)
                 $("#btnSend").on('click', function () {
-                    
                     var msg = $('#messages').val();
-                    console.log(msg)
                     const date = new Date();
                     var sendAt = date.toLocaleString();
                     connection.invoke("SendMessageSync", Usermsgs, msg, sendAt, avatar); //add userImage as parameter to the main function
