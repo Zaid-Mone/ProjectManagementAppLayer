@@ -7,6 +7,15 @@
 
         @if (User.Identity.IsAuthenticated && User.IsInRole("ProjectManager"))
         {
+            <li class="nav-header">Public Page</li>
+            <li class="nav-item">
+                <a class="nav-link" asp-area="ProjectManagment" asp-controller="Home" asp-action="Chatting">
+                    <i class="nav-icon fa-solid fa-comments"></i>
+                    <p>
+                        Chatting
+                    </p>
+                </a>
+            </li>
 
             <li class="nav-header">Custom Pages</li>
             <li class="nav-item">
@@ -45,10 +54,23 @@
                 </a>
             </li>
 
+
+
+
+
         }
-       
+
         @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
         {
+            <li class="nav-header">Public Page</li>
+            <li class="nav-item">
+                <a class="nav-link" asp-area="ProjectManagment" asp-controller="Home" asp-action="Chatting">
+                    <i class="nav-icon fa-solid fa-comments"></i>
+                    <p>
+                        Chatting
+                    </p>
+                </a>
+            </li>
             <li class="nav-header">Custom Pages</li>
 
             <li class="nav-item">
@@ -172,6 +194,15 @@
 
         @if (User.Identity.IsAuthenticated && User.IsInRole("ProjectDirector"))
         {
+            <li class="nav-header">Public Page</li>
+            <li class="nav-item">
+                <a class="nav-link" asp-area="ProjectManagment" asp-controller="Home" asp-action="Chatting">
+                    <i class="nav-icon fa-solid fa-comments"></i>
+                    <p>
+                        Chatting
+                    </p>
+                </a>
+            </li>
             <li class="nav-header">Custom Pages</li>
 
             <li class="nav-item">

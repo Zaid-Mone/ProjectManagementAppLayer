@@ -10,6 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json;
 using ProjectManagementAppLayer.Helper;
+using ProjectManagementAppLayer.Hubs;
 using ProjectManagementBusinessLayer.Data;
 using ProjectManagementBusinessLayer.Entities;
 using ProjectManagementBusinessLayer.Repositories.Implementation;
@@ -49,7 +50,7 @@ namespace ProjectManagementAppLayer
 
             services.AddControllersWithViews();
             services.AddRazorPages();
-
+            services.AddSignalR();
 
             var mapperConfig = new MapperConfiguration(mc =>
             {
@@ -74,6 +75,7 @@ namespace ProjectManagementAppLayer
             services.AddSession(options =>
             {
                 options.IdleTimeout = TimeSpan.FromMinutes(120);
+                
             });
 
 
@@ -108,6 +110,7 @@ namespace ProjectManagementAppLayer
                     name:"default",
                     pattern: "{area=ProjectManagment}/{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapRazorPages();
+                endpoints.MapHub<ChatHub>("/hub/chatHub");
             });
         }
     }

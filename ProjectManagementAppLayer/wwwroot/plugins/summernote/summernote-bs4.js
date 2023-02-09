@@ -2402,39 +2402,39 @@ external_jQuery_default().fn.extend({
    * @param {Object|String}
    * @return {this}
    */
-  summernote: function summernote() {
-    var type = external_jQuery_default().type(lists.head(arguments));
-    var isExternalAPICalled = type === 'string';
-    var hasInitOptions = type === 'object';
-    var options = external_jQuery_default().extend({}, (external_jQuery_default()).summernote.options, hasInitOptions ? lists.head(arguments) : {}); // Update options
+//  summernote: function summernote() {
+//    var type = external_jQuery_default().type(lists.head(arguments));
+//    var isExternalAPICalled = type === 'string';
+//    var hasInitOptions = type === 'object';
+//    var options = external_jQuery_default().extend({}, (external_jQuery_default()).summernote.options, hasInitOptions ? lists.head(arguments) : {}); // Update options
 
-    options.langInfo = external_jQuery_default().extend(true, {}, (external_jQuery_default()).summernote.lang["en-US"], (external_jQuery_default()).summernote.lang[options.lang]);
-    options.icons = external_jQuery_default().extend(true, {}, (external_jQuery_default()).summernote.options.icons, options.icons);
-    options.tooltip = options.tooltip === 'auto' ? !env.isSupportTouch : options.tooltip;
-    this.each(function (idx, note) {
-      var $note = external_jQuery_default()(note);
+//    options.langInfo = external_jQuery_default().extend(true, {}, (external_jQuery_default()).summernote.lang["en-US"], (external_jQuery_default()).summernote.lang[options.lang]);
+//    options.icons = external_jQuery_default().extend(true, {}, (external_jQuery_default()).summernote.options.icons, options.icons);
+//    options.tooltip = options.tooltip === 'auto' ? !env.isSupportTouch : options.tooltip;
+//    this.each(function (idx, note) {
+//      var $note = external_jQuery_default()(note);
 
-      if (!$note.data('summernote')) {
-        var context = new Context($note, options);
-        $note.data('summernote', context);
-        $note.data('summernote').triggerEvent('init', context.layoutInfo);
-      }
-    });
-    var $note = this.first();
+//      if (!$note.data('summernote')) {
+//        var context = new Context($note, options);
+//        $note.data('summernote', context);
+//        $note.data('summernote').triggerEvent('init', context.layoutInfo);
+//      }
+//    });
+//    var $note = this.first();
 
-    if ($note.length) {
-      var context = $note.data('summernote');
+//    if ($note.length) {
+//      var context = $note.data('summernote');
 
-      if (isExternalAPICalled) {
-        return context.invoke.apply(context, lists.from(arguments));
-      } else if (options.focus) {
-        context.invoke('editor.focus');
-      }
-    }
+//      if (isExternalAPICalled) {
+//        return context.invoke.apply(context, lists.from(arguments));
+//      } else if (options.focus) {
+//        context.invoke('editor.focus');
+//      }
+//    }
 
-    return this;
-  }
-});
+//    return this;
+//  }
+//});
 ;// CONCATENATED MODULE: ./src/js/core/range.js
 function range_classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
