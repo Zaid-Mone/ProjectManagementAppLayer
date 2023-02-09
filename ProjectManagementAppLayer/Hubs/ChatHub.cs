@@ -17,9 +17,9 @@ namespace ProjectManagementAppLayer.Hubs
         }
 
         // to send messages
-        public async Task SendMessageSync(string username, string message, string sendAt)
+        public async Task SendMessageSync(string username, string message, string sendAt,string avatar)
         {
-            await Clients.All.SendAsync("SendUserMessage", username, message, sendAt);
+            await Clients.All.SendAsync("SendUserMessage", username, message, sendAt, avatar);
         }
 
         // to show the name of the user that enter the room
