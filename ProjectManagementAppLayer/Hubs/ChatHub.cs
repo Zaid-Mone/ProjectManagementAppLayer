@@ -19,7 +19,7 @@ namespace ProjectManagementAppLayer.Hubs
         // to send messages
         public async Task SendMessageSync(string username, string message, string sendAt,string avatar)
         {
-            await Clients.All.SendAsync("SendUserMessage", username, message, sendAt, avatar);
+         await Clients.All.SendAsync("SendUserMessage", username, message, sendAt, avatar);
         }
 
         // to show the name of the user that enter the room
@@ -34,6 +34,13 @@ namespace ProjectManagementAppLayer.Hubs
             ConnectedUsers.myConnectedUsers.Remove(Context.ConnectionId);
             return base.OnDisconnectedAsync(exception);
         }
+
+
+        public async Task IsTypeing(string user)
+        {
+            await Clients.Others.SendAsync("isType", user);
+        }
+
 
     }
 }
