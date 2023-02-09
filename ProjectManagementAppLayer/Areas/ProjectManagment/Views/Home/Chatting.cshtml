@@ -35,7 +35,8 @@
 <!--Coded With Love By Mutiullah Samim-->
 <body>
     <input hidden value="@person.FullName" id="hiddenInputName"/>
-    <input hidden value="@person.ImageUrl" id="hiddenInputImage"/>
+    @*<input hidden value="@person.ImageUrl" id="hiddenInputImage"/>*@
+    <img src="~/Images/@person.ImageUrl"  id="hiddenInputImage" hidden/>
     <div class="container-fluid h-100">
         <div class="row justify-content-center h-100">
             <div class="col-md-8 col-xl-6 chat">
@@ -81,11 +82,11 @@
                 .withUrl("/hub/chatHub")
                 .build();
 
-            connection.on("SendUserMessage", function (sender, message, sendAt) {
+            connection.on("SendUserMessage", function (sender, message, sendAt,avatar) {
                 $("#msgsContainer").append(`
                         <div class="d-flex justify-content-start mb-4">
                             <div class="img_cont_msg">
-                                <img src="" 
+                                <img src="${avatar}"
                                      class="rounded-circle user_img_msg" />
                             </div>
                             <div class="msg_cotainer" style="display: flex;flex-direction: column;">
@@ -94,15 +95,13 @@
                                 <span class="msg_time">${sendAt}</span>
                             </div>
                         </div>
-
-`);//~/Images/avatar.png
-
+`);
             });
 
             function fullfiled() {
                 var Usermsgs = $('#hiddenInputName').val()
-                var imgeeee = $('#hiddenInputImage').val()
-                console.log(imgeeee)
+                var avatar = $('#hiddenInputImage').attr("src");
+                console.log(avatar)
                 
                 console.log(Usermsgs)
                 $("#btnSend").on('click', function () {
@@ -111,7 +110,7 @@
                     console.log(msg)
                     const date = new Date();
                     var sendAt = date.toLocaleString();
-                    connection.invoke("SendMessageSync", Usermsgs, msg, sendAt); //add userImage as parameter to the main function
+                    connection.invoke("SendMessageSync", Usermsgs, msg, sendAt, avatar); //add userImage as parameter to the main function
                     document.getElementById("messages").value = "";
                 })
             };
