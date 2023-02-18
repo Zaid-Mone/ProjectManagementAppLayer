@@ -165,7 +165,8 @@ namespace ProjectManagementAppLayer.Areas.Administrator.Controllers
 
             foreach (var item in users)
             {
-                var proj1 = _db.Projects.Where(q => q.ProjectManagerId == item.Id).Count();
+               var proj1 = _db.Projects
+                    .Where(q => q.ProjectManagerId == item.Id).Count();
                 My_diction.Add(item.FullName, proj1);
             }
             var dict= My_diction;
