@@ -36,11 +36,13 @@ namespace ProjectManagementAppLayer.Areas.ProjectManagment.Controllers
             else if (User.IsInRole("ProjectDirector"))
             {
                 IsProjectDirector();
+
                 return View();
             }
             else
             {
                 IsProjectManager();
+                BarChart();
                 return View();
             }
         }
@@ -59,6 +61,8 @@ namespace ProjectManagementAppLayer.Areas.ProjectManagment.Controllers
             ViewBag.user = user;
             return View();
         }
+
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
@@ -178,6 +182,25 @@ namespace ProjectManagementAppLayer.Areas.ProjectManagment.Controllers
                 .ToList().Count;
 
         }
-    
+        public void BarChart()
+        {
+            var usr = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            // cost // project name
+            Dictionary<decimal, string> barchart = new Dictionary<decimal, string>();
+
+            var project = _db.Projects
+                    .Where(e => e.ProjectManagerId == usr)
+                    .Include(a => a.ProjectStatus)
+                    .Include(t => t.ProjectType)
+                    .ToList();
+
+            foreach (var item in project)
+            {
+                barchart.Add(item.ContractAmount, item.ProjectName);
+            }
+
+            ViewBag.dict = barchart;
+        }
     }
 }

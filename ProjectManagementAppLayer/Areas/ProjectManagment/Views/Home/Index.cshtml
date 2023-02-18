@@ -1,5 +1,6 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
+    var dict = (Dictionary<decimal, string>)ViewBag.dict;
 }
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.2.3/axios.min.js" integrity="sha512-L4lHq2JI/GoKsERT8KYa72iCwfSrKYWEyaBxzJeeITM9Lub5vlTj8tufqYk056exhjo2QDEipJrg6zen/DDtoQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
@@ -78,7 +79,7 @@
         var events = Array();
         axios.get('/ProjectManagment/Project/GetAllProjectForCalenderAdminAndProjectDirector')
             .then(function (response) {
-                console.log(response)
+                /* console.log(response)*/
                 response.data.forEach(function (item) {
                     events.push({
                         title: item.projectName,
@@ -87,8 +88,8 @@
                     })
                     //    console.log(item.endDate, item.startDate, item.projectName);
                 });
-                console.log(events)
-                console.log('Title')
+                /* console.log(events)*/
+                /*console.log('Title')*/
                 GenerateCalendar(events);
             })
             .catch(function (error) {
@@ -135,7 +136,7 @@ else if (User.Identity.IsAuthenticated && User.IsInRole("ProjectManager"))
                 <div class="icon">
                     <i class="ion ion-bag"></i>
                 </div>
-                <a  class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                <a class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
             </div>
         </div>
         <!-- ./col -->
@@ -150,7 +151,7 @@ else if (User.Identity.IsAuthenticated && User.IsInRole("ProjectManager"))
                 <div class="icon">
                     <i class="ion ion-stats-bars"></i>
                 </div>
-                <a  class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                <a class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
             </div>
         </div>
         <!-- ./col -->
@@ -165,7 +166,7 @@ else if (User.Identity.IsAuthenticated && User.IsInRole("ProjectManager"))
                 <div class="icon">
                     <i class="ion ion-person-add"></i>
                 </div>
-                <a  class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                <a class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
             </div>
         </div>
         <!-- ./col -->
@@ -179,19 +180,33 @@ else if (User.Identity.IsAuthenticated && User.IsInRole("ProjectManager"))
                 <div class="icon">
                     <i class="ion ion-pie-graph"></i>
                 </div>
-                <a  class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                <a class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
             </div>
         </div>
     </div>
     <!-- /.row -->
-    <div id="calendar"></div>
+
+    <!--Calendar-->
+    <div class="row">
+        <div class="col-12">
+            <div id="calendar"></div>
+        </div>
+    </div>
+    <!--BarChart-->
+    <div class="row">
+        <div class="col-12">
+            <canvas id="myChart"></canvas>
+        </div>
+    </div>
+
     <script src="~/js/Calender.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
 
         var events = Array();
         axios.get('/ProjectManagment/Project/GetAllProjectForCalenderProjectManager')
             .then(function (response) {
-                console.log(response)
+                //console.log(response)
                 response.data.forEach(function (item) {
                     events.push({
                         title: item.projectName,
@@ -200,8 +215,8 @@ else if (User.Identity.IsAuthenticated && User.IsInRole("ProjectManager"))
                     })
                     //    console.log(item.endDate, item.startDate, item.projectName);
                 });
-                console.log(events)
-                console.log('Title')
+                //console.log(events)
+                //console.log('Title')
                 GenerateCalendar(events);
             })
             .catch(function (error) {
@@ -232,6 +247,43 @@ else if (User.Identity.IsAuthenticated && User.IsInRole("ProjectManager"))
         }
     </script>
 
+    <script>
+        @{
+            List<decimal> projectCost = new List<decimal>();
+            List<string> projectName = new List<string>();
+            foreach (var item in dict)
+            {
+                projectCost.Add(item.Key);
+                projectName.Add(item.Value);
+            }
+        }
+            var projectcost = @Html.Raw(Json.Serialize(projectCost));
+            var projectname = @Html.Raw(Json.Serialize(projectName));
+
+        var ctx = document.getElementById('myChart').getContext('2d');
+        var myChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: projectname,
+                datasets: [{
+                    label: 'Projects and Their Costs',
+                    data: projectcost,
+                    fill: false,
+                    borderColor: 'rgb(75, 192, 192)',
+                    tension: 0.021
+                }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
+        });
+    </script>
 }
 else if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
 {
@@ -249,7 +301,7 @@ else if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
                 <div class="icon">
                     <i class="ion ion-bag"></i>
                 </div>
-                <a  class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                <a class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
             </div>
         </div>
         <!-- ./col -->
@@ -264,7 +316,7 @@ else if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
                 <div class="icon">
                     <i class="ion ion-stats-bars"></i>
                 </div>
-                <a  class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                <a class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
             </div>
         </div>
         <!-- ./col -->
@@ -279,7 +331,7 @@ else if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
                 <div class="icon">
                     <i class="ion ion-person-add"></i>
                 </div>
-                <a  class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                <a class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
             </div>
         </div>
         <!-- ./col -->
@@ -294,7 +346,7 @@ else if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
                 <div class="icon">
                     <i class="ion ion-pie-graph"></i>
                 </div>
-                <a  class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                <a class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
             </div>
         </div>
     </div>
@@ -442,3 +494,41 @@ else
     </section>
     <!-- End Team Section -->
 }
+
+
+
+
+@*<script>
+
+    line chart used in project manager
+        @{
+            List<decimal> projectCost = new List<decimal>();
+            List<string> projectName = new List<string>();
+            foreach (var item in dict)
+            {
+                projectCost.Add(item.Key);
+                projectName.Add(item.Value);
+            }
+        }
+            var items1 = @Html.Raw(Json.Serialize(projectCost));
+            var items2 = @Html.Raw(Json.Serialize(projectName));
+        const ctx = document.getElementById('myChart');
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: items2,
+                datasets: [{
+                    label: 'Project && Costs',
+                    data: items1,
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+</script>*@
