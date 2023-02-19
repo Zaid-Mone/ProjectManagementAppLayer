@@ -18,11 +18,9 @@ namespace ProjectManagementAppLayer.Areas.Administrator.Controllers
     {
        
         private readonly IPhaseRepository _phaseRepository;
-       
-
+      
         public PhaseController( IPhaseRepository phaseRepository)
         {
-      
             _phaseRepository = phaseRepository;
         }
 

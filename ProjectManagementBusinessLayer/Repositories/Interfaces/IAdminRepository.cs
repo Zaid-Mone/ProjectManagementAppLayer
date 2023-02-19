@@ -21,5 +21,4 @@ namespace ProjectManagementBusinessLayer.Repositories.Interfaces
         // Find Admin Based On A Specific Condition
         public Task<Admin> FindConditionById(Expression<Func<Admin, bool>> predicate);
     }
-
 }
