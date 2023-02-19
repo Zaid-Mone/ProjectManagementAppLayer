@@ -14,6 +14,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using ProjectManagementAppLayer.DTOs.Insert;
 using ProjectManagementAppLayer.DTOs.Update;
+using ProjectManagementAppLayer.Utility;
 using ProjectManagementBusinessLayer.Data;
 using ProjectManagementBusinessLayer.Entities;
 using ProjectManagementBusinessLayer.Repositories.Implementation;
@@ -106,11 +107,10 @@ namespace ProjectManagementAppLayer.Areas.ProjectManagment.Controllers
                      InvoiceDate= insertInvoiceDTO.InvoiceDate,
                      InvoiceTitle=insertInvoiceDTO.InvoiceTitle,
                      ProjectId=insertInvoiceDTO.ProjectId,
+                     // genertae a uniqe serial number that contains 5 digit of numbers
                     SerialNumber = Math.Abs(Guid.NewGuid().GetHashCode()).ToString().Substring(0, 5),
-                    //IsApproved=false,
-                    //IsPaidInvoice=false
                 };
-                _invoiceRepository.Insert(invoice); // 1
+                _invoiceRepository.Insert(invoice); 
                 _invoiceRepository.Save();
 
                 foreach (var item in insertInvoiceDTO.PaymentTermIds)
@@ -308,44 +308,7 @@ namespace ProjectManagementAppLayer.Areas.ProjectManagment.Controllers
             _invoiceRepository.Update(invoice);
             _invoiceRepository.Save();
           string MESSAGE_TEXT = "PMS. Advertisement It would help if you visited us because Invoice Order No.(#" + invoice.SerialNumber + " ) is available until ("+invoice.InvoiceDate.ToString("d")+")";
-         string BASE_URL = "https://5vzxyz.api.infobip.com";
-         string API_KEY = mySetting;
-         string SENDER = "InfoSMS";
-         string RECIPIENT = "962776934286";
-        var configuration = new Configuration()
-            {
-                BasePath = BASE_URL,
-                ApiKeyPrefix = "App",
-                ApiKey = API_KEY
-            };
-
-            var sendSmsApi = new SendSmsApi(configuration);
-
-            var smsMessage = new SmsTextualMessage()
-            {
-                From = SENDER,
-                Destinations = new List<SmsDestination>()
-                {
-                    new SmsDestination(to: RECIPIENT)
-                },
-                Text = MESSAGE_TEXT
-            };
-
-            var smsRequest = new SmsAdvancedTextualRequest()
-            {
-                Messages = new List<SmsTextualMessage>() { smsMessage }
-            };
-
-            try
-            {
-                var smsResponse = sendSmsApi.SendSmsMessage(smsRequest);
-
-                Console.WriteLine("Response: " + smsResponse.Messages.FirstOrDefault());
-            }
-            catch (ApiException apiException)
-            {
-                Console.WriteLine("Error occurred! \n\tMessage: {0}\n\tError content", apiException.ErrorContent);
-            }
+            SMSMessages.SendSMSMessage(MESSAGE_TEXT, mySetting);
             TempData["save"] = "Message has been sent Successfully ...";
             return RedirectToAction("GetAllApprovedInvoiecs");
         }

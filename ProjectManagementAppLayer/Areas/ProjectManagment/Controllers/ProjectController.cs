@@ -263,8 +263,6 @@ namespace ProjectManagementAppLayer.Areas.ProjectManagment.Controllers
         }
 
 
-
-
         public async Task<FileStreamResult> ViewContract(Guid id) // to open connection with browser
         {
             var file = await _projectRepository.GetProjectById(id);
@@ -273,7 +271,7 @@ namespace ProjectManagementAppLayer.Areas.ProjectManagment.Controllers
         }
 
 
-
+        // update the flag
         public async Task<IActionResult> ProjectApproved(Guid id)
         {
             var project = await _projectRepository.GetProjectById(id);
@@ -283,7 +281,7 @@ namespace ProjectManagementAppLayer.Areas.ProjectManagment.Controllers
             ViewBag.msg = true;
             return RedirectToAction("GetAllPendingProjects", "Project");
         }
-
+        // update the flag
         public async Task<IActionResult> ProjectPending(Guid id)
         {
             var project = await _projectRepository.GetProjectById(id);
@@ -306,7 +304,7 @@ namespace ProjectManagementAppLayer.Areas.ProjectManagment.Controllers
             return View(item);
         }
 
-
+        // get all projects for  admin & Director 
         public async Task<JsonResult> GetAllProjectForCalenderAdminAndProjectDirector()
         {
             if (User.IsInRole("Admin") || User.IsInRole("ProjectDirector"))
@@ -319,17 +317,7 @@ namespace ProjectManagementAppLayer.Areas.ProjectManagment.Controllers
                 return await GetAllProjectForCalenderProjectManager();
             }
         }
-
-
-        //public async Task<JsonResult> GetAllProjectForCalenderAdminAndProjectDirectors()
-        //{
-
-        //        var project = await _context.Projects.ToListAsync();
-        //        //var project = await _projectRepository.GetAllProjects();
-        //        return new JsonResult(project);
-
-        //}
-
+        // get all projects for specific manager
         public async Task<JsonResult> GetAllProjectForCalenderProjectManager()
         {
             if (User.IsInRole("ProjectManager"))

@@ -58,13 +58,11 @@ namespace ProjectManagementAppLayer.Areas.ProjectManagment.Controllers
             {
                 return NotFound();
             }
-
             var deliverable = await _deliverableRepository.GetDeliverableById(id);
             if (deliverable == null)
             {
                 return NotFound();
             }
-
             return View(deliverable);
         }
 
@@ -100,12 +98,9 @@ namespace ProjectManagementAppLayer.Areas.ProjectManagment.Controllers
                 }
                 // for Date Check
                 ViewBag.msg = false;
-                    //ModelState.AddModelError("", $"The Start Date must be bigger Than or equal {projectPhases.StartDate.ToString("d")} && The End Date must be less Than or equal {projectPhases.EndDate.ToString("d")}");
                     await Create(deliverable.ProjectPhaseId);
                     return View(deliverable);
             }
-            //ViewBag.projectphase = projectPhases;
-            //ViewBag.project = projects;
             return View(deliverable);
         }
 
