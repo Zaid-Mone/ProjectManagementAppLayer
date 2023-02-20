@@ -2,7 +2,8 @@
 In short, it is a site that cares about creating projects and following up on their development through design and invoices.
 
   (** Built with ASP.NET 3.1)
-you can find more in the [Docs.pdf](https://github.com/Zaid-Mone/ProjectManagementAppLayer/files/10774929/Docs.pdf)
+you can find more in the [Docs.pdf](https://github.com/Zaid-Mone/ProjectManagementAppLayer/files/10786912/Docs.pdf)
+
 
 # Roles
 * Admin: is responsible for creating accounts  for  the other roles in thesystem, like a project manager and a project director, as well.
@@ -15,7 +16,7 @@ you can find more in the [Docs.pdf](https://github.com/Zaid-Mone/ProjectManageme
 
 # Features that will be added in the near future
 * Multi Languages
-* Send the invoice via email instead of the SMS messages.
+* Send the invoice via email instead of the SMS messages. (Addedd *)
 * Include the supervision with the design.
 
 # JS Libraries that is used in the site
