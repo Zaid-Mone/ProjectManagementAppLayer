@@ -43,7 +43,7 @@
                     @Html.DisplayFor(modelItem => item.Project.Client.Name)
                 </td>
                 <td>
-                        <p class="text-primary">Paid</p>
+                    <p class="text-primary">Paid</p>
                 </td>
             </tr>
         }
@@ -60,4 +60,21 @@
             $('#table_id').DataTable();
         });
     </script>
+    <script type="text/javascript">
+        $(function(){
+            var save = '@TempData["save"]'
+            if(save!='') {
+                toastr.success(save, 'Create');
+            }
+            var edit = '@TempData["edit"]'
+            if(edit!='') {
+                toastr.info(edit, 'Update');
+            }
+            var del = '@TempData["delete"]'
+            if (del!='') {
+                toastr.error(del, 'Delete');
+            }
+        })
+    </script>
 }
+

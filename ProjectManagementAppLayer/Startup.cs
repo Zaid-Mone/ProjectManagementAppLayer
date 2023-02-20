@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -11,6 +12,7 @@ using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json;
 using ProjectManagementAppLayer.Helper;
 using ProjectManagementAppLayer.Hubs;
+using ProjectManagementAppLayer.Utility;
 using ProjectManagementBusinessLayer.Data;
 using ProjectManagementBusinessLayer.Entities;
 using ProjectManagementBusinessLayer.Repositories.Implementation;
@@ -73,6 +75,7 @@ namespace ProjectManagementAppLayer
             services.AddTransient<IAdminRepository, AdminRepository>();
             services.AddTransient<IProjectDirectorRepository, ProjectDirectorRepository>();
             services.AddTransient<IUserRepository, UserRepository>();
+            services.AddTransient<IEmailSender, EmailSender>();
             services.AddSession(options =>
             {
                 options.IdleTimeout = TimeSpan.FromMinutes(120);

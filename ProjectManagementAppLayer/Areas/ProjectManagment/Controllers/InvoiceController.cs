@@ -8,6 +8,7 @@ using Infobip.Api.Client.Api;
 using Infobip.Api.Client.Model;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -24,7 +25,7 @@ using ProjectManagementBusinessLayer.Repositories.Interfaces;
 namespace ProjectManagementAppLayer.Areas.ProjectManagment.Controllers
 {
     [Area("ProjectManagment")]
-    [Authorize]
+    
     public class InvoiceController : Controller
     {
 
@@ -35,12 +36,13 @@ namespace ProjectManagementAppLayer.Areas.ProjectManagment.Controllers
         private readonly IInvoicePaymentTermsRepository _invoicePaymentTerms;
         private readonly IPaymentTermRepository _paymentTermRepository;
         private readonly UserManager<Person> _userManager;
+        private readonly IEmailSender _emailSender;
 
         public InvoiceController(ApplicationDbContext context,
             IInvoiceRepository invoiceRepository,
             IProjectRepository projectRepository,
            IInvoicePaymentTermsRepository invoicePaymentTerms,
-           IPaymentTermRepository paymentTermRepository, UserManager<Person> userManager, IConfiguration configuration)
+           IPaymentTermRepository paymentTermRepository, UserManager<Person> userManager, IConfiguration configuration, IEmailSender emailSender)
         {
             _context = context;
             _invoiceRepository = invoiceRepository;
@@ -49,9 +51,11 @@ namespace ProjectManagementAppLayer.Areas.ProjectManagment.Controllers
             _paymentTermRepository = paymentTermRepository;
             _userManager = userManager;
             _config = configuration;
+            _emailSender = emailSender;
         }
 
         // GET: ProjectManagment/Invoice
+        [Authorize]
         public async Task<IActionResult> Index()
         {
             var user = await _userManager.GetUserAsync(User);
@@ -68,6 +72,7 @@ namespace ProjectManagementAppLayer.Areas.ProjectManagment.Controllers
         }
 
         // GET: ProjectManagment/Invoice/Details/5
+
         public async Task<IActionResult> Details(Guid id)
         {
             //if(User.Identity.IsAuthenticated)
@@ -88,6 +93,7 @@ namespace ProjectManagementAppLayer.Areas.ProjectManagment.Controllers
 
 
         // GET: ProjectManagment/Invoice/Create
+        [Authorize]
         public async Task<IActionResult> Create()
         {
             ViewBag.user = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -98,6 +104,7 @@ namespace ProjectManagementAppLayer.Areas.ProjectManagment.Controllers
         // POST: ProjectManagment/Invoice/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> Create(InsertInvoiceDTO insertInvoiceDTO)
         {
             if (ModelState.IsValid)
@@ -157,6 +164,7 @@ namespace ProjectManagementAppLayer.Areas.ProjectManagment.Controllers
         // POST: ProjectManagment/Invoice/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> Edit(UpdateInvoiceDTO updateInvoiceDTO)
         {
             if (ModelState.IsValid)
@@ -230,6 +238,7 @@ namespace ProjectManagementAppLayer.Areas.ProjectManagment.Controllers
         // POST: ProjectManagment/Invoice/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
             var invoice = await _invoiceRepository.GetInvoiceById(id);
@@ -262,10 +271,17 @@ namespace ProjectManagementAppLayer.Areas.ProjectManagment.Controllers
         // to change invoice state
         public async Task<IActionResult> InvoiceApproved(Guid id)
         {
+            
             var invoice = await _invoiceRepository.GetInvoiceById(id);
+            var link = $"https://localhost:44328/ProjectManagment/Invoice/Details/{invoice.Id}";
             invoice.IsApproved = true;
             _invoiceRepository.Update(invoice);
             _invoiceRepository.Save();
+            await _emailSender.SendEmailAsync(
+                invoice.Project.Client.Email,
+                "Invoice Details",
+                $"please Confirm the Invoice via this Link :{link}");
+            TempData["save"] = "The Email has been sent Successfully ...";
             return RedirectToAction("GetAllPendingInvoiecs", "Invoice");
         }
         // to change invoice state

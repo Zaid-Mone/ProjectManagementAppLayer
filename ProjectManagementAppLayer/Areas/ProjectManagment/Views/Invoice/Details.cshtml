@@ -1,6 +1,7 @@
 ﻿@model ProjectManagementBusinessLayer.Entities.Invoice
 @{
     ViewData["Title"] = "Details";
+    Layout = null;
     decimal sum=0;
 }
 
@@ -18,7 +19,7 @@
     <!-- Theme style -->
     <link rel="stylesheet" href="~/dist/css/adminlte.min.css">
 </head>
-<body>
+<body class="mt-5">
 
     <div class="container">
         <div class="wrapper mr-1 ">
@@ -118,7 +119,10 @@
                     <div class="col-12">
                         <a href="javascript:;" onclick="window.print()" rel="noopener" target="_blank" class="btn btn-default"><i class="fas fa-print"></i> Print</a>
                         @*<a href="/ProjectManagment/Invoice/Print?id=@Model.Id" rel="noopener" target="_blank" class="btn btn-default"><i class="fas fa-print"></i> Print</a>*@
-                        <a href="/ProjectManagment/Invoice/Index" class="btn btn-primary">Back</a>
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <a href="/ProjectManagment/Invoice/Index" class="btn btn-primary">Back</a>
+                        }
                     </div>
                 </div>
                 <!-- /.row -->
