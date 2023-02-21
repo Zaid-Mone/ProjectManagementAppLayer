@@ -2,13 +2,14 @@
 @{
     ViewData["Title"] = "Statistics";
     var dict = (Dictionary<String, int>)ViewBag.diction;
+    var dict1 = (Dictionary<decimal, string>)ViewBag.dict;
 }
 
 <script src="https://code.highcharts.com/highcharts.js"></script>
 <script src="https://code.highcharts.com/modules/exporting.js"></script>
 <script src="https://code.highcharts.com/modules/export-data.js"></script>
 <script src="https://code.highcharts.com/modules/accessibility.js"></script>
-
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <div class="row">
     <div class="col-12">
         <div id="pie-chart"></div>
@@ -20,6 +21,11 @@
         <figure class="highcharts-figure">
             <div id="container"></div>
         </figure>
+    </div>
+</div>
+<div class="row">
+    <div class="col-12">
+        <canvas id="myChart"></canvas>
     </div>
 </div>
 
@@ -50,7 +56,7 @@
 
 
 
-<script>
+    <script>
     @{
         List<string> data1 = new List<string>();
         List<int> label1 = new List<int>();
@@ -64,10 +70,10 @@
     var arrData = []
     var arrLabel = []
     var newArr = []
-  
+
     var items1 = @Html.Raw(Json.Serialize(data1))
     var items2 = @Html.Raw(Json.Serialize(label1))
-    
+
     console.log(items1);
     console.log(items2);
     console.log(items1)
@@ -117,6 +123,46 @@
         }]
     });
 
-</script>
+    </script>
+
+    <script>
+        @{
+            List<decimal> projectCost = new List<decimal>();
+            List<string> projectName = new List<string>();
+            foreach (var item in dict1)
+            {
+                projectCost.Add(item.Key);
+                projectName.Add(item.Value);
+            }
+        }
+            var projectcost = @Html.Raw(Json.Serialize(projectCost));
+            var projectname = @Html.Raw(Json.Serialize(projectName));
+
+        var ctx = document.getElementById('myChart').getContext('2d');
+        var myChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: projectname,
+                datasets: [{
+                    label: 'Projects and Their Costs',
+                    data: projectcost,
+                    fill: false,
+                    borderColor: 'rgb(75, 192, 192)',
+                    tension: 0.021
+                }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
+        });
+    </script>
+
+
 
 }

@@ -197,6 +197,25 @@ namespace ProjectManagementAppLayer.Areas.Administrator.Controllers
             ViewBag.Approvedinvoice = inv2;
 
 
+
+            Dictionary<decimal, string> barchart = new Dictionary<decimal, string>();
+
+            var project = _db.Projects
+                    .Include(a => a.ProjectStatus)
+                    .Include(t => t.ProjectType)
+                 .Select(proj => new
+                 {
+                     ProjectName = proj.ProjectName,
+                     ContractAmount = proj.ContractAmount
+                 }).ToList();
+
+
+            foreach (var item in project)
+            {
+                barchart.Add(item.ContractAmount, item.ProjectName);
+            }
+
+            ViewBag.dict = barchart;
             //////////////////
 
 

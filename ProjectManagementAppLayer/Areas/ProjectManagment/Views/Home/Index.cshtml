@@ -71,7 +71,13 @@
         </div>
     </div>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.min.css" />
-    <div id="calendar"></div>
+    <!--Calendar-->
+    <div class="row">
+        <div class="col-12">
+            <div id="calendar"></div>
+        </div>
+    </div>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/6.0.3/index.min.js" integrity="sha512-6JYYNVTxA5xwcs3VFsX5cqw2ZglAVwcng/z8u15yq4gV6RiQVattCVcBHMsBxZ6OfLwakrb/IF/YnK64dw2OWQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="~/js/Calender.js"></script>
     <script>
@@ -79,7 +85,7 @@
         var events = Array();
         axios.get('/ProjectManagment/Project/GetAllProjectForCalenderAdminAndProjectDirector')
             .then(function (response) {
-                /* console.log(response)*/
+                console.log(response)
                 response.data.forEach(function (item) {
                     events.push({
                         title: item.projectName,
@@ -119,6 +125,7 @@
 
         }
     </script>
+
 
 }
 else if (User.Identity.IsAuthenticated && User.IsInRole("ProjectManager"))
@@ -351,14 +358,20 @@ else if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
         </div>
     </div>
     <!-- /.row -->
-    <div id="calendar"></div>
+    <!--Calendar-->
+    <div class="row">
+        <div class="col-12">
+            <div id="calendar"></div>
+        </div>
+    </div>
+
     <script src="~/js/Calender.js"></script>
     <script>
 
         var events = Array();
         axios.get('/ProjectManagment/Project/GetAllProjectForCalenderAdminAndProjectDirector')
             .then(function (response) {
-                //console.log(response)
+                console.log(response)
                 response.data.forEach(function (item) {
                     events.push({
                         title: item.projectName,
@@ -398,6 +411,7 @@ else if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
 
         }
     </script>
+
 }
 else
 {
@@ -500,35 +514,35 @@ else
 
 @*<script>
 
-    line chart used in project manager
-        @{
-            List<decimal> projectCost = new List<decimal>();
-            List<string> projectName = new List<string>();
-            foreach (var item in dict)
-            {
-                projectCost.Add(item.Key);
-                projectName.Add(item.Value);
-            }
-        }
-            var items1 = @Html.Raw(Json.Serialize(projectCost));
-            var items2 = @Html.Raw(Json.Serialize(projectName));
-        const ctx = document.getElementById('myChart');
-        new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: items2,
-                datasets: [{
-                    label: 'Project && Costs',
-                    data: items1,
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
+        line chart used in project manager
+            @{
+                List<decimal> projectCost = new List<decimal>();
+                List<string> projectName = new List<string>();
+                foreach (var item in dict)
+                {
+                    projectCost.Add(item.Key);
+                    projectName.Add(item.Value);
                 }
             }
-        });
-</script>*@
+                var items1 = @Html.Raw(Json.Serialize(projectCost));
+                var items2 = @Html.Raw(Json.Serialize(projectName));
+            const ctx = document.getElementById('myChart');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: items2,
+                    datasets: [{
+                        label: 'Project && Costs',
+                        data: items1,
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+    </script>*@

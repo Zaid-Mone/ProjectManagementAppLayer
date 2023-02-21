@@ -31,12 +31,13 @@ namespace ProjectManagementAppLayer.Areas.ProjectManagment.Controllers
             if (User.IsInRole("Admin"))
             {
                 IsAdmin();
+                AdminBarChart();
                 return View();
             }
             else if (User.IsInRole("ProjectDirector"))
             {
                 IsProjectDirector();
-
+                AdminBarChart();
                 return View();
             }
             else
@@ -193,7 +194,34 @@ namespace ProjectManagementAppLayer.Areas.ProjectManagment.Controllers
                     .Where(e => e.ProjectManagerId == usr)
                     .Include(a => a.ProjectStatus)
                     .Include(t => t.ProjectType)
-                    .ToList();
+                 .Select(proj => new
+                 {
+                    ProjectName = proj.ProjectName,
+                    ContractAmount = proj.ContractAmount
+                }).ToList();
+
+
+            foreach (var item in project)
+            {
+                barchart.Add(item.ContractAmount, item.ProjectName);
+            }
+
+            ViewBag.dict = barchart;
+        }
+        public void AdminBarChart()
+        {
+            // cost // project name
+            Dictionary<decimal, string> barchart = new Dictionary<decimal, string>();
+
+            var project = _db.Projects
+                    .Include(a => a.ProjectStatus)
+                    .Include(t => t.ProjectType)
+                 .Select(proj => new
+                 {
+                    ProjectName = proj.ProjectName,
+                    ContractAmount = proj.ContractAmount
+                }).ToList();
+
 
             foreach (var item in project)
             {

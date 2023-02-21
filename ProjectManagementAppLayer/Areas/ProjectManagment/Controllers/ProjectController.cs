@@ -309,7 +309,16 @@ namespace ProjectManagementAppLayer.Areas.ProjectManagment.Controllers
         {
             if (User.IsInRole("Admin") || User.IsInRole("ProjectDirector"))
             {
-                var project = await _context.Projects.ToListAsync();
+                var project = await _context.Projects
+                .Select(proj =>
+                new
+                {
+                    ProjectName = proj.ProjectName,
+                    StartDate = proj.StartDate,
+                    EndDate=proj.EndDate
+                }).ToListAsync();
+
+
                 return new JsonResult(project);
             }
             else
