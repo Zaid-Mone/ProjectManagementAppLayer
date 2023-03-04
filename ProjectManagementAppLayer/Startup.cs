@@ -13,6 +13,7 @@ using Newtonsoft.Json;
 using ProjectManagementAppLayer.Helper;
 using ProjectManagementAppLayer.Hubs;
 using ProjectManagementAppLayer.Utility;
+using ProjectManagementAppLayer.Utility.DbInitializr;
 using ProjectManagementBusinessLayer.Data;
 using ProjectManagementBusinessLayer.Entities;
 using ProjectManagementBusinessLayer.Repositories.Implementation;
@@ -79,7 +80,6 @@ namespace ProjectManagementAppLayer
             services.AddSession(options =>
             {
                 options.IdleTimeout = TimeSpan.FromMinutes(120);
-                
             });
 
 
@@ -104,7 +104,7 @@ namespace ProjectManagementAppLayer
             app.UseStaticFiles();
 
             app.UseRouting();
-
+            //Seeding.InitializeAsync(app);
             app.UseAuthentication();
             app.UseAuthorization();
             app.UseSession();
@@ -116,6 +116,7 @@ namespace ProjectManagementAppLayer
                 endpoints.MapRazorPages();
                 endpoints.MapHub<ChatHub>("/hub/chatHub");
             });
+            //Seeding.InitializeAsync(app);
         }
     }
 }
